@@ -11,7 +11,7 @@ import java.time.LocalDate;
  * @author CAUPT - ALUNOS
  */
 public class Cerimonial {
-    int id;
+    long id;
     LocalDate data;
     LocalDate dataCriacao;
     LocalDate dataModificacao;

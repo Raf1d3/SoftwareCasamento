@@ -11,7 +11,7 @@ import java.time.LocalDate;
  * @author CAUPT - ALUNOS
  */
 public class Fornecedor {
-    int id;
+    long id;
     String nome;
     String cnpj;
     String telefone;

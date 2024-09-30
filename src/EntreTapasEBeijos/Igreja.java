@@ -11,7 +11,7 @@ import java.time.LocalDate;
  * @author CAUPT - ALUNOS
  */
 public class Igreja {
-    int id;
+    long id;
     LocalDate dataCriacao;
     LocalDate dataModificacao;
 }

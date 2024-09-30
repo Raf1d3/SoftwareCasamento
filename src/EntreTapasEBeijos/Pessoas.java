@@ -12,11 +12,94 @@ import java.time.LocalDate;
  */
 public class Pessoas {
 
-    int id;
-    String nome;
-    LocalDate nascimento;
-    String telefone;
-    LocalDate dataCriacao;
-    LocalDate dataModificacao;
+    private long id;
+    private static long serial;
+    private String nome;
+    private LocalDate nascimento;
+    private String telefone;
+    private LocalDate dataCriacao;
+    private LocalDate dataModificacao;
+
+    public Pessoas() {
+        this.id = ++Pessoas.serial;
+    }
+
+    
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 97 * hash + (int) (this.id ^ (this.id >>> 32));
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Pessoas other = (Pessoas) obj;
+        return this.id == other.id;
+    }
+
+    
+    
+    @Override
+    public String toString() {
+        return "Pessoas{" + "id=" + id + ", nome=" + nome + ", nascimento=" + nascimento + ", telefone=" + telefone + ", dataCriacao=" + dataCriacao + ", dataModificacao=" + dataModificacao + '}' + "\n";
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public LocalDate getNascimento() {
+        return nascimento;
+    }
+
+    public void setNascimento(LocalDate nascimento) {
+        this.nascimento = nascimento;
+    }
+
+    public String getTelefone() {
+        return telefone;
+    }
+
+    public void setTelefone(String telefone) {
+        this.telefone = telefone;
+    }
+
+    public LocalDate getDataCriacao() {
+        return dataCriacao;
+    }
+
+    public void setDataCriacao(LocalDate dataCriacao) {
+        this.dataCriacao = dataCriacao;
+    }
+
+    public LocalDate getDataModificacao() {
+        return dataModificacao;
+    }
+
+    public void setDataModificacao(LocalDate dataModificacao) {
+        this.dataModificacao = dataModificacao;
+    }
 
 }

@@ -12,7 +12,7 @@ import java.time.LocalDate;
  */
 public class Evento {
 
-    int id;
+    long id;
     LocalDate data;
     Cerimonial cerimonial;
     Igreja igreja;

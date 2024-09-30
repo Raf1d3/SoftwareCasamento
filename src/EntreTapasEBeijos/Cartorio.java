@@ -12,7 +12,7 @@ import java.time.LocalDate;
  */
 public class Cartorio {
 
-    int id;
+    long id;
     LocalDate dataCriacao;
     LocalDate dataModificacao;
 }

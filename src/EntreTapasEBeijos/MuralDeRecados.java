@@ -11,7 +11,7 @@ import java.time.LocalDate;
  * @author CAUPT - ALUNOS
  */
 public class MuralDeRecados {
-    int id;
+    long id;
     Pessoas pessoa;
     String comentario;
     LocalDate dataCriacao;

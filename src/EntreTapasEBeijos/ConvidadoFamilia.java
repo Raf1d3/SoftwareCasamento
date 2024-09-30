@@ -11,7 +11,7 @@ import java.time.LocalDate;
  * @author CAUPT - ALUNOS
  */
 public class ConvidadoFamilia {
-    int id;
+    long id;
     String nomeDaFamilia;
     String acesso;
     boolean confirmacao = false;

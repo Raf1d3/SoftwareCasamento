@@ -4,6 +4,7 @@
  */
 package EntreTapasEBeijos;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 /**
@@ -11,10 +12,10 @@ import java.time.LocalDate;
  * @author CAUPT - ALUNOS
  */
 public class Presentes {
-    int id;
+    long id;
     String nome;
     String tipo;
-    int valor;
+    BigDecimal valor;
     Pessoas pessoa;
     LocalDate dataCriacao;
     LocalDate dataModificacao;
