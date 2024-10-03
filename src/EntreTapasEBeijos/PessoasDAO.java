@@ -4,6 +4,8 @@
  */
 package EntreTapasEBeijos;
 
+import model.Pessoas;
+
 /**
  *
  * @author pse
@@ -40,6 +42,7 @@ public class PessoasDAO {
     }
 
     public boolean alterar(Pessoas pNova, Pessoas pAntiga) {
+        if (pAntiga != null){
         for (int i = 0; i < pessoas.length; i++) {
             if (pessoas[i] != null && pessoas[i].getId() == pAntiga.getId()) {
                 if(pNova.getNascimento() != null){
@@ -53,6 +56,8 @@ public class PessoasDAO {
                 }
                 //alterar pNova.getDataModificacao()
             }
+        }
+        return true;
         }
         return false;
     }
