@@ -27,8 +27,8 @@ public class GenericDAO<T> {
             if (!elementosDeletados.isEmpty()) {
                 elementosDeletados.sort((o1, o2) -> Long.compare(o1, o2));
                 //System.out.println(elementosDeletados.toString());
-                if (database.size() >= elementosDeletados.getFirst()) {
-                    long e = elementosDeletados.getFirst();
+                if (database.size() >= elementosDeletados.get(0)) {
+                    long e = elementosDeletados.get(0);
                     setId.invoke(obj, e);
                     database.add(Math.toIntExact(e), obj);
                     elementosDeletados.remove(0);
