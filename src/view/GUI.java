@@ -7,8 +7,16 @@ package view;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import javax.swing.JOptionPane;
+
+import model.ConvidadoFamilia;
+import model.ConvidadoIndividual;
+import model.Evento;
+import model.Fornecedor;
 import model.Pessoas;
 import model.Usuario;
+import model.MuralDeRecados;
+import model.Pagamentos;
+import model.Presentes;
 
 /**
  *
@@ -37,9 +45,11 @@ public class GUI {
     public int menuAcessoAdministradorOpcoes() {
         StringBuilder menu = new StringBuilder("");
 
-        menu.append("<html><body style='text-align:center; margin-left:450px;'><br>");
+        menu.append("<html><body><br>");
+        menu.append("<div width='1200px' align='center'>");
         menu.append("<p style='font-size:18px; font-weight:bold;'>GERENCIADOR DE CASAMENTOS</p>");
-        menu.append("<p style='font-size:12px;'>Oque deseja fazer hoje?</p><br></body></html>");
+        menu.append("<p style='font-size:12px;'>Oque deseja fazer hoje?</p><br></div></body></html>");
+        
         Object[] options = {"Modificar Pessoas", "Modificar Usuarios", "Modificar Fornecedores",
             "Modificar Convidados", "Modificar Evento", "Modificar Mural de recados",
             "Modificar Pagamentos", "Modificar Presentes", "Sair do programa"};
@@ -55,15 +65,15 @@ public class GUI {
     }
 
     //Menu Convidado Sem login
-    public int menuConvidadoOpcoes() {
+    public int menuLoginConvidadoOpcoes() {
         StringBuilder menu = new StringBuilder("");
 
-        menu.append("<html><body style='text-align:center; margin-left:135px;'><br>");
+        menu.append("<html><body><br>");
+        menu.append("<div width='400px' align='center'>");
         menu.append("<p style='font-size:18px; font-weight:bold;'>GERENCIADOR DE CASAMENTOS</p>");
-        menu.append("<p style='font-size:12px;'>Oque deseja fazer hoje?</p><br></body></html>");
+        menu.append("<p style='font-size:12px;'>Oque deseja fazer hoje?</p><br></div></body></html>");
 
-        Object[] options = {"Confirmar Pesença (acesso)", "Modificar Mural de recados", "Dar Presente",
-            "Sair do programa"};
+        Object[] options = {"Modificar Mural de recados", "Dar Presente", "Sair do programa"};
 
         int resposta = mostrarMensagemBots(menu.toString(), "Menu Convidado", -1, options);
         if (resposta != -1 && resposta != options.length - 1) {
@@ -74,12 +84,32 @@ public class GUI {
 
     }
 
-    public int menuPessoasOpcoes() {
+    //Menu logado Confirmação de presença familia
+    public int menuConfirmacaoConvidadoResponsavelOpcoes() {
         StringBuilder menu = new StringBuilder("");
 
-        menu.append("<html><body style='text-align:center; margin-left:220px;'><br>");
+        menu.append("<html><body'><br>");
+        menu.append("<div width='300px' align='center'>");
         menu.append("<p style='font-size:18px; font-weight:bold;'>GERENCIADOR DE CASAMENTOS</p>");
-        menu.append("<p style='font-size:12px;'>Oque deseja fazer hoje?</p><br></body></html>");
+        menu.append("<p style='font-size:12px;'>Oque deseja fazer hoje?</p><br></div></body></html>");
+
+        Object[] options = {"Confirmar presença da familia", "Sair do programa"};
+
+        int resposta = mostrarMensagemBots(menu.toString(), "Menu Confirmação de Presença", -1, options);
+        if (resposta != -1 && resposta != options.length - 1) {
+            return resposta;
+        } else {
+            return 9;
+        }
+    }
+
+    public int menuPessoaOpcoes() {
+        StringBuilder menu = new StringBuilder("");
+
+        menu.append("<html><body><br>");
+        menu.append("<div width='730px' align='center'>");
+        menu.append("<p style='font-size:18px; font-weight:bold;'>GERENCIADOR DE CASAMENTOS</p>");
+        menu.append("<p style='font-size:12px;'>Oque deseja fazer hoje?</p><br></div></body></html>");
 
         Object[] options = {"Criar pessoa", "Mostrar pessoas", "Alterar dados da pessoa",
             "Deletar pessoa", "Buscar pessoa (id)", "Sair do programa"};
@@ -94,12 +124,13 @@ public class GUI {
     }
 
     // menu usuarios
-    public int menuUsuariosOpcoes() {
+    public int menuUsuarioOpcoes() {
         StringBuilder menu = new StringBuilder("");
 
-        menu.append("<html><body style='text-align:center; margin-left:220px;'><br>");
+        menu.append("<html><body><br>");
+        menu.append("<div width='730px' align='center'>");
         menu.append("<p style='font-size:18px; font-weight:bold;'>GERENCIADOR DE CASAMENTOS</p>");
-        menu.append("<p style='font-size:12px;'>Oque deseja fazer hoje?</p><br></body></html>");
+        menu.append("<p style='font-size:12px;'>Oque deseja fazer hoje?</p><br><div></body></html>");
 
         Object[] options = {"Criar usuario", "Mostrar usuarios", "Alterar dados do usuario",
             "Deletar usuario", "Buscar usuario (id)", "Sair do programa"};
@@ -112,13 +143,14 @@ public class GUI {
         }
     }
 
-    // menu Fornecedores
-    public int menuFornecedoresOpcoes() {
+    // menu Fornecedor
+    public int menuFornecedorOpcoes() {
         StringBuilder menu = new StringBuilder("");
 
-        menu.append("<html><body style='text-align:center; margin-left:320px;'><br>");
+        menu.append("<html><body><br>");
+        menu.append("<div width='920px' align='center'>");
         menu.append("<p style='font-size:18px; font-weight:bold;'>GERENCIADOR DE CASAMENTOS</p>");
-        menu.append("<p style='font-size:12px;'>Oque deseja fazer hoje?</p><br></body></html>");
+        menu.append("<p style='font-size:12px;'>Oque deseja fazer hoje?</p><br><div></body></html>");
 
         Object[] options = {"Criar fornecedor", "Mostrar fornecedores", "Deletar fornecedor",
             "Buscar fornecedor (id)", "Alterar dados de um fornecedor", "Sair do programa"};
@@ -131,12 +163,54 @@ public class GUI {
     }
 
     // menu Convidados
-    public int menuConvidadosOpcoes() {
+    public int menuEscolhaTipoConvidadoOpcoes() {
         StringBuilder menu = new StringBuilder("");
 
-        menu.append("<html><body style='text-align:center; margin-left:260px;'><br>");
+        menu.append("<html><body><br>");
+        menu.append("<div width='430px' align='center'>");
         menu.append("<p style='font-size:18px; font-weight:bold;'>GERENCIADOR DE CASAMENTOS</p>");
-        menu.append("<p style='font-size:12px;'>Oque deseja fazer hoje?</p><br></body></html>");
+        menu.append("<p style='font-size:12px;'>Oque deseja fazer hoje?</p><br></div></body></html>");
+
+        Object[] options = {"Modificar convidados", "Modificar responsavel familia", "Sair do programa"};
+
+        int resposta = mostrarMensagemBots(menu.toString(), "Menu Tipo convidado", -1, options);
+
+        if (resposta != -1 && resposta != options.length - 1) {
+            return resposta;
+        } else {
+            return 9;
+        }
+    }
+
+    // menu Convidados Responsaveis admin
+    public int menuConvidadoResponsavelOpcoes() {
+        StringBuilder menu = new StringBuilder("");
+
+        menu.append("<html><body><br>");
+        menu.append("<div width='1140px' align='center'>");
+        menu.append("<p style='font-size:18px; font-weight:bold;'>GERENCIADOR DE CASAMENTOS</p>");
+        menu.append("<p style='font-size:12px;'>Oque deseja fazer hoje?</p><br></div></body></html>");
+
+        Object[] options = {"adicionar convidado responsavel", "Mostrar convidados responsaveis", "Deletar convidado responsavel",
+            "Buscar convidado responsavel (id)", "Alterar dados do convidado responsavel", "Sair do programa"};
+
+        int resposta = mostrarMensagemBots(menu.toString(), "Menu convidado responsaveis familia", -1, options);
+
+        if (resposta != -1 && resposta != options.length - 1) {
+            return resposta;
+        } else {
+            return 9;
+        }
+    }
+
+    // menu Convidados admin
+    public int menuConvidadoOpcoes() {
+        StringBuilder menu = new StringBuilder("");
+
+        menu.append("<html><body><br>");
+        menu.append("<div width='810px' align='center'>");
+        menu.append("<p style='font-size:18px; font-weight:bold;'>GERENCIADOR DE CASAMENTOS</p>");
+        menu.append("<p style='font-size:12px;'>Oque deseja fazer hoje?</p><br></div></body></html>");
 
         Object[] options = {"Criar convidado", "Mostrar convidados", "Deletar convidado",
             "Buscar convidado (id)", "Alterar dados do convidado", "Sair do programa"};
@@ -154,12 +228,13 @@ public class GUI {
     public int menuEventoOpcoes() {
         StringBuilder menu = new StringBuilder("");
 
-        menu.append("<html><body style='text-align:center; margin-left:115px;'><br>");
+        menu.append("<html><body><br>");
+        menu.append("<div width='550px' align='center'>");
         menu.append("<p style='font-size:18px; font-weight:bold;'>GERENCIADOR DE CASAMENTOS</p>");
-        menu.append("<p style='font-size:12px;'>Oque deseja fazer hoje?</p><br></body></html>");
+        menu.append("<p style='font-size:12px;'>Oque deseja fazer hoje?</p><br></div></body></html>");
 
-        Object[] options = {"Modificar Cartorio", "Modificar Cerimonial", "Modificar Evento",
-            "Modificar Igreja", "Sair do programa"};
+        Object[] options = {"Criar Evento", "Mostrar Evento", "Deletar Evento",
+            "Buscar Evento", "Alterar Evento", "Sair do programa"};
 
         int resposta = mostrarMensagemBots(menu.toString(), "Menu evento", -1, options);
 
@@ -174,9 +249,10 @@ public class GUI {
     public int menuMuralDeRecadosOpcoes() {
         StringBuilder menu = new StringBuilder("");
 
-        menu.append("<html><body style='text-align:center; margin-left:200px;'><br>");
+        menu.append("<html><body><br>");
+        menu.append("<div width='690px' align='center'>");
         menu.append("<p style='font-size:18px; font-weight:bold;'>GERENCIADOR DE CASAMENTOS</p>");
-        menu.append("<p style='font-size:12px;'>Oque deseja fazer hoje?</p><br></body></html>");
+        menu.append("<p style='font-size:12px;'>Oque deseja fazer hoje?</p><br></div></body></html>");
 
         Object[] options = {"Adicionar no mural", "Mostrar mural", "Deletar do mural",
             "Buscar comentario (id)", "Alterar comentario", "Sair do programa"};
@@ -191,12 +267,13 @@ public class GUI {
     }
 
     // menu pagamentos
-    public int menuPagamentosOpcoes() {
+    public int menuPagamentoOpcoes() {
         StringBuilder menu = new StringBuilder("");
 
-        menu.append("<html><body style='text-align:center; margin-left:200px;'><br>");
+        menu.append("<html><body><br>");
+        menu.append("<div width='690px' align='center'>");
         menu.append("<p style='font-size:18px; font-weight:bold;'>GERENCIADOR DE CASAMENTOS</p>");
-        menu.append("<p style='font-size:12px;'>Oque deseja fazer hoje?</p><br></body></html>");
+        menu.append("<p style='font-size:12px;'>Oque deseja fazer hoje?</p><br></div></body></html>");
 
         Object[] options = {"Adicionar pagamento", "Mostrar pagamentos", "Deletar pagamento",
             "Buscar pagamento (id)", "Alterar pagamento", "Sair do programa"};
@@ -211,12 +288,13 @@ public class GUI {
     }
 
     // menu presentes
-    public int menuPresentesOpcoes() {
+    public int menuPresenteOpcoes() {
         StringBuilder menu = new StringBuilder("");
 
-        menu.append("<html><body style='text-align:center; margin-left:115px;'><br>");
+        menu.append("<html><body><br>");
+        menu.append("<div width='520px' align='center'>");
         menu.append("<p style='font-size:18px; font-weight:bold;'>GERENCIADOR DE CASAMENTOS</p>");
-        menu.append("<p style='font-size:12px;'>Oque deseja fazer hoje?</p><br></body></html>");
+        menu.append("<p style='font-size:12px;'>Oque deseja fazer hoje?</p><br></div></body></html>");
 
         Object[] options = {"Adicionar presente", "Mostrar presentes", "Buscar presente (id)",
             "Alterar presente", "Sair do programa"};
@@ -231,21 +309,74 @@ public class GUI {
     }
 
     public Pessoas CriarPessoa() {
-        String nome = mostrarMensagemInput("Digite um nome", "Nome", 3, "douglas");
+        String nome = mostrarMensagemInput("Nome:", "Nome", 3, "douglas");
         LocalDate nascimento = FormatarData(mostrarMensagemInput("Digite uma data de nascimento", "Nascimento", 3, "01/01/2001"));
         String telefone = mostrarMensagemInput("Digite um telefone", "Telefone", 3, "40028922");
 
         Pessoas p = new Pessoas();
+
         p.setNome(nome);
         p.setNascimento(nascimento);
         p.setTelefone(telefone);
+
         return p;
     }
 
-    public Usuario CriarUsuario() {
+    public Usuario CriarUsuario(Pessoas p) {
+        String login = mostrarMensagemInput("login:", "Login", 3, "rodrigo");
+        String senha = mostrarMensagemInput("senha:", "Senha", 3, "123");
+        String tipo = mostrarMensagemInput("Tipo (noivo/noiva, administrador)", "Tipo", 3, "administrador");
         Usuario u = new Usuario();
-
+        u.setLogin(login);
+        u.setPessoa(p);
+        u.setSenha(senha);
+        u.setTipo(tipo);
         return u;
+    }
+
+    public Fornecedor CriarFornecedor() {
+        Fornecedor f = new Fornecedor();
+        return f;
+    }
+
+    public ConvidadoFamilia CriarConvidadoFamilia() {
+        String confirmacao = mostrarMensagemInput("confirmacao:", "Confirmacao", 3, "");
+        String nomefamilia = mostrarMensagemInput("nome da familia", "Nome da Familia", 3, "40028922");
+
+        ConvidadoFamilia cf = new ConvidadoFamilia();
+        cf.setConfirmacao(confirmacao);
+        cf.setNomeDaFamilia(nomefamilia);
+        return cf;
+    }
+
+    public ConvidadoIndividual CriarConvidadoIndividual() {
+        ConvidadoIndividual ci = new ConvidadoIndividual();
+
+        return ci;
+    }
+
+    public Evento CriarEvento() {
+        Evento e = new Evento();
+
+        return e;
+    }
+
+    public MuralDeRecados CriarRecado() {
+        MuralDeRecados mr = new MuralDeRecados();
+
+        return mr;
+    }
+
+    public Pagamentos CriarPagamento() {
+        Pagamentos pg = new Pagamentos();
+
+        return pg;
+    }
+
+    public Presentes CriarPresente() {
+        Presentes ps = new Presentes();
+
+        return ps;
     }
 
     public LocalDate FormatarData(String dataNascimento) {

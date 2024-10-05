@@ -15,7 +15,7 @@ public class ConvidadoIndividual {
     private Pessoas pessoa;
     private String Familia;
     private String parentesco;
-    private boolean confirmacao = false;
+    private String confirmacao;
     private LocalDate dataCriacao;
     private LocalDate dataModificacao;
 
@@ -70,11 +70,11 @@ public class ConvidadoIndividual {
         this.parentesco = parentesco;
     }
 
-    public boolean isConfirmacao() {
+    public String isConfirmacao() {
         return confirmacao;
     }
 
-    public void setConfirmacao(boolean confirmacao) {
+    public void setConfirmacao(String confirmacao) {
         this.confirmacao = confirmacao;
     }
 

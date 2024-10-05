@@ -7,12 +7,13 @@ package control;
 import model.Usuario;
 import control.GenericDAO;
 
+
 /**
  *
  * @author pse
  */
 public class UsuarioDAO extends GenericDAO<Usuario> {
-
+    
     public UsuarioDAO() {
         Usuario admin = new Usuario();
         admin.setLogin("admin");
