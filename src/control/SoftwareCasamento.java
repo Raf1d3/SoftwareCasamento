@@ -284,11 +284,18 @@ public class SoftwareCasamento {
         while (opcaoUsuario != 9) {
             switch (opcaoUsuario) {
                 case 0:
-                    FornecedorDao.inserir(Gui.CriarFornecedor());
-                    Gui.mostrarMensagemAviso("Fornecedor Criado", "Aviso", 1);
+                    if (FornecedorDao.inserir(Gui.CriarFornecedor()) != -1) {
+                        Gui.mostrarMensagemAviso("Fornecedor Criado", "Aviso", 1);
+                    } else {
+                        Gui.mostrarMensagemAviso("Erro ao Inserir Fornecedor", "Aviso", 2);
+                    }
                     break;
                 case 1:
-                    Gui.mostrarMensagemAviso("Fornecedores : \n" + UsuarioDao.mostrar(null), "Aviso", 1);
+                    if (!FornecedorDao.mostrar(null).equals("")) {
+                        Gui.mostrarMensagemAviso("Fornecedores: \n" + FornecedorDao.mostrar(null), "Aviso", 1);
+                    } else {
+                        Gui.mostrarMensagemAviso("Nenhum fornecedor encontrado", "Aviso", 2);
+                    }
                     break;
                 case 2:
                     int idAltera = Integer.parseInt(Gui.mostrarMensagemInput("Digite o id do fornecedor a ser alterado", "Alterar Fornecedor", 1, "0"));

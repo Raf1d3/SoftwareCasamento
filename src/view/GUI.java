@@ -5,6 +5,7 @@
 package view;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import javax.swing.JOptionPane;
 
@@ -49,7 +50,7 @@ public class GUI {
         menu.append("<div width='1200px' align='center'>");
         menu.append("<p style='font-size:18px; font-weight:bold;'>GERENCIADOR DE CASAMENTOS</p>");
         menu.append("<p style='font-size:12px;'>Oque deseja fazer hoje?</p><br></div></body></html>");
-        
+
         Object[] options = {"Modificar Pessoas", "Modificar Usuarios", "Modificar Fornecedores",
             "Modificar Convidados", "Modificar Evento", "Modificar Mural de recados",
             "Modificar Pagamentos", "Modificar Presentes", "Sair do programa"};
@@ -152,8 +153,8 @@ public class GUI {
         menu.append("<p style='font-size:18px; font-weight:bold;'>GERENCIADOR DE CASAMENTOS</p>");
         menu.append("<p style='font-size:12px;'>Oque deseja fazer hoje?</p><br><div></body></html>");
 
-        Object[] options = {"Criar fornecedor", "Mostrar fornecedores", "Deletar fornecedor",
-            "Buscar fornecedor (id)", "Alterar dados de um fornecedor", "Sair do programa"};
+        Object[] options = {"Criar fornecedor", "Mostrar fornecedores", "Alterar dados do fornecedor",
+            "Deletar fornecedor", "Buscar fornecedor (id)", "Sair do programa"};
         int resposta = mostrarMensagemBots(menu.toString(), "Menu fornecedor", -1, options);
         if (resposta != -1 && resposta != options.length - 1) {
             return resposta;
@@ -335,7 +336,23 @@ public class GUI {
     }
 
     public Fornecedor CriarFornecedor() {
+        String nome = mostrarMensagemInput("Nome:", "Nome", 3, "Floricultura");
+        String cnpj = mostrarMensagemInput("Cnpj:", "Cnpj", 3, "00.000.000/0000-00");
+        String valorAPagar = mostrarMensagemInput("Valor a pagar:", "Valor a pagar:", 3, "100");
+        String parcelas = mostrarMensagemInput("Parcelas:", "Parcelas:", 3, "2");
+        String telefone = mostrarMensagemInput("Telefone:", "Telefone:", 3, "(34) 999999-9999");
+        String estado = mostrarMensagemInput("Estado:", "Estado:", 3, "Pago");
+
         Fornecedor f = new Fornecedor();
+        f.setNome(nome);
+        f.setCnpj(cnpj);
+        f.setTelefone(telefone);
+
+        // Convertendo strings para inteiros
+        f.setValorAPagar(Integer.parseInt(valorAPagar));
+        f.setParcelas(Integer.parseInt(parcelas));
+
+        f.setEstado(estado);
         return f;
     }
 
@@ -400,6 +417,10 @@ public class GUI {
     //Mostrar pop up com mensagem e quantidade configuravel botões
     public int mostrarMensagemBots(String mensagem, String titulo, int icone, Object[] options) {
         return JOptionPane.showOptionDialog(null, mensagem, titulo, JOptionPane.DEFAULT_OPTION, icone, null, options, options[0]);
+    }
+
+    private boolean mostrar(Object object) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
 }

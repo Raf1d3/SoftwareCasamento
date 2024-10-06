@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.time.LocalDateTime;
 import model.Usuario;
 
 /**
@@ -76,9 +77,11 @@ public class GenericDAO<T> {
                     if (!campo.getName().equals("id") && !campo.getName().equals("dataCriacao")) {
                         Object novoValor = campo.get(objNovo);
                         campo.set(objAntigo, novoValor);
-
                     }
 
+                    if (campo.getName().equals("dataModificacao")) {
+                        campo.set(objAntigo, LocalDateTime.now());
+                    }
                 }
                 return true;
             } catch (IllegalAccessException e) {
