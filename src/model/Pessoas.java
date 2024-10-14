@@ -13,7 +13,6 @@ import java.time.LocalDate;
 public class Pessoas {
 
     private long id;
-    private static long serial;
     private String nome;
     private LocalDate nascimento;
     private String telefone;

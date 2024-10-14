@@ -4,16 +4,16 @@
  */
 package control;
 
-import model.Usuario;
-import control.GenericDAO;
 
+import control.GenericDAO;
+import model.Usuario;
+import model.Pessoas;
 
 /**
  *
  * @author pse
  */
 public class UsuarioDAO extends GenericDAO<Usuario> {
-    
     public UsuarioDAO() {
         Usuario admin = new Usuario();
         admin.setLogin("admin");
@@ -31,49 +31,5 @@ public class UsuarioDAO extends GenericDAO<Usuario> {
         }
         return false;
     }
-    
-    
-    
-    
-    /*
-    private Usuario[] usuario = new Usuario[100];
-    
-    public UsuarioDAO() {
-        Usuario administrador = new Usuario();
-        administrador.setLogin("admin");
-        administrador.setSenha("");
-        administrador.setTipo("administrador");
-        inserir(administrador);
-    }
-    
-
-    public boolean alterar(Usuario uNovo, Usuario uAntigo) {
-        if (uAntigo != null){
-        for (int i = 0; i < usuario.length; i++) {
-            if (usuario[i] != null && usuario[i].getId() == uAntigo.getId()) {
-                if (uNovo.getLogin() != null) {
-                    usuario[i].setLogin(uNovo.getLogin());
-                }
-                if (uNovo.getSenha() != null) {
-                    usuario[i].setSenha(uNovo.getSenha());
-                }
-                if (uNovo.getPessoa() != null) {
-                    usuario[i].setPessoa(uNovo.getPessoa());
-                }
-                if (uNovo.getTipo() != null) {
-                    usuario[i].setTipo(uNovo.getTipo());
-                }
-                //alterar pNova.getDataModificacao()
-            }
-        }
-        return true;
-        }
-        return false;
-    }
-
-    */
-    
-
-
 
 }

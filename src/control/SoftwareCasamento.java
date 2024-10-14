@@ -5,7 +5,6 @@
 package control;
 
 import view.GUI;
-import EntreTapasEBeijos.PessoasDAO;
 import model.Pessoas;
 import model.Fornecedor;
 import model.ConvidadoFamilia;
@@ -14,6 +13,7 @@ import model.Evento;
 import model.MuralDeRecados;
 import model.Pagamentos;
 import model.Presentes;
+import model.Usuario;
 
 /**
  *
@@ -23,7 +23,6 @@ public class SoftwareCasamento {
 
     GUI Gui = new GUI();
 
-    GenericDAO<Pessoas> pessoasDao = new GenericDAO<>();
     GenericDAO<Fornecedor> FornecedorDao = new GenericDAO<>();
     GenericDAO<ConvidadoIndividual> ConvidadoIndividualDao = new GenericDAO<>();
     GenericDAO<Evento> EventoDao = new GenericDAO<>();
@@ -31,11 +30,13 @@ public class SoftwareCasamento {
     GenericDAO<Pagamentos> PagamentosDao = new GenericDAO<>();
     GenericDAO<Presentes> PresentesDao = new GenericDAO<>();
     ConvidadoFamiliaDAO ConvidadoFamiliaDao = new ConvidadoFamiliaDAO();
+    PessoasDAO PessoasDao = new PessoasDAO();
     UsuarioDAO UsuarioDao = new UsuarioDAO();
 
     public SoftwareCasamento() {
         System.out.println("Iniciando Logs do programa...");
         MenuLoginLoop(Gui.MenuLoginOpcoes());
+        System.out.println("Programa finalizado...");
     }
 
     //menu de login e boas vindas
@@ -49,21 +50,26 @@ public class SoftwareCasamento {
                     String senha = Gui.mostrarMensagemInput("Digite sua senha:", "Senha", 3, "");
                     if (UsuarioDao.autenticar(login, senha)) {
                         System.out.println("Acessando menu Gerenciador...");
-                        MenuAcessoAdministradorLoop(Gui.menuAcessoAdministradorOpcoes());
+                        if (!MenuAcessoAdministradorLoop(Gui.menuAcessoAdministradorOpcoes())) {
+                            return;
+                        }
                     } else if (ConvidadoFamiliaDao.autenticar(login, senha)) {
                         System.out.println("Acessando menu Responsavel Familiar...");
-                        menuConfirmacaoConvidadoResponsavelLoop(Gui.menuConfirmacaoConvidadoResponsavelOpcoes());
+                        if (!menuConfirmacaoConvidadoResponsavelLoop(Gui.menuConfirmacaoConvidadoResponsavelOpcoes())) {
+                            return;
+                        }
                     } else {
                         Gui.mostrarMensagemAviso("Usuario invalido", "Aviso", 2);
                         System.out.println("Usuario invalido detectado...");
-                        break;
-
                     }
-
                     break;
                 case 1:
-                    MenuLoginConvidadoLoop(Gui.menuLoginConvidadoOpcoes());
+                    if (!MenuLoginConvidadoLoop(Gui.menuLoginConvidadoOpcoes())) {
+                        return;
+                    }
                     break;
+                case -1:
+                    return;
                 default:
                     Gui.mostrarMensagemAviso("escola uma opcao valida !!", "Aviso", 2);
                     break;
@@ -110,7 +116,7 @@ public class SoftwareCasamento {
     }
      */
     // Respstas do painel de convidado (sem login)
-    private void MenuLoginConvidadoLoop(int opcaoUsuario) {
+    private boolean MenuLoginConvidadoLoop(int opcaoUsuario) {
 
         while (opcaoUsuario != 9) {
             switch (opcaoUsuario) {
@@ -120,9 +126,8 @@ public class SoftwareCasamento {
                 case 1:
                     Gui.mostrarMensagemAviso("Dando presente", "Aviso", 1);
                     break;
-                case 9:
-                    Gui.mostrarMensagemAviso("saindo", "Aviso", 1);
-                    break;
+                case -1:
+                    return false;
                 default:
                     Gui.mostrarMensagemAviso("Escola uma opcao valida !!", "Aviso", 2);
                     break;
@@ -132,40 +137,56 @@ public class SoftwareCasamento {
 
         }
         System.out.println("Menu Fechado");
+        return true;
     }
 
     // menu de acesso ao painel do administrador
-    private void MenuAcessoAdministradorLoop(int opcaoUsuario) {
+    private boolean MenuAcessoAdministradorLoop(int opcaoUsuario) {
 
         while (opcaoUsuario != 9) {
             switch (opcaoUsuario) {
                 case 0:
-                    menuPessoasLoop(Gui.menuPessoaOpcoes());
+                    if (!menuPessoasLoop(Gui.menuPessoaOpcoes())) {
+                        return false;
+                    }
                     break;
                 case 1:
-                    menuUsuariosLoop(Gui.menuUsuarioOpcoes());
+                    if (!menuUsuariosLoop(Gui.menuUsuarioOpcoes())) {
+                        return false;
+                    }
                     break;
                 case 2:
-                    menuFornecedorLoop(Gui.menuFornecedorOpcoes());
+                    if (!menuFornecedorLoop(Gui.menuFornecedorOpcoes())) {
+                        return false;
+                    }
                     break;
                 case 3:
-                    menuEscolhaTipoConvidadoLoop(Gui.menuEscolhaTipoConvidadoOpcoes());
+                    if (!menuEscolhaTipoConvidadoLoop(Gui.menuEscolhaTipoConvidadoOpcoes())) {
+                        return false;
+                    }
                     break;
                 case 4:
-                    menuEventoLoop(Gui.menuEventoOpcoes());
+                    if (!menuEventoLoop(Gui.menuEventoOpcoes())) {
+                        return false;
+                    }
                     break;
                 case 5:
-                    menuMuralDeRecadosLoop(Gui.menuMuralDeRecadosOpcoes());
+                    if (!menuMuralDeRecadosLoop(Gui.menuMuralDeRecadosOpcoes())) {
+                        return false;
+                    }
                     break;
                 case 6:
-                    menuPagamentoLoop(Gui.menuPagamentoOpcoes());
+                    if (!menuPagamentoLoop(Gui.menuPagamentoOpcoes())) {
+                        return false;
+                    }
                     break;
                 case 7:
-                    menuPresenteLoop(Gui.menuPresenteOpcoes());
+                    if (!menuPresenteLoop(Gui.menuPresenteOpcoes())) {
+                        return false;
+                    }
                     break;
-                case 9:
-                    Gui.mostrarMensagemAviso("saindo", "Aviso", 1);
-                    break;
+                case -1:
+                    return false;
                 default:
                     Gui.mostrarMensagemAviso("Escola uma opcao valida !!", "Aviso", 2);
                     break;
@@ -175,30 +196,31 @@ public class SoftwareCasamento {
 
         }
         System.out.println("Menu Fechado");
+        return true;
     }
 
     // menu pessoas
-    private void menuPessoasLoop(int opcaoUsuario) {
+    private boolean menuPessoasLoop(int opcaoUsuario) {
 
         while (opcaoUsuario != 9) {
             switch (opcaoUsuario) {
                 case 0:
-                    if (pessoasDao.inserir(Gui.CriarPessoa()) != -1) {
+                    if (PessoasDao.inserir(Gui.CriarPessoa()) != -1) {
                         Gui.mostrarMensagemAviso("Pessoa Criada", "Aviso", 1);
                     } else {
                         Gui.mostrarMensagemAviso("Erro ao Inserir Pessoa", "Aviso", 2);
                     }
                     break;
                 case 1:
-                    if (!pessoasDao.mostrar(null).equals("")) {
-                        Gui.mostrarMensagemAviso("Pessoas: \n" + pessoasDao.mostrar(null), "Aviso", 1);
+                    if (!PessoasDao.mostrar(null).equals("")) {
+                        Gui.mostrarMensagemAviso("Pessoas: \n" + PessoasDao.mostrar(null), "Aviso", 1);
                     } else {
                         Gui.mostrarMensagemAviso("Nenhuma pessoa cadastrada", "Aviso", 2);
                     }
                     break;
                 case 2:
                     int idAltera = Integer.parseInt(Gui.mostrarMensagemInput("Digite o id do usuario a ser alterado", "Alterar Usuario", 1, "0"));
-                    if (pessoasDao.alterar(Gui.CriarPessoa(), idAltera) != false) {
+                    if (PessoasDao.alterar(Gui.CriarPessoa(), idAltera) != false) {
                         Gui.mostrarMensagemAviso("Pessoa Alterada", "Aviso", 3);
                     } else {
                         Gui.mostrarMensagemAviso("Erro ao Alterar Pessoa", "Aviso", 2);
@@ -206,7 +228,7 @@ public class SoftwareCasamento {
                     break;
                 case 3:
                     int idDelete = Integer.parseInt(Gui.mostrarMensagemInput("Digite o id do usuario a ser deletado", "Deletar Usuario", 1, "0"));
-                    if (pessoasDao.deletar(idDelete)) {
+                    if (PessoasDao.deletar(idDelete)) {
                         Gui.mostrarMensagemAviso("Pessoa Deletada", "Aviso", 3);
                     } else {
                         Gui.mostrarMensagemAviso("Erro ao Deletar Pessoa", "Aviso", 2);
@@ -214,16 +236,15 @@ public class SoftwareCasamento {
                     break;
                 case 4:
                     int idBuscar = Integer.parseInt(Gui.mostrarMensagemInput("Digite o id do usuario a ser buscado", "Buscar Usuario", 1, "0"));
-                    if (pessoasDao.buscar(idBuscar) != null) {
-                        Gui.mostrarMensagemAviso("Pessoas : \n" + pessoasDao.mostrar(pessoasDao.buscar(idBuscar)), "Aviso", 3);
+                    if (PessoasDao.buscar(idBuscar) != null) {
+                        Gui.mostrarMensagemAviso("Pessoas : \n" + PessoasDao.mostrar(PessoasDao.buscar(idBuscar)), "Aviso", 3);
 
                     } else {
                         Gui.mostrarMensagemAviso("Pessoa não encontrada", "Aviso", 2);
                     }
                     break;
-                case 9:
-                    Gui.mostrarMensagemAviso("Saindo", "Aviso", 1);
-                    break;
+                case -1:
+                    return false;
                 default:
                     Gui.mostrarMensagemAviso("Escolha uma opcao valida !!", "Aviso", 2);
                     break;
@@ -233,16 +254,55 @@ public class SoftwareCasamento {
 
         }
         System.out.println("Menu Fechado");
+        return true;
     }
 
-    private void menuUsuariosLoop(int opcaoUsuario) {
+    private boolean menuUsuariosLoop(int opcaoUsuario) {
 
         while (opcaoUsuario != 9) {
             switch (opcaoUsuario) {
                 case 0:
+                    boolean PessoaTemUsuario = false;
+                    String pessoasSemUsuario = "";
 
-                    //UsuarioDao.inserir(Gui.CriarUsuario());
-                    Gui.mostrarMensagemAviso("Usuario Criado", "Aviso", 1);
+                    for (Pessoas pessoa : PessoasDao.GetDataBase()) {
+                        boolean estaAssociada = false;
+
+                        for (Usuario usuario : UsuarioDao.GetDataBase()) {
+                            if (usuario.getPessoa() != null && usuario.getPessoa().getId() == pessoa.getId()) {
+                                estaAssociada = true;
+                                break;
+                            }
+                        }
+
+                        if (!estaAssociada) {
+                            PessoaTemUsuario = true;
+                            pessoasSemUsuario += PessoasDao.mostrar(pessoa) + "\n";
+                        }
+                    }
+
+                    if (!PessoaTemUsuario || pessoasSemUsuario.equals("")) {
+                        Gui.mostrarMensagemAviso("Nenhuma pessoa disponivel encontrada insira informações da pessoa referente a esse usuario", "Aviso", 1);
+                        Pessoas p = Gui.CriarPessoa();
+
+                        if (PessoasDao.inserir(p) != -1) {
+                            Gui.mostrarMensagemAviso("Pessoa Criada", "Aviso", 1);
+
+                            Gui.mostrarMensagemAviso("Agora insira as informações do usuario", "Aviso", 1);
+                            if (UsuarioDao.inserir(Gui.CriarUsuario(p)) != -1) {
+                                Gui.mostrarMensagemAviso("Usuario Criado", "Aviso", 1);
+                            } else {
+                                Gui.mostrarMensagemAviso("Erro ao Criar Usuario ", "Aviso", 2);
+                            }
+                        } else {
+                            Gui.mostrarMensagemAviso("Erro ao Criar Pessoa", "Aviso", 2);
+                        }
+                    } else {
+                        if (!menuUsuariosInserirEscolhaLoop(Gui.menuUsuariosInserirEscolhaOpcoes())) {
+                            return false;
+                        };
+                    }
+
                     break;
                 case 1:
                     Gui.mostrarMensagemAviso("Usuarios : \n" + UsuarioDao.mostrar(null), "Aviso", 1);
@@ -265,9 +325,8 @@ public class SoftwareCasamento {
                     int idBuscar = Integer.parseInt(Gui.mostrarMensagemInput("Digite o id do usuario a ser buscado", "Buscar Usuario", 1, "0"));
                     Gui.mostrarMensagemAviso("Usuario : \n" + UsuarioDao.mostrar(UsuarioDao.buscar(idBuscar)), "Aviso", 1);
                     break;
-                case 9:
-                    Gui.mostrarMensagemAviso("Saindo", "Aviso", 1);
-                    break;
+                case -1:
+                    return false;
                 default:
                     Gui.mostrarMensagemAviso("Escolha uma opcao valida !!", "Aviso", 2);
                     break;
@@ -277,9 +336,100 @@ public class SoftwareCasamento {
 
         }
         System.out.println("Menu Fechado");
+        return true;
     }
 
-    private void menuFornecedorLoop(int opcaoUsuario) {
+    private boolean menuUsuariosInserirEscolhaLoop(int opcaoUsuario) {
+
+        while (opcaoUsuario != 9) {
+            switch (opcaoUsuario) {
+                case 0:
+                    Pessoas p = Gui.CriarPessoa();
+                    if (PessoasDao.inserir(p) != -1) {
+                        Gui.mostrarMensagemAviso("Pessoa Criada", "Aviso", 1);
+                        if (UsuarioDao.inserir(Gui.CriarUsuario(p)) != -1) {
+                            Gui.mostrarMensagemAviso("Usuario Criado", "Aviso", 1);
+                        } else {
+                            Gui.mostrarMensagemAviso("Erro ao Criar Usuario ", "Aviso", 2);
+                        }
+                    } else {
+                        Gui.mostrarMensagemAviso("Erro ao Criar Pessoa", "Aviso", 2);
+                    }
+                    break;
+                case 1:
+                    int tamVet = 1000;
+                    long[] idsPessoaSemUsuario = new long[tamVet]; // MUDAR
+                    for (int a = 0; a < idsPessoaSemUsuario.length; a++) {
+                        idsPessoaSemUsuario[a] = -1;
+                    }
+
+                    String StringPessoasSemUsuario = "";
+
+                    int j = 0;
+                    for (Pessoas pessoa : PessoasDao.GetDataBase()) {
+                        boolean PessoatemUsuario = false;
+
+                        for (Usuario usuario : UsuarioDao.GetDataBase()) {
+                            if (usuario.getPessoa() != null && usuario.getPessoa().getId() == pessoa.getId()) {
+                                PessoatemUsuario = true;
+                            }
+                        }
+
+                        if (!PessoatemUsuario && j <= tamVet) {
+                            idsPessoaSemUsuario[j] = pessoa.getId();
+                            StringPessoasSemUsuario += PessoasDao.mostrar(pessoa);
+                            j++;
+                        }
+                    }
+
+                    boolean verificacao = false;
+                    int option;
+                    while (verificacao != true) {
+                        String resp = Gui.mostrarMensagemInput("Qual Pessoa vai ser atrelado ao usuario? digite o ID: \n" + StringPessoasSemUsuario, "Opções", 1, "0");
+                        if (resp == null) {
+                            return true;
+                        } else {
+                            option = Integer.parseInt(resp);
+                        }
+
+                        for (long pessoa : idsPessoaSemUsuario) {
+                            if (pessoa == option && option != -1) {
+                                verificacao = true;
+                            }
+                        }
+                        // o problema e q todas as posições do idsPessoaSemUsuario é 0
+
+                        if (verificacao == true) {
+                            Pessoas p2 = PessoasDao.buscar(option);
+
+                            if (UsuarioDao.inserir(Gui.CriarUsuario(p2)) != -1) {
+                                Gui.mostrarMensagemAviso("Usuario Criado", "Aviso", 1);
+                            } else {
+                                Gui.mostrarMensagemAviso("Erro ao Criar Usuario ", "Aviso", 2);
+                            }
+
+                        } else {
+                            Gui.mostrarMensagemAviso("Id invalido", "Aviso", 1);
+                        }
+
+                    }
+                    break;
+
+                case -1:
+                    return false;
+
+            }
+            return true;
+        }
+
+        System.out.println(
+                "Menu Fechado");
+
+        return true;
+    }
+
+    //a
+    private boolean menuFornecedorLoop(int opcaoUsuario) {
 
         while (opcaoUsuario != 9) {
             switch (opcaoUsuario) {
@@ -304,9 +454,8 @@ public class SoftwareCasamento {
                     int idBuscar = Integer.parseInt(Gui.mostrarMensagemInput("Digite o id do Fornecedor a ser buscado", "Buscar Forncededor", 1, "0"));
                     Gui.mostrarMensagemAviso("Fornecedor : \n" + FornecedorDao.mostrar(FornecedorDao.buscar(idBuscar)), "Aviso", 1);
                     break;
-                case 9:
-                    Gui.mostrarMensagemAviso("Saindo", "Aviso", 1);
-                    break;
+                case -1:
+                    return false;
                 default:
                     Gui.mostrarMensagemAviso("Escolha uma opcao valida !!", "Aviso", 2);
                     break;
@@ -316,18 +465,18 @@ public class SoftwareCasamento {
 
         }
         System.out.println("Menu Fechado");
+        return true;
     }
 
-    private void menuConfirmacaoConvidadoResponsavelLoop(int opcaoUsuario) {
+    private boolean menuConfirmacaoConvidadoResponsavelLoop(int opcaoUsuario) {
 
         while (opcaoUsuario != 9) {
             switch (opcaoUsuario) {
                 case 0:
                     Gui.mostrarMensagemAviso("Entrando menu Convidado Responsavel", "Aviso", 1);
                     break;
-                case 9:
-                    Gui.mostrarMensagemAviso("Saindo", "Aviso", 1);
-                    break;
+                case -1:
+                    return false;
                 default:
                     Gui.mostrarMensagemAviso("Escolha uma opcao valida !!", "Aviso", 2);
                     break;
@@ -337,21 +486,25 @@ public class SoftwareCasamento {
 
         }
         System.out.println("Menu Fechado");
+        return true;
     }
 
-    private void menuEscolhaTipoConvidadoLoop(int opcaoUsuario) {
+    private boolean menuEscolhaTipoConvidadoLoop(int opcaoUsuario) {
 
         while (opcaoUsuario != 9) {
             switch (opcaoUsuario) {
                 case 0:
-                    menuConvidadoLoop(Gui.menuConvidadoOpcoes());
+                    if (!menuConvidadoLoop(Gui.menuConvidadoOpcoes())) {
+                        return false;
+                    }
                     break;
                 case 1:
-                    menuConvidadoResponsavelLoop(Gui.menuConvidadoResponsavelOpcoes());
+                    if (!menuConvidadoResponsavelLoop(Gui.menuConvidadoResponsavelOpcoes())) {
+                        return false;
+                    }
                     break;
-                case 9:
-                    Gui.mostrarMensagemAviso("Saindo", "Aviso", 1);
-                    break;
+                case -1:
+                    return false;
                 default:
                     Gui.mostrarMensagemAviso("Escolha uma opcao valida !!", "Aviso", 2);
                     break;
@@ -361,9 +514,10 @@ public class SoftwareCasamento {
 
         }
         System.out.println("Menu Fechado");
+        return true;
     }
 
-    private void menuConvidadoResponsavelLoop(int opcaoUsuario) {
+    private boolean menuConvidadoResponsavelLoop(int opcaoUsuario) {
         while (opcaoUsuario != 9) {
             switch (opcaoUsuario) {
                 case 0:
@@ -387,9 +541,8 @@ public class SoftwareCasamento {
                     int idBuscar = Integer.parseInt(Gui.mostrarMensagemInput("Digite o id do Responsavel familiar a ser buscado", "Buscar Responsavel familiar", 1, "0"));
                     Gui.mostrarMensagemAviso("Responsavel familiar : \n" + ConvidadoFamiliaDao.mostrar(ConvidadoFamiliaDao.buscar(idBuscar)), "Aviso", 1);
                     break;
-                case 9:
-                    Gui.mostrarMensagemAviso("Saindo", "Aviso", 1);
-                    break;
+                case -1:
+                    return false;
                 default:
                     Gui.mostrarMensagemAviso("Escolha uma opcao valida !!", "Aviso", 2);
                     break;
@@ -399,9 +552,10 @@ public class SoftwareCasamento {
 
         }
         System.out.println("Menu Fechado");
+        return true;
     }
 
-    private void menuConvidadoLoop(int opcaoUsuario) {
+    private boolean menuConvidadoLoop(int opcaoUsuario) {
         while (opcaoUsuario != 9) {
             switch (opcaoUsuario) {
                 case 0:
@@ -425,9 +579,8 @@ public class SoftwareCasamento {
                     int idBuscar = Integer.parseInt(Gui.mostrarMensagemInput("Digite o id do Convidado a ser buscado", "Buscar Convidado", 1, "0"));
                     Gui.mostrarMensagemAviso("Convidado : \n" + ConvidadoIndividualDao.mostrar(ConvidadoIndividualDao.buscar(idBuscar)), "Aviso", 1);
                     break;
-                case 9:
-                    Gui.mostrarMensagemAviso("Saindo", "Aviso", 1);
-                    break;
+                case -1:
+                    return false;
                 default:
                     Gui.mostrarMensagemAviso("Escolha uma opcao valida !!", "Aviso", 2);
                     break;
@@ -437,9 +590,10 @@ public class SoftwareCasamento {
 
         }
         System.out.println("Menu Fechado");
+        return true;
     }
 
-    private void menuEventoLoop(int opcaoUsuario) {
+    private boolean menuEventoLoop(int opcaoUsuario) {
         while (opcaoUsuario != 9) {
             switch (opcaoUsuario) {
                 case 0:
@@ -463,9 +617,8 @@ public class SoftwareCasamento {
                     int idBuscar = Integer.parseInt(Gui.mostrarMensagemInput("Digite o id do Evento a ser buscado", "Buscar Evento", 1, "0"));
                     Gui.mostrarMensagemAviso("Evento : \n" + EventoDao.mostrar(EventoDao.buscar(idBuscar)), "Aviso", 1);
                     break;
-                case 9:
-                    Gui.mostrarMensagemAviso("Saindo", "Aviso", 1);
-                    break;
+                case -1:
+                    return false;
                 default:
                     Gui.mostrarMensagemAviso("Escolha uma opcao valida !!", "Aviso", 2);
                     break;
@@ -475,9 +628,10 @@ public class SoftwareCasamento {
 
         }
         System.out.println("Menu Fechado");
+        return true;
     }
 
-    private void menuMuralDeRecadosLoop(int opcaoUsuario) {
+    private boolean menuMuralDeRecadosLoop(int opcaoUsuario) {
         while (opcaoUsuario != 9) {
             switch (opcaoUsuario) {
                 case 0:
@@ -501,9 +655,8 @@ public class SoftwareCasamento {
                     int idBuscar = Integer.parseInt(Gui.mostrarMensagemInput("Digite o id do Recado a ser buscado", "Buscar Recado", 1, "0"));
                     Gui.mostrarMensagemAviso("Recado : \n" + MuralDeRecadosDao.mostrar(MuralDeRecadosDao.buscar(idBuscar)), "Aviso", 1);
                     break;
-                case 9:
-                    Gui.mostrarMensagemAviso("Saindo", "Aviso", 1);
-                    break;
+                case -1:
+                    return false;
                 default:
                     Gui.mostrarMensagemAviso("Escolha uma opcao valida !!", "Aviso", 2);
                     break;
@@ -513,9 +666,10 @@ public class SoftwareCasamento {
 
         }
         System.out.println("Menu Fechado");
+        return true;
     }
 
-    private void menuPagamentoLoop(int opcaoUsuario) {
+    private boolean menuPagamentoLoop(int opcaoUsuario) {
         while (opcaoUsuario != 9) {
             switch (opcaoUsuario) {
                 case 0:
@@ -539,9 +693,8 @@ public class SoftwareCasamento {
                     int idBuscar = Integer.parseInt(Gui.mostrarMensagemInput("Digite o id do Pagamento a ser buscado", "Buscar Pagamento", 1, "0"));
                     Gui.mostrarMensagemAviso("Pagamento : \n" + PagamentosDao.mostrar(PagamentosDao.buscar(idBuscar)), "Aviso", 1);
                     break;
-                case 9:
-                    Gui.mostrarMensagemAviso("Saindo", "Aviso", 1);
-                    break;
+                case -1:
+                    return false;
                 default:
                     Gui.mostrarMensagemAviso("Escolha uma opcao valida !!", "Aviso", 2);
                     break;
@@ -551,9 +704,10 @@ public class SoftwareCasamento {
 
         }
         System.out.println("Menu Fechado");
+        return true;
     }
 
-    private void menuPresenteLoop(int opcaoUsuario) {
+    private boolean menuPresenteLoop(int opcaoUsuario) {
         while (opcaoUsuario != 9) {
             switch (opcaoUsuario) {
                 case 0:
@@ -577,9 +731,8 @@ public class SoftwareCasamento {
                     int idBuscar = Integer.parseInt(Gui.mostrarMensagemInput("Digite o id do Presente a ser buscado", "Recado Presente", 1, "0"));
                     Gui.mostrarMensagemAviso("Presente : \n" + PresentesDao.mostrar(PresentesDao.buscar(idBuscar)), "Aviso", 1);
                     break;
-                case 9:
-                    Gui.mostrarMensagemAviso("Saindo", "Aviso", 1);
-                    break;
+                case -1:
+                    return false;
                 default:
                     Gui.mostrarMensagemAviso("Escolha uma opcao valida !!", "Aviso", 2);
                     break;
@@ -589,6 +742,7 @@ public class SoftwareCasamento {
 
         }
         System.out.println("Menu Fechado");
+        return true;
     }
 
     /**

@@ -31,14 +31,12 @@ public class GUI {
     // --------- INTERFACE GRAFICA DOS MENUS ----------
     //Menu inicial de boas vindas
     public int MenuLoginOpcoes() {
-        Object[] options = {"Fazer login", "Entrar sem login", "Sair do programa"};
+        Object[] options = {"Fazer login", "Entrar sem login"};
 
         int resposta = mostrarMensagemBots("Oque deseja fazer hoje?", "Bem vindo", 3, options);
-        if (resposta != -1 && resposta != options.length - 1) {
-            return resposta;
-        } else {
-            return 9;
-        }
+        
+        return resposta;
+
     }
 
     //Menu Administrados pós login
@@ -52,11 +50,11 @@ public class GUI {
         
         Object[] options = {"Modificar Pessoas", "Modificar Usuarios", "Modificar Fornecedores",
             "Modificar Convidados", "Modificar Evento", "Modificar Mural de recados",
-            "Modificar Pagamentos", "Modificar Presentes", "Sair do programa"};
+            "Modificar Pagamentos", "Modificar Presentes", "Voltar"};
 
         //int resposta = mostrarMensagemBotsPadrao(menu.toString(), "Menu administrador", 1, options);
         int resposta = mostrarMensagemBots(menu.toString(), "Menu administrador", -1, options);
-        if (resposta != -1 && resposta != options.length - 1) {
+        if (resposta != options.length - 1) {
             return resposta;
         } else {
             return 9;
@@ -73,10 +71,10 @@ public class GUI {
         menu.append("<p style='font-size:18px; font-weight:bold;'>GERENCIADOR DE CASAMENTOS</p>");
         menu.append("<p style='font-size:12px;'>Oque deseja fazer hoje?</p><br></div></body></html>");
 
-        Object[] options = {"Modificar Mural de recados", "Dar Presente", "Sair do programa"};
+        Object[] options = {"Modificar Mural de recados", "Dar Presente", "Voltar"};
 
         int resposta = mostrarMensagemBots(menu.toString(), "Menu Convidado", -1, options);
-        if (resposta != -1 && resposta != options.length - 1) {
+        if (resposta != options.length - 1) {
             return resposta;
         } else {
             return 9;
@@ -93,10 +91,10 @@ public class GUI {
         menu.append("<p style='font-size:18px; font-weight:bold;'>GERENCIADOR DE CASAMENTOS</p>");
         menu.append("<p style='font-size:12px;'>Oque deseja fazer hoje?</p><br></div></body></html>");
 
-        Object[] options = {"Confirmar presença da familia", "Sair do programa"};
+        Object[] options = {"Confirmar presença da familia", "Voltar"};
 
         int resposta = mostrarMensagemBots(menu.toString(), "Menu Confirmação de Presença", -1, options);
-        if (resposta != -1 && resposta != options.length - 1) {
+        if (resposta != options.length - 1) {
             return resposta;
         } else {
             return 9;
@@ -112,10 +110,10 @@ public class GUI {
         menu.append("<p style='font-size:12px;'>Oque deseja fazer hoje?</p><br></div></body></html>");
 
         Object[] options = {"Criar pessoa", "Mostrar pessoas", "Alterar dados da pessoa",
-            "Deletar pessoa", "Buscar pessoa (id)", "Sair do programa"};
+            "Deletar pessoa", "Buscar pessoa (id)", "Voltar"};
 
         int resposta = mostrarMensagemBots(menu.toString(), "Menu pessoas", -1, options);
-        if (resposta != -1 && resposta != options.length - 1) {
+        if (resposta != options.length - 1) {
             return resposta;
         } else {
             return 9;
@@ -133,15 +131,36 @@ public class GUI {
         menu.append("<p style='font-size:12px;'>Oque deseja fazer hoje?</p><br><div></body></html>");
 
         Object[] options = {"Criar usuario", "Mostrar usuarios", "Alterar dados do usuario",
-            "Deletar usuario", "Buscar usuario (id)", "Sair do programa"};
+            "Deletar usuario", "Buscar usuario (id)", "Voltar"};
 
         int resposta = mostrarMensagemBots(menu.toString(), "Menu usuarios", -1, options);
-        if (resposta != -1 && resposta != options.length - 1) {
+        if (resposta != options.length - 1) {
             return resposta;
         } else {
             return 9;
         }
     }
+    
+    // menu usuarios escolha Criar nova pessoa ou escolher um existente
+    public int menuUsuariosInserirEscolhaOpcoes(){
+        StringBuilder menu = new StringBuilder("");
+
+        menu.append("<html><body><br>");
+        menu.append("<div width='730px' align='center'>");
+        menu.append("<p style='font-size:18px; font-weight:bold;'>GERENCIADOR DE CASAMENTOS</p>");
+        menu.append("<p style='font-size:12px;'>Oque deseja fazer hoje?</p><br><div></body></html>");
+
+        Object[] options = {"Criar nova pessoa", "Escolher uma pessoa", "Voltar"};
+
+        int resposta = mostrarMensagemBots(menu.toString(), "Menu usuarios escolha", -1, options);
+        if (resposta != options.length - 1) {
+            return resposta;
+        } else {
+            return 9;
+        }
+    }
+    
+    
 
     // menu Fornecedor
     public int menuFornecedorOpcoes() {
@@ -153,9 +172,10 @@ public class GUI {
         menu.append("<p style='font-size:12px;'>Oque deseja fazer hoje?</p><br><div></body></html>");
 
         Object[] options = {"Criar fornecedor", "Mostrar fornecedores", "Deletar fornecedor",
-            "Buscar fornecedor (id)", "Alterar dados de um fornecedor", "Sair do programa"};
+            "Buscar fornecedor (id)", "Alterar dados de um fornecedor", "Voltar"};
+        
         int resposta = mostrarMensagemBots(menu.toString(), "Menu fornecedor", -1, options);
-        if (resposta != -1 && resposta != options.length - 1) {
+        if (resposta != options.length - 1) {
             return resposta;
         } else {
             return 9;
@@ -171,11 +191,11 @@ public class GUI {
         menu.append("<p style='font-size:18px; font-weight:bold;'>GERENCIADOR DE CASAMENTOS</p>");
         menu.append("<p style='font-size:12px;'>Oque deseja fazer hoje?</p><br></div></body></html>");
 
-        Object[] options = {"Modificar convidados", "Modificar responsavel familia", "Sair do programa"};
+        Object[] options = {"Modificar convidados", "Modificar responsavel familia", "Voltar"};
 
         int resposta = mostrarMensagemBots(menu.toString(), "Menu Tipo convidado", -1, options);
 
-        if (resposta != -1 && resposta != options.length - 1) {
+        if (resposta != options.length - 1) {
             return resposta;
         } else {
             return 9;
@@ -192,11 +212,11 @@ public class GUI {
         menu.append("<p style='font-size:12px;'>Oque deseja fazer hoje?</p><br></div></body></html>");
 
         Object[] options = {"adicionar convidado responsavel", "Mostrar convidados responsaveis", "Deletar convidado responsavel",
-            "Buscar convidado responsavel (id)", "Alterar dados do convidado responsavel", "Sair do programa"};
+            "Buscar convidado responsavel (id)", "Alterar dados do convidado responsavel", "Voltar"};
 
         int resposta = mostrarMensagemBots(menu.toString(), "Menu convidado responsaveis familia", -1, options);
 
-        if (resposta != -1 && resposta != options.length - 1) {
+        if (resposta != options.length - 1) {
             return resposta;
         } else {
             return 9;
@@ -213,11 +233,11 @@ public class GUI {
         menu.append("<p style='font-size:12px;'>Oque deseja fazer hoje?</p><br></div></body></html>");
 
         Object[] options = {"Criar convidado", "Mostrar convidados", "Deletar convidado",
-            "Buscar convidado (id)", "Alterar dados do convidado", "Sair do programa"};
+            "Buscar convidado (id)", "Alterar dados do convidado", "Voltar"};
 
         int resposta = mostrarMensagemBots(menu.toString(), "Menu convidado", -1, options);
 
-        if (resposta != -1 && resposta != options.length - 1) {
+        if (resposta != options.length - 1) {
             return resposta;
         } else {
             return 9;
@@ -234,11 +254,11 @@ public class GUI {
         menu.append("<p style='font-size:12px;'>Oque deseja fazer hoje?</p><br></div></body></html>");
 
         Object[] options = {"Criar Evento", "Mostrar Evento", "Deletar Evento",
-            "Buscar Evento", "Alterar Evento", "Sair do programa"};
+            "Buscar Evento", "Alterar Evento", "Voltar"};
 
         int resposta = mostrarMensagemBots(menu.toString(), "Menu evento", -1, options);
 
-        if (resposta != -1 && resposta != options.length - 1) {
+        if (resposta != options.length - 1) {
             return resposta;
         } else {
             return 9;
@@ -255,11 +275,11 @@ public class GUI {
         menu.append("<p style='font-size:12px;'>Oque deseja fazer hoje?</p><br></div></body></html>");
 
         Object[] options = {"Adicionar no mural", "Mostrar mural", "Deletar do mural",
-            "Buscar comentario (id)", "Alterar comentario", "Sair do programa"};
+            "Buscar comentario (id)", "Alterar comentario", "Voltar"};
 
         int resposta = mostrarMensagemBots(menu.toString(), "Menu Mural de recados", -1, options);
 
-        if (resposta != -1 && resposta != options.length - 1) {
+        if (resposta != options.length - 1) {
             return resposta;
         } else {
             return 9;
@@ -276,11 +296,11 @@ public class GUI {
         menu.append("<p style='font-size:12px;'>Oque deseja fazer hoje?</p><br></div></body></html>");
 
         Object[] options = {"Adicionar pagamento", "Mostrar pagamentos", "Deletar pagamento",
-            "Buscar pagamento (id)", "Alterar pagamento", "Sair do programa"};
+            "Buscar pagamento (id)", "Alterar pagamento", "Voltar"};
 
         int resposta = mostrarMensagemBots(menu.toString(), "Menu pagamentos", -1, options);
 
-        if (resposta != -1 && resposta != options.length - 1) {
+        if (resposta != options.length - 1) {
             return resposta;
         } else {
             return 9;
@@ -297,11 +317,11 @@ public class GUI {
         menu.append("<p style='font-size:12px;'>Oque deseja fazer hoje?</p><br></div></body></html>");
 
         Object[] options = {"Adicionar presente", "Mostrar presentes", "Buscar presente (id)",
-            "Alterar presente", "Sair do programa"};
+            "Alterar presente", "Deletar presente", "Voltar"};
 
         int resposta = mostrarMensagemBots(menu.toString(), "Menu presentes", -1, options);
 
-        if (resposta != -1 && resposta != options.length - 1) {
+        if (resposta != options.length - 1) {
             return resposta;
         } else {
             return 9;

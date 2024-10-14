@@ -13,7 +13,6 @@ import java.time.LocalDate;
 public class Usuario {
 
     private long id;
-    private static long serial;
     private Pessoas pessoa;
     private String tipo;
     private String login;
