@@ -11,6 +11,7 @@ import java.time.LocalDate;
  * @author CAUPT - ALUNOS
  */
 public class ConvidadoIndividual {
+
     private long id;
     private Pessoas pessoa;
     private String Familia;
@@ -45,10 +46,11 @@ public class ConvidadoIndividual {
         final ConvidadoIndividual other = (ConvidadoIndividual) obj;
         return this.id == other.id;
     }
-
-   
     
     
+    public void setId(long id) {
+        this.id = id;
+    }
     
     public long getId() {
         return id;
@@ -60,6 +62,10 @@ public class ConvidadoIndividual {
 
     public void setPessoa(Pessoas pessoa) {
         this.pessoa = pessoa;
+    }
+
+    public void setFamilia(String familia) {
+        this.Familia = familia;
     }
 
     public String getParentesco() {
@@ -93,6 +99,5 @@ public class ConvidadoIndividual {
     public void setDataModificacao(LocalDate dataModificacao) {
         this.dataModificacao = dataModificacao;
     }
-   
-    
+
 }

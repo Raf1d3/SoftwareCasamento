@@ -55,7 +55,7 @@ public class SoftwareCasamento {
                         }
                     } else if (ConvidadoFamiliaDao.autenticar(login, senha)) {
                         System.out.println("Acessando menu Responsavel Familiar...");
-                        if (!menuConfirmacaoConvidadoResponsavelLoop(Gui.menuConfirmacaoConvidadoResponsavelOpcoes())) {
+                        if (!menuConfirmacaoFamiliaLoop(Gui.menuConfirmacaoFamiliaOpcoes())) {
                             return;
                         }
                     } else {
@@ -262,8 +262,8 @@ public class SoftwareCasamento {
         while (opcaoUsuario != 9) {
             switch (opcaoUsuario) {
                 case 0:
+                    // verifica nos vetores de usuario e pessoa se eles estão associados
                     boolean PessoaTemUsuario = false;
-                    String pessoasSemUsuario = "";
 
                     for (Pessoas pessoa : PessoasDao.GetDataBase()) {
                         boolean estaAssociada = false;
@@ -274,14 +274,13 @@ public class SoftwareCasamento {
                                 break;
                             }
                         }
-
                         if (!estaAssociada) {
                             PessoaTemUsuario = true;
-                            pessoasSemUsuario += PessoasDao.mostrar(pessoa) + "\n";
                         }
                     }
-
-                    if (!PessoaTemUsuario || pessoasSemUsuario.equals("")) {
+                    
+                    // caso não tenha nenhuma pessoa cadastrada ou nenhuma pessoa que não esteja atrelada a um usuario 
+                    if (!PessoaTemUsuario || PessoasDao.mostrar(null).equals("")) {
                         Gui.mostrarMensagemAviso("Nenhuma pessoa disponivel encontrada insira informações da pessoa referente a esse usuario", "Aviso", 1);
                         Pessoas p = Gui.CriarPessoa();
 
@@ -297,10 +296,10 @@ public class SoftwareCasamento {
                         } else {
                             Gui.mostrarMensagemAviso("Erro ao Criar Pessoa", "Aviso", 2);
                         }
-                    } else {
+                    } else { // caso tenha vai para a escolha de criar uma pessoa ou escolher uma existente
                         if (!menuUsuariosInserirEscolhaLoop(Gui.menuUsuariosInserirEscolhaOpcoes())) {
                             return false;
-                        };
+                        }
                     }
 
                     break;
@@ -358,7 +357,7 @@ public class SoftwareCasamento {
                     break;
                 case 1:
                     int tamVet = 1000;
-                    long[] idsPessoaSemUsuario = new long[tamVet]; // MUDAR
+                    long[] idsPessoaSemUsuario = new long[tamVet];
                     for (int a = 0; a < idsPessoaSemUsuario.length; a++) {
                         idsPessoaSemUsuario[a] = -1;
                     }
@@ -368,7 +367,6 @@ public class SoftwareCasamento {
                     int j = 0;
                     for (Pessoas pessoa : PessoasDao.GetDataBase()) {
                         boolean PessoatemUsuario = false;
-
                         for (Usuario usuario : UsuarioDao.GetDataBase()) {
                             if (usuario.getPessoa() != null && usuario.getPessoa().getId() == pessoa.getId()) {
                                 PessoatemUsuario = true;
@@ -397,7 +395,6 @@ public class SoftwareCasamento {
                                 verificacao = true;
                             }
                         }
-                        // o problema e q todas as posições do idsPessoaSemUsuario é 0
 
                         if (verificacao == true) {
                             Pessoas p2 = PessoasDao.buscar(option);
@@ -428,7 +425,7 @@ public class SoftwareCasamento {
         return true;
     }
 
-    //a
+    
     private boolean menuFornecedorLoop(int opcaoUsuario) {
 
         while (opcaoUsuario != 9) {
@@ -468,7 +465,7 @@ public class SoftwareCasamento {
         return true;
     }
 
-    private boolean menuConfirmacaoConvidadoResponsavelLoop(int opcaoUsuario) {
+    private boolean menuConfirmacaoFamiliaLoop(int opcaoUsuario) {
 
         while (opcaoUsuario != 9) {
             switch (opcaoUsuario) {
@@ -482,7 +479,7 @@ public class SoftwareCasamento {
                     break;
             }
 
-            opcaoUsuario = Gui.menuConfirmacaoConvidadoResponsavelOpcoes();
+            opcaoUsuario = Gui.menuConfirmacaoFamiliaOpcoes();
 
         }
         System.out.println("Menu Fechado");
@@ -499,7 +496,7 @@ public class SoftwareCasamento {
                     }
                     break;
                 case 1:
-                    if (!menuConvidadoResponsavelLoop(Gui.menuConvidadoResponsavelOpcoes())) {
+                    if (!menuFamiliaLoop(Gui.menuFamiliaOpcoes())) {
                         return false;
                     }
                     break;
@@ -517,7 +514,7 @@ public class SoftwareCasamento {
         return true;
     }
 
-    private boolean menuConvidadoResponsavelLoop(int opcaoUsuario) {
+    private boolean menuFamiliaLoop(int opcaoUsuario) {
         while (opcaoUsuario != 9) {
             switch (opcaoUsuario) {
                 case 0:
@@ -548,7 +545,7 @@ public class SoftwareCasamento {
                     break;
             }
 
-            opcaoUsuario = Gui.menuConvidadoResponsavelOpcoes();
+            opcaoUsuario = Gui.menuFamiliaOpcoes();
 
         }
         System.out.println("Menu Fechado");
@@ -559,15 +556,52 @@ public class SoftwareCasamento {
         while (opcaoUsuario != 9) {
             switch (opcaoUsuario) {
                 case 0:
-                    ConvidadoIndividualDao.inserir(Gui.CriarConvidadoIndividual());
-                    Gui.mostrarMensagemAviso("Convidado Criado", "Aviso", 1);
+                    // verifica nos vetores de convidado e pessoa se eles estão associados
+                    boolean PessoaEhconvidado = false;
+
+                    for (Pessoas pessoa : PessoasDao.GetDataBase()) {
+                        boolean estaAssociada = false;
+
+                        for (ConvidadoIndividual ci : ConvidadoIndividualDao.GetDataBase()) {
+                            if (ci.getPessoa() != null && ci.getPessoa().getId() == pessoa.getId()) {
+                                estaAssociada = true;
+                                break;
+                            }
+                        }
+                        if (!estaAssociada) {
+                            PessoaEhconvidado = true;
+                        }
+                    }
+                    // caso não tenha nenhuma pessoa cadastrada ou nenhuma pessoa que não esteja atrelada a um convidado 
+                    if (!PessoaEhconvidado || PessoasDao.mostrar(null).equals("")) {
+                        Gui.mostrarMensagemAviso("Nenhuma pessoa disponivel encontrada insira informações da pessoa referente a esse Convidado", "Aviso", 1);
+                        Pessoas p = Gui.CriarPessoa();
+
+                        if (PessoasDao.inserir(p) != -1) {
+                            Gui.mostrarMensagemAviso("Pessoa Criada", "Aviso", 1);
+
+                            Gui.mostrarMensagemAviso("Agora insira as informações do Convidado", "Aviso", 1);
+                            if (ConvidadoIndividualDao.inserir(Gui.CriarConvidadoIndividual(p)) != -1) {
+                                Gui.mostrarMensagemAviso("Convidado Criado", "Aviso", 1);
+                            } else {
+                                Gui.mostrarMensagemAviso("Erro ao Criar Convidado ", "Aviso", 2);
+                            }
+                        } else {
+                            Gui.mostrarMensagemAviso("Erro ao Criar Pessoa", "Aviso", 2);
+                        }
+                    } else {// caso tenha vai para a escolha de criar uma pessoa ou escolher uma existente
+                        if (!menuConvidadoInserirEscolhaLoop(Gui.menuConvidadoInserirEscolhaOpcoes())) {
+                            return false;
+                        }
+                    }
+
                     break;
                 case 1:
                     Gui.mostrarMensagemAviso("Convidados : \n" + ConvidadoIndividualDao.mostrar(null), "Aviso", 1);
                     break;
                 case 2:
                     int idAltera = Integer.parseInt(Gui.mostrarMensagemInput("Digite o id de um Convidado a ser alterado", "Alterar Convidado", 1, "0"));
-                    ConvidadoIndividualDao.alterar(Gui.CriarConvidadoIndividual(), idAltera);
+                    ConvidadoIndividualDao.alterar(Gui.CriarConvidadoIndividual(null), idAltera);
                     Gui.mostrarMensagemAviso("Convidado Alterado", "Aviso", 1);
                     break;
                 case 3:
@@ -579,6 +613,9 @@ public class SoftwareCasamento {
                     int idBuscar = Integer.parseInt(Gui.mostrarMensagemInput("Digite o id do Convidado a ser buscado", "Buscar Convidado", 1, "0"));
                     Gui.mostrarMensagemAviso("Convidado : \n" + ConvidadoIndividualDao.mostrar(ConvidadoIndividualDao.buscar(idBuscar)), "Aviso", 1);
                     break;
+                case 5:
+                    Gui.mostrarMensagemAviso("Confirmando presença", "Aviso", 2);
+                    break;  
                 case -1:
                     return false;
                 default:
@@ -588,6 +625,96 @@ public class SoftwareCasamento {
 
             opcaoUsuario = Gui.menuConvidadoOpcoes();
 
+        }
+        System.out.println("Menu Fechado");
+        return true;
+    }
+
+    private boolean menuConvidadoInserirEscolhaLoop(int opcaoUsuario) {
+        while (opcaoUsuario != 9) {
+            switch (opcaoUsuario) {
+                case 0:
+                    Pessoas p = Gui.CriarPessoa();
+                    if (PessoasDao.inserir(p) != -1) {
+                        Gui.mostrarMensagemAviso("Pessoa Criada", "Aviso", 1);
+
+                        Gui.mostrarMensagemAviso("Agora insira as informações do Convidado", "Aviso", 1);
+                        if (ConvidadoIndividualDao.inserir(Gui.CriarConvidadoIndividual(p)) != -1) {
+                            Gui.mostrarMensagemAviso("Convidado Criado", "Aviso", 1);
+                        } else {
+                            Gui.mostrarMensagemAviso("Erro ao Criar Convidado ", "Aviso", 2);
+                        }
+                    } else {
+                        Gui.mostrarMensagemAviso("Erro ao Criar Pessoa", "Aviso", 2);
+                    }
+                    break;
+
+                case 1:
+
+                    int tamVet = 1000;
+                    long[] idsPessoasSemConvite = new long[tamVet];
+                    for (int a = 0; a < idsPessoasSemConvite.length; a++) {
+                        idsPessoasSemConvite[a] = -1;
+                    }
+
+                    String StringPessoasSemConvite = "";
+                    int j = 0;
+                    for (Pessoas pessoa : PessoasDao.GetDataBase()) {
+
+                        boolean PessoaEhconvidado = false;
+
+                        for (ConvidadoIndividual ci : ConvidadoIndividualDao.GetDataBase()) {
+                            if (ci.getPessoa() != null && ci.getPessoa().getId() == pessoa.getId()) {
+                                PessoaEhconvidado = true;
+                            }
+                        }
+                        if (!PessoaEhconvidado && j <= tamVet) {
+                            idsPessoasSemConvite[j] = pessoa.getId();
+                            StringPessoasSemConvite += PessoasDao.mostrar(pessoa);
+                            j++;
+                        }
+                    }
+
+                    boolean verificacao = false;
+                    int option;
+                    while (verificacao != true) {
+                        String resp = Gui.mostrarMensagemInput("Qual Pessoa vai ser atrelado ao Convidado? digite o ID: \n" + StringPessoasSemConvite, "escolha a pessoa", 3, "0");
+
+                        if (resp == null) {
+                            return true;
+                        } else {
+                            option = Integer.parseInt(resp);
+                        }
+
+                        for (Long pessoa : idsPessoasSemConvite) {
+                            if (pessoa == option && option != -1) {
+                                verificacao = true;
+                            }
+                        }
+
+                        if (verificacao == true) {
+                            Pessoas p2 = PessoasDao.buscar(option);
+
+                            if (ConvidadoIndividualDao.inserir(Gui.CriarConvidadoIndividual(p2)) != -1) {
+                                Gui.mostrarMensagemAviso("Convidado Criado", "Aviso", 1);
+                            } else {
+                                Gui.mostrarMensagemAviso("Erro ao Criar Convidado ", "Aviso", 2);
+                            }
+
+                        } else {
+                            Gui.mostrarMensagemAviso("Id invalido", "Aviso", 1);
+                        }
+
+                    }
+
+                    break;
+                case -1:
+                    return false;
+                default:
+                    Gui.mostrarMensagemAviso("Escolha uma opcao valida !!", "Aviso", 2);
+                    break;
+            }
+            return true;
         }
         System.out.println("Menu Fechado");
         return true;
