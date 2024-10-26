@@ -13,14 +13,12 @@ import java.time.LocalDate;
 public class Pessoas {
 
     private long id;
-    private static long serial;
     private String nome;
     private LocalDate nascimento;
     private String telefone;
     private LocalDate dataCriacao;
     private LocalDate dataModificacao;
 
-    
     @Override
     public int hashCode() {
         int hash = 7;
@@ -43,9 +41,33 @@ public class Pessoas {
         return this.id == other.id;
     }
 
+    /*
     @Override
     public String toString() {
-        return "Pessoas{" + "id=" + id + ", nome=" + nome + ", nascimento=" + nascimento + ", telefone=" + telefone + ", dataCriacao=" + dataCriacao + ", dataModificacao=" + dataModificacao + '}' + "\n";
+        return "[ID: " + id + "] | [Nome: " + nome + "] | [Nascimento: " + nascimento
+                + "] | [Telefone: " + telefone + "] | [Criado em: " + dataCriacao
+                + "] | [Modificado em: " + dataModificacao + "]";
+    }
+    
+    @Override
+    public String toString() {
+        return String.format(
+                "| %-5s | %-35s | %-12s | %-15s | %-12s | %-15s |",
+                "ID: " + id,
+                "Nome: " + nome,
+                "Nascimento: " + nascimento,
+                "Telefone: " + telefone,
+                "Criado em: " + dataCriacao,
+                "Modificado em: " + dataModificacao
+        );
+    }
+     */
+    @Override
+    public String toString() {
+
+        return "ID: " + id + " | Nome: " + nome + " | Nascimento: " + nascimento
+                + " | Telefone: " + telefone + " | Data de Criação: " + dataCriacao
+                + " | Última Modificação: " + dataModificacao;
     }
 
     public long getId() {

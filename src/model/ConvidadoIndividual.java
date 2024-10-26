@@ -11,6 +11,7 @@ import java.time.LocalDate;
  * @author CAUPT - ALUNOS
  */
 public class ConvidadoIndividual {
+
     private long id;
     private Pessoas pessoa;
     private String Familia;
@@ -18,6 +19,10 @@ public class ConvidadoIndividual {
     private String confirmacao;
     private LocalDate dataCriacao;
     private LocalDate dataModificacao;
+
+    public ConvidadoIndividual() {
+        this.confirmacao = "Não Confirmado";
+    }
 
     @Override
     public String toString() {
@@ -45,10 +50,11 @@ public class ConvidadoIndividual {
         final ConvidadoIndividual other = (ConvidadoIndividual) obj;
         return this.id == other.id;
     }
-
-   
     
     
+    public void setId(long id) {
+        this.id = id;
+    }
     
     public long getId() {
         return id;
@@ -62,6 +68,10 @@ public class ConvidadoIndividual {
         this.pessoa = pessoa;
     }
 
+    public void setFamilia(String familia) {
+        this.Familia = familia;
+    }
+
     public String getParentesco() {
         return parentesco;
     }
@@ -70,7 +80,7 @@ public class ConvidadoIndividual {
         this.parentesco = parentesco;
     }
 
-    public String isConfirmacao() {
+    public String getConfirmacao() {
         return confirmacao;
     }
 
@@ -93,6 +103,5 @@ public class ConvidadoIndividual {
     public void setDataModificacao(LocalDate dataModificacao) {
         this.dataModificacao = dataModificacao;
     }
-   
-    
+
 }

@@ -20,6 +20,7 @@ public class ConvidadoFamilia {
     LocalDate dataModificacao;
 
     public ConvidadoFamilia() {
+        this.confirmacao = "Não Confirmado";
     }
 
     public long getId() {
