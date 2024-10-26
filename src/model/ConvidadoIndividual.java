@@ -20,6 +20,10 @@ public class ConvidadoIndividual {
     private LocalDate dataCriacao;
     private LocalDate dataModificacao;
 
+    public ConvidadoIndividual() {
+        this.confirmacao = "Não Confirmado";
+    }
+
     @Override
     public String toString() {
         return "ConvidadoIndividual{" + "id=" + id + ", pessoa=" + pessoa + ", Familia=" + Familia + ", parentesco=" + parentesco + ", confirmacao=" + confirmacao + ", dataCriacao=" + dataCriacao + ", dataModificacao=" + dataModificacao + '}';
@@ -76,7 +80,7 @@ public class ConvidadoIndividual {
         this.parentesco = parentesco;
     }
 
-    public String isConfirmacao() {
+    public String getConfirmacao() {
         return confirmacao;
     }
 

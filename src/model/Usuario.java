@@ -20,6 +20,13 @@ public class Usuario {
     private LocalDate dataCriacao;
     private LocalDate dataModificacao;
 
+    
+    public Usuario(String tipo, String login, String senha, Pessoas pessoa) {
+        this.tipo = tipo;
+        this.login = login;
+        this.senha = senha;
+        this.pessoa = pessoa;
+    }
 
     @Override
     public String toString() {

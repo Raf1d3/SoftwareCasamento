@@ -15,11 +15,7 @@ import model.Pessoas;
  */
 public class UsuarioDAO extends GenericDAO<Usuario> {
     public UsuarioDAO() {
-        Usuario admin = new Usuario();
-        admin.setLogin("admin");
-        admin.setSenha("");
-        admin.setTipo("administrador");
-        inserir(admin);
+        inserir(new Usuario("administrador","admin","",null));
     }
     
     

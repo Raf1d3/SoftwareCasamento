@@ -5,6 +5,7 @@
 package view;
 
 import control.GenericDAO;
+import java.math.BigDecimal;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -57,7 +58,7 @@ public class GUI {
             menu.append("<p style='font-size:12px;'>Igreja: ");
             //menu.append(EventoDao.GetDataBase().get(0).getIgreja);
             menu.append("</p><br>");
-        }else{
+        } else {
             menu.append("<p style='font-size:12px;'><br>Evento em organização...");
             menu.append("</p><br>");
         }
@@ -76,20 +77,21 @@ public class GUI {
         StringBuilder menu = new StringBuilder("");
 
         menu.append("<html><body><br>");
-        menu.append("<div width='1200px' align='center'>");
+        menu.append("<div width='1000px' align='center'>");
         menu.append("<p style='font-size:18px; font-weight:bold;'>GERENCIADOR DE CASAMENTOS</p>");
-        menu.append("<p style='font-size:12px;'>Oque deseja fazer hoje?</p><br></div></body></html>");
+        menu.append("<p style='font-size:12px;'>Oque deseja gerenciar hoje?</p><br></div></body></html>");
 
-        Object[] options = {"Modificar Pessoas", "Modificar Usuarios", "Modificar Fornecedores",
-            "Gerenciar Convidados", "Modificar Evento", "Modificar Mural de recados",
-            "Modificar Pagamentos", "Modificar Presentes", "Voltar"};
+        Object[] options = {"Pessoas", "Usuarios", "Fornecedores",
+            "Convidados", "Evento", "Mural de recados",
+            "Pagamentos", "Presentes", "Relatorios",
+            "Calendario", "Sair"};
 
         //int resposta = mostrarMensagemBotsPadrao(menu.toString(), "Menu administrador", 1, options);
         int resposta = mostrarMensagemBots(menu.toString(), "Menu administrador", -1, options);
         if (resposta != options.length - 1) {
             return resposta;
         } else {
-            return 9;
+            return 15;
         }
 
     }
@@ -126,6 +128,27 @@ public class GUI {
         Object[] options = {"Confirmar presença da familia", "Voltar"};
 
         int resposta = mostrarMensagemBots(menu.toString(), "Menu Confirmação de Presença", -1, options);
+        if (resposta != options.length - 1) {
+            return resposta;
+        } else {
+            return 9;
+        }
+    }
+
+    //Menu opções mural de recados convidado (sem login)
+    public int menuMuralDeRecadosConvidadoOpcoes() {
+        StringBuilder menu = new StringBuilder("");
+
+        menu.append("<html><body><br>");
+        menu.append("<div width='790px' align='center'>");
+        menu.append("<p style='font-size:18px; font-weight:bold;'>GERENCIADOR DE CASAMENTOS</p>");
+        menu.append("<p style='font-size:12px;'>Oque deseja fazer hoje?</p><br></div></body></html>");
+
+        Object[] options = {"Adicionar no mural", "Mostrar mural", "Alterar meus comentarios",
+            "Deletar meus comentarios", "Buscar comentario (id)", "Voltar"};
+
+        int resposta = mostrarMensagemBots(menu.toString(), "Menu Mural de recados", -1, options);
+
         if (resposta != options.length - 1) {
             return resposta;
         } else {
@@ -178,7 +201,7 @@ public class GUI {
         StringBuilder menu = new StringBuilder("");
 
         menu.append("<html><body><br>");
-        menu.append("<div width='730px' align='center'>");
+        menu.append("<div width='330px' align='center'>");
         menu.append("<p style='font-size:18px; font-weight:bold;'>GERENCIADOR DE CASAMENTOS</p>");
         menu.append("<p style='font-size:12px;'>Oque deseja fazer hoje?</p><br><div></body></html>");
 
@@ -212,7 +235,7 @@ public class GUI {
         }
     }
 
-    // menu Convidados
+    // menu Convidados escolha
     public int menuEscolhaTipoConvidadoOpcoes() {
         StringBuilder menu = new StringBuilder("");
 
@@ -223,7 +246,7 @@ public class GUI {
 
         Object[] options = {"Modificar convidados", "Modificar família", "Voltar"};
 
-        int resposta = mostrarMensagemBots(menu.toString(), "Menu convidado", -1, options);
+        int resposta = mostrarMensagemBots(menu.toString(), "Menu tipo convidados", -1, options);
 
         if (resposta != options.length - 1) {
             return resposta;
@@ -237,12 +260,12 @@ public class GUI {
         StringBuilder menu = new StringBuilder("");
 
         menu.append("<html><body><br>");
-        menu.append("<div width='1100px' align='center'>");
+        menu.append("<div width='830px' align='center'>");
         menu.append("<p style='font-size:18px; font-weight:bold;'>GERENCIADOR DE CASAMENTOS</p>");
         menu.append("<p style='font-size:12px;'>Oque deseja fazer hoje?</p><br></div></body></html>");
 
         Object[] options = {"Adicionar família", "Mostrar famílias", "Alterar dados da família",
-            "Deletar família", "Buscar família (id)", "Confirmar presença das famílias",
+            "Deletar família", "Buscar família (id)", "Confirmar presenças",
             "Voltar"};
 
         int resposta = mostrarMensagemBots(menu.toString(), "Menu Família", -1, options);
@@ -254,7 +277,7 @@ public class GUI {
         }
     }
 
-    // menu Convidados admin
+    // menu Convidados
     public int menuConvidadoOpcoes() {
         StringBuilder menu = new StringBuilder("");
 
@@ -264,10 +287,10 @@ public class GUI {
         menu.append("<p style='font-size:12px;'>Oque deseja fazer hoje?</p><br></div></body></html>");
 
         Object[] options = {"Criar convidado", "Mostrar convidados", "Alterar dados do convidado",
-            "Deletar convidado", "Buscar convidado (id)", "Confirmar presença",
+            "Deletar convidado", "Buscar convidado (id)", "alterar presenças",
             "Voltar"};
 
-        int resposta = mostrarMensagemBots(menu.toString(), "Menu convidado", -1, options);
+        int resposta = mostrarMensagemBots(menu.toString(), "Menu convidados", -1, options);
 
         if (resposta != options.length - 1) {
             return resposta;
@@ -275,13 +298,13 @@ public class GUI {
             return 9;
         }
     }
-    
-        // menu usuarios escolha Criar nova pessoa ou escolher um existente
+
+    // menu Convidado escolha Criar nova pessoa ou escolher um existente
     public int menuConvidadoInserirEscolhaOpcoes() {
         StringBuilder menu = new StringBuilder("");
 
         menu.append("<html><body><br>");
-        menu.append("<div width='730px' align='center'>");
+        menu.append("<div width='330px' align='center'>");
         menu.append("<p style='font-size:18px; font-weight:bold;'>GERENCIADOR DE CASAMENTOS</p>");
         menu.append("<p style='font-size:12px;'>Oque deseja fazer hoje?</p><br><div></body></html>");
 
@@ -294,7 +317,24 @@ public class GUI {
             return 9;
         }
     }
-    
+
+    public int menuConvidadoEscolhaPresencaOpcoes() {
+        StringBuilder menu = new StringBuilder("");
+
+        menu.append("<html><body><br>");
+        menu.append("<div width='330px' align='center'>");
+        menu.append("<p style='font-size:18px; font-weight:bold;'>GERENCIADOR DE CASAMENTOS</p>");
+        menu.append("<p style='font-size:12px;'>Oque deseja fazer hoje?</p><br><div></body></html>");
+
+        Object[] options = {"Confirmar presença", "Cancelar presença", "Voltar"};
+
+        int resposta = mostrarMensagemBots(menu.toString(), "Menu convidado escolha", -1, options);
+        if (resposta != options.length - 1) {
+            return resposta;
+        } else {
+            return 9;
+        }
+    }
 
     // menu Locais
     public int menuEventoOpcoes() {
@@ -305,8 +345,8 @@ public class GUI {
         menu.append("<p style='font-size:18px; font-weight:bold;'>GERENCIADOR DE CASAMENTOS</p>");
         menu.append("<p style='font-size:12px;'>Oque deseja fazer hoje?</p><br></div></body></html>");
 
-        Object[] options = {"Criar Evento", "Mostrar Evento", "Alterar Evento", 
-           "Deletar Evento", "Buscar Evento",  "Voltar"};
+        Object[] options = {"Criar Evento", "Mostrar Evento", "Alterar Evento",
+            "Deletar Evento", "Buscar Evento", "Voltar"};
 
         int resposta = mostrarMensagemBots(menu.toString(), "Menu evento", -1, options);
 
@@ -327,7 +367,7 @@ public class GUI {
         menu.append("<p style='font-size:12px;'>Oque deseja fazer hoje?</p><br></div></body></html>");
 
         Object[] options = {"Adicionar no mural", "Mostrar mural", "Alterar comentario",
-            "Deletar do mural", "Buscar comentario (id)",  "Voltar"};
+            "Deletar do mural", "Buscar comentario (id)", "Voltar"};
 
         int resposta = mostrarMensagemBots(menu.toString(), "Menu Mural de recados", -1, options);
 
@@ -368,11 +408,69 @@ public class GUI {
         menu.append("<p style='font-size:18px; font-weight:bold;'>GERENCIADOR DE CASAMENTOS</p>");
         menu.append("<p style='font-size:12px;'>Oque deseja fazer hoje?</p><br></div></body></html>");
 
-        Object[] options = {"Adicionar presente", "Mostrar presentes", "Alterar presente", 
-             "Deletar presente", "Buscar presente (id)", "Voltar"};
+        Object[] options = {"Adicionar presente", "Mostrar presentes", "Alterar presente",
+            "Deletar presente", "Buscar presente (id)", "Voltar"};
 
         int resposta = mostrarMensagemBots(menu.toString(), "Menu presentes", -1, options);
 
+        if (resposta != options.length - 1) {
+            return resposta;
+        } else {
+            return 9;
+        }
+    }
+
+    //Menu Relatorios
+    public int menuRelatoriosOpcoes() {
+        StringBuilder menu = new StringBuilder("");
+
+        menu.append("<html><body><br>");
+        menu.append("<div width='1010px' align='center'>");
+        menu.append("<p style='font-size:18px; font-weight:bold;'>GERENCIADOR DE CASAMENTOS</p>");
+        menu.append("<p style='font-size:12px;'>Escolha abaixo uma opção de geração de relatio.</p><br></div></body></html>");
+
+        Object[] options = {"relatorio de recados", "Imprimir convite Individual", "Imprimir Convite familiar",
+            "relatorio de pagamento", "relatorio de convidados", "relatorio de convidados confirmados",
+            "Voltar",};
+
+        int resposta = mostrarMensagemBots(menu.toString(), "Menu Relatorios", -1, options);
+        if (resposta != options.length - 1) {
+            return resposta;
+        } else {
+            return 9;
+        }
+
+    }
+
+    //Tela do Relatorio de recados
+    public void RelatorioRecados(Object[] vetmural) {
+        StringBuilder menu = new StringBuilder("");
+
+        menu.append("<html><body><br>");
+        menu.append("<div width='1010px' align='center'>");
+        menu.append("<p style='font-size:18px; font-weight:bold;'>GERENCIADOR DE CASAMENTOS</p>");
+        menu.append("<p style='font-size:14px;'>Relatorio De Recados</p><br>");
+        for (Object recado : vetmural) {
+            menu.append("<p style='font-size:12px; font-weight:bold;'>" + recado + "</p>");
+        }
+        menu.append("<br></div></body></html>");
+
+        mostrarMensagemAviso(menu.toString(), "Relatorio de Recados", -1);
+
+    }
+
+    // menu Recados escolha Criar nova pessoa ou escolher um existente
+    public int menuMuralDeRecadosEscolhaInserirOpcoes() {
+        StringBuilder menu = new StringBuilder("");
+
+        menu.append("<html><body><br>");
+        menu.append("<div width='330px' align='center'>");
+        menu.append("<p style='font-size:18px; font-weight:bold;'>GERENCIADOR DE CASAMENTOS</p>");
+        menu.append("<p style='font-size:12px;'>Oque deseja fazer hoje?</p><br><div></body></html>");
+
+        Object[] options = {"Criar nova pessoa", "Escolher uma pessoa", "Voltar"};
+
+        int resposta = mostrarMensagemBots(menu.toString(), "Menu Recados escolha", -1, options);
         if (resposta != options.length - 1) {
             return resposta;
         } else {
@@ -409,11 +507,7 @@ public class GUI {
         String login = mostrarMensagemInput("login:", "Login", 3, "rodrigo");
         String senha = mostrarMensagemInput("senha:", "Senha", 3, "123");
         String tipo = mostrarMensagemInput("Tipo (noivo/noiva, administrador)", "Tipo", 3, "administrador");
-        Usuario u = new Usuario();
-        u.setLogin(login);
-        u.setPessoa(p);
-        u.setSenha(senha);
-        u.setTipo(tipo);
+        Usuario u = new Usuario(tipo, login, senha, p);
         return u;
     }
 
@@ -432,14 +526,13 @@ public class GUI {
     }
 
     public ConvidadoIndividual CriarConvidadoIndividual(Pessoas p) {
-        String Parentesco = mostrarMensagemInput("Parentesco:", "Parentesco", 3, "");
+        String parentesco = mostrarMensagemInput("Parentesco:", "Parentesco", 3, "");
         String familia = mostrarMensagemInput("Nome da família", "Nome da Família", 3, "Almeida");
 
         ConvidadoIndividual ci = new ConvidadoIndividual();
         ci.setPessoa(p);
-        ci.setParentesco(Parentesco);
+        ci.setParentesco(parentesco);
         ci.setFamilia(familia);
-        
         return ci;
     }
 
@@ -449,9 +542,12 @@ public class GUI {
         return e;
     }
 
-    public MuralDeRecados CriarRecado() {
+    public MuralDeRecados CriarRecado(Pessoas p) {
         MuralDeRecados mr = new MuralDeRecados();
+        String comentario = mostrarMensagemInput("Comentario:", "Comentario", 3, "Bom dia");
 
+        mr.setPessoa(p);
+        mr.setComentario(comentario);
         return mr;
     }
 
@@ -461,17 +557,37 @@ public class GUI {
         return pg;
     }
 
-    public Presentes CriarPresente() {
-        Presentes ps = new Presentes();
-
+    public Presentes CriarPresente(Pessoas p) {
+        String nome = mostrarMensagemInput("Nome:", "Nome", 3, "Jogo de pratos");
+        String tipo = mostrarMensagemInput("Tipo:", "Tipo", 3, "Cozinha");
+        BigDecimal valor = validarStringToBigDecimal(mostrarMensagemInput("Valor", "Valor", 3, "79.90"));
+        
+        Presentes ps = new Presentes(nome, tipo, valor);
+        ps.setPessoa(p);
         return ps;
     }
 
-    private LocalDate validarData(String inputData) {
+    public LocalDate validarData(String inputData) {
         DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         try {
             return LocalDate.parse(inputData, formato);
         } catch (DateTimeParseException e) {
+            return null;
+        }
+    }
+
+    public int validarStringToInt(String inputString) {
+        try {
+            return Integer.parseInt(inputString);
+        } catch (NumberFormatException e) {
+            return -1;
+        }
+    }
+
+    private BigDecimal validarStringToBigDecimal(String inputString) {
+        try {
+            return new BigDecimal(inputString);
+        } catch (NumberFormatException e) {
             return null;
         }
     }
