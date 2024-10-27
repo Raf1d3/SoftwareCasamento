@@ -228,11 +228,15 @@ public class SoftwareCasamento {
                 case 7:
                     if (!menuPresenteLoop(Gui.menuPresenteOpcoes())) {
                         return false;
-
                     }
                     break;
                 case 8:
                     if (!menuRelatoriosLoop(Gui.menuRelatoriosOpcoes())) {
+                        return false;
+                    }
+                    break;
+                case 9:
+                    if (!menuCalendarioLoop(Gui.menuCalendarioOpcoes(Util.getDataAtual()))) {
                         return false;
                     }
                     break;
@@ -1620,7 +1624,7 @@ public class SoftwareCasamento {
                         int tamVet = 1000;
                         String[] conteudoC = new String[tamVet];
                         double totalDePontos = 0;
-                        
+
                         for (int i = 0; i < conteudoC.length; i++) {
                             conteudoC[i] = "";
                         }
@@ -1683,6 +1687,82 @@ public class SoftwareCasamento {
             }
 
             opcaoUsuario = Gui.menuRelatoriosOpcoes();
+
+        }
+
+        System.out.println("Menu Fechado");
+
+        return true;
+    }
+
+    private boolean menuCalendarioLoop(int opcaoUsuario) {
+        while (opcaoUsuario != 9) {
+            switch (opcaoUsuario) {
+                case 0:
+                    int option = -1;
+                    while (option == -1) {
+                        String resp = Gui.mostrarMensagemInput("Quantos dias voce gostaria de avançar?", "Avançar dias", 3, "1");
+
+                        if (resp == null) {
+                            break;
+                        } else {
+
+                            if (Gui.validarStringToInt(resp) != -1) {
+                                option = Gui.validarStringToInt(resp);
+                                Util.avancarDias(option);
+                                Gui.mostrarMensagemAviso("Calendario atualizado", "Aviso", 2);
+                            } else {
+                                Gui.mostrarMensagemAviso("Quantidade de dias invalido", "Aviso", 2);
+                            }
+                        }
+                    }
+                    break;
+                case 1:
+                    option = -1;
+                    while (option == -1) {
+                        String resp = Gui.mostrarMensagemInput("Quantos dias voce gostaria de retroceder?", "Retroceder dias", 3, "1");
+
+                        if (resp == null) {
+                            break;
+                        } else {
+
+                            if (Gui.validarStringToInt(resp) != -1) {
+                                option = Gui.validarStringToInt(resp);
+                                Util.retrocederDias(opcaoUsuario);
+                                Gui.mostrarMensagemAviso("Calendario atualizado", "Aviso", 2);
+                            } else {
+                                Gui.mostrarMensagemAviso("Quantidade de dias invalido", "Aviso", 2);
+                            }
+                        }
+                    }
+                    break;
+                case 2:
+                    boolean validacao = false;
+                    while (validacao == false) {
+                        String resp = Gui.mostrarMensagemInput("Digite a data desejada", "Definir Data", 3, "1");
+
+                        if (resp == null) {
+                            break;
+                        } else {
+
+                            if (Gui.validarData(resp) != null) {
+                                validacao = true;
+                                Util.setData(Gui.validarData(resp));
+                                Gui.mostrarMensagemAviso("Calendario atualizado", "Aviso", 2);
+                            } else {
+                                Gui.mostrarMensagemAviso("Data invalida! digite nesse modelo: (dia/mes/ano)", "Aviso", 2);
+                            }
+                        }
+                    }
+                    break;
+                case -1:
+                    return false;
+                default:
+                    Gui.mostrarMensagemAviso("Escolha uma opcao valida !!", "Aviso", 2);
+                    break;
+            }
+
+            opcaoUsuario = Gui.menuCalendarioOpcoes(Util.getDataAtual());
 
         }
 

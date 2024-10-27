@@ -5,6 +5,7 @@
 package view;
 
 import control.GenericDAO;
+import control.Util;
 import java.math.BigDecimal;
 
 import java.time.LocalDate;
@@ -456,13 +457,37 @@ public class GUI {
         menu.append("<html><body><br>");
         menu.append("<div width='1010px' align='center'>");
         menu.append("<p style='font-size:18px; font-weight:bold;'>GERENCIADOR DE CASAMENTOS</p>");
-        menu.append("<p style='font-size:12px;'>Escolha abaixo uma opção de geração de relatio.</p><br></div></body></html>");
+        menu.append("<p style='font-size:12px;'>Escolha abaixo uma opção de geração de relatorio.</p><br></div></body></html>");
 
         Object[] options = {"relatorio de recados", "Imprimir convite Individual", "Imprimir Convite familiar",
             "relatorio de pagamento", "relatorio de convidados", "relatorio de convidados confirmados",
             "Voltar",};
 
         int resposta = mostrarMensagemBots(menu.toString(), "Menu Relatorios", -1, options);
+        if (resposta != options.length - 1) {
+            return resposta;
+        } else {
+            return 9;
+        }
+
+    }
+
+    //Menu Relatorios
+    public int menuCalendarioOpcoes(LocalDate dataAtual) {
+        StringBuilder menu = new StringBuilder("");
+
+        menu.append("<html><body><br>");
+        menu.append("<div width='610px' align='center'>");
+        menu.append("<p style='font-size:18px; font-weight:bold;'>GERENCIADOR DE CASAMENTOS</p>");
+        menu.append("<p style='font-size:12px;'>Hoje é ");
+        menu.append(Util.formatarDataLocal(dataAtual));
+        menu.append("</p><br></div></body></html>");
+        menu.append("<p style='font-size:12px;'>Escolha abaixo uma das opções abaixo do calendario.</p><br></div></body></html>");
+
+        Object[] options = {"Avançar dias", "Retroceder dias", "Definir data",
+            "Voltar",};
+
+        int resposta = mostrarMensagemBots(menu.toString(), "Menu Calendario", -1, options);
         if (resposta != options.length - 1) {
             return resposta;
         } else {
@@ -596,7 +621,7 @@ public class GUI {
 
         LocalDate nascimento = null;
         while (nascimento == null) {
-            String input_nascimento = mostrarMensagemInput("Digite uma data de nascimento", "Nascimento", 3, "01/01/2001");
+            String input_nascimento = mostrarMensagemInput("Digite sua data de nascimento", "Nascimento", 3, "01/01/2001");
             if (input_nascimento != null) {
                 nascimento = validarData(input_nascimento);
                 if (nascimento == null) {
