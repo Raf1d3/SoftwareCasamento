@@ -4,9 +4,9 @@
  */
 package model;
 
+import control.Util;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 /**
  *
@@ -19,14 +19,35 @@ public class Fornecedor {
     private String cnpj;
     private String telefone;
     private double valorAPagar;
+    private double valorOriginalAPagar;
+    private double valorPago;
     private int parcelas;
     private String estado;
     private LocalDateTime dataCriacao;
     private LocalDateTime dataModificacao;
+    
 
     public Fornecedor() {
         this.dataCriacao = LocalDateTime.now();
         this.dataModificacao = LocalDateTime.now();
+        this.valorOriginalAPagar = valorAPagar;
+    }
+    
+
+
+    @Override
+    public String toString() {
+        return "ID: " + id
+                + " | Nome: " + nome
+                + " | CNPJ: " + cnpj
+                + " | Tel: " + telefone
+                + " | Valor combinado: " + valorOriginalAPagar
+                + " | Valor a Pagar: " + valorAPagar
+                + " | Valor pago: " + valorPago
+                + " | Parcelas: " + parcelas
+                + " | Estado: " + estado
+                + " | Data de Criação: " + getDataCriacao()
+                + " | Última Modificação: " + getDataModificacao() + "\n";
     }
 
     @Override
@@ -49,13 +70,6 @@ public class Fornecedor {
         }
         final Fornecedor other = (Fornecedor) obj;
         return this.id == other.id;
-    }
-
-    @Override
-    public String toString() {
-        return "Forncedores{" + "id=" + id + ", nome=" + nome + ", cnpj=" + cnpj + ", telefone=" + telefone
-                + ", valor a pagar=" + valorAPagar + ", parcelas=" + parcelas + ", estado=" + estado
-                + ", data de criação=" + getDataCriacao() + ", data de modificação=" + getDataModificacao() + '}' + "\n";
     }
 
     public long getId() {
@@ -94,8 +108,12 @@ public class Fornecedor {
         return valorAPagar;
     }
 
-    public void setValorAPagar(int valorAPagar) {
+    public void setValorAPagar(double valorAPagar) {
         this.valorAPagar = valorAPagar;
+        
+         if (this.valorOriginalAPagar == 0.0) {
+            this.valorOriginalAPagar = valorAPagar;
+        }
     }
 
     public int getParcelas() {
@@ -115,19 +133,34 @@ public class Fornecedor {
     }
 
     public String getDataCriacao() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
-        return dataCriacao.format(formatter);
+        return Util.formatarData(dataCriacao);
     }
 
-    /*public void setDataCriacao(LocalDateTime dataCriacao) {
+    public void setDataCriacao(LocalDateTime dataCriacao) {
         this.dataCriacao = dataCriacao;
-    } */
-    public String getDataModificacao() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
-        return dataModificacao.format(formatter);
     }
 
-    /* public void setDataModificacao(LocalDate dataModificacao) {
+    public String getDataModificacao() {
+        return Util.formatarData(dataModificacao);
+    }
+
+    public void setDataModificacao(LocalDateTime dataModificacao) {
         this.dataModificacao = dataModificacao;
-    }*/
+    }
+
+    public double getValorPago() {
+        return valorPago;
+    }
+
+    public void setValorPago(double valorPago) {
+        this.valorPago = valorPago;
+    }
+
+    public double getValorOriginalAPagar() {
+        return valorOriginalAPagar;
+    }
+    
+        public void setValorOriginalAPagar(double valorOriginalAPagar) {
+        this.valorOriginalAPagar = valorOriginalAPagar;
+    }
 }

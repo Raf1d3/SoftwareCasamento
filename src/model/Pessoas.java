@@ -4,9 +4,9 @@
  */
 package model;
 
+import control.Util;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 /**
  *
@@ -15,18 +15,12 @@ import java.time.format.DateTimeFormatter;
 public class Pessoas {
 
     private long id;
-    private static long serial;
     private String nome;
     private LocalDate nascimento;
     private String telefone;
     private LocalDateTime dataCriacao;
     private LocalDateTime dataModificacao;
 
-     public Pessoas() {
-        this.dataCriacao = LocalDateTime.now();
-        this.dataModificacao = LocalDateTime.now();
-    }
-    
     @Override
     public int hashCode() {
         int hash = 7;
@@ -49,9 +43,33 @@ public class Pessoas {
         return this.id == other.id;
     }
 
+    /*
     @Override
     public String toString() {
-        return "Pessoas{" + "id=" + id + ", nome=" + nome + ", nascimento=" + nascimento + ", telefone=" + telefone + ", dataCriacao=" + getDataCriacao() + ", dataModificacao=" + getDataModificacao() + '}' + "\n";
+        return "[ID: " + id + "] | [Nome: " + nome + "] | [Nascimento: " + nascimento
+                + "] | [Telefone: " + telefone + "] | [Criado em: " + dataCriacao
+                + "] | [Modificado em: " + dataModificacao + "]";
+    }
+    
+    @Override
+    public String toString() {
+        return String.format(
+                "| %-5s | %-35s | %-12s | %-15s | %-12s | %-15s |",
+                "ID: " + id,
+                "Nome: " + nome,
+                "Nascimento: " + nascimento,
+                "Telefone: " + telefone,
+                "Criado em: " + dataCriacao,
+                "Modificado em: " + dataModificacao
+        );
+    }
+     */
+    @Override
+    public String toString() {
+
+        return "ID: " + id + " | Nome: " + nome + " | Nascimento: " + nascimento
+                + " | Telefone: " + telefone + " | Data de Criação: " + dataCriacao
+                + " | Última Modificação: " + dataModificacao;
     }
 
     public long getId() {
@@ -87,21 +105,18 @@ public class Pessoas {
     }
 
     public String getDataCriacao() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
-        return dataCriacao.format(formatter);
+        return Util.formatarData(dataCriacao);
     }
-
-    /*public void setDataCriacao(LocalDate dataCriacao) {
+    
+    public void setDataCriacao(LocalDateTime dataCriacao) {
         this.dataCriacao = dataCriacao;
-    }*/
-
-    public String getDataModificacao() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
-        return dataModificacao.format(formatter);
     }
-
-    /*public void setDataModificacao(LocalDate dataModificacao) {
+   
+    public String getDataModificacao() {
+        return Util.formatarData(dataModificacao);
+    }
+    
+    public void setDataModificacao(LocalDateTime dataModificacao) {
         this.dataModificacao = dataModificacao;
-    }*/
-
+    }
 }

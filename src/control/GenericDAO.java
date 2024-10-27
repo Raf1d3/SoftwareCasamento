@@ -9,6 +9,7 @@ import java.util.List;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.time.LocalDateTime;
+import model.Pagamentos;
 import model.Usuario;
 
 /**
@@ -78,8 +79,7 @@ public class GenericDAO<T> {
                         Object novoValor = campo.get(objNovo);
                         campo.set(objAntigo, novoValor);
                     }
-
-                    if (campo.getName().equals("dataModificacao")) {
+                        if (campo.getName().equals("dataModificacao")) {
                         campo.set(objAntigo, LocalDateTime.now());
                     }
                 }
@@ -122,4 +122,11 @@ public class GenericDAO<T> {
         return database;
     }
 
+    boolean pagamentoExistente(long idFornecedor) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    boolean existePagamentoParaFornecedor(long id) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 }

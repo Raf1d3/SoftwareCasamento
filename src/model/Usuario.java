@@ -4,8 +4,7 @@
  */
 package model;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.time.LocalDate;
 
 /**
  *
@@ -14,22 +13,24 @@ import java.time.format.DateTimeFormatter;
 public class Usuario {
 
     private long id;
-    private static long serial;
     private Pessoas pessoa;
     private String tipo;
     private String login;
     private String senha;
-    private LocalDateTime dataCriacao;
-    private LocalDateTime dataModificacao;
+    private LocalDate dataCriacao;
+    private LocalDate dataModificacao;
 
-    public Usuario() {
-        this.dataCriacao = LocalDateTime.now();
-        this.dataModificacao = LocalDateTime.now();
+    
+    public Usuario(String tipo, String login, String senha, Pessoas pessoa) {
+        this.tipo = tipo;
+        this.login = login;
+        this.senha = senha;
+        this.pessoa = pessoa;
     }
 
     @Override
     public String toString() {
-        return "Usuario{" + "id=" + id + ", pessoa=" + pessoa + ", tipo=" + tipo + ", dataCriacao=" + getDataCriacao() + ", dataModificacao=" + getDataModificacao() + '}';
+        return "Usuario{" + "id=" + id + ", pessoa=" + pessoa + ", tipo=" + tipo + ", dataCriacao=" + dataCriacao + ", dataModificacao=" + dataModificacao + '}';
     }
 
     @Override
@@ -57,7 +58,7 @@ public class Usuario {
     public long getId() {
         return id;
     }
-
+    
     public void setId(long id) {
         this.id = id;
     }
@@ -94,20 +95,20 @@ public class Usuario {
         this.senha = senha;
     }
 
-    public String getDataCriacao() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
-        return dataCriacao.format(formatter);
+    public LocalDate getDataCriacao() {
+        return dataCriacao;
     }
 
-    /*public void setDataCriacao(LocalDate dataCriacao) {
+    public void setDataCriacao(LocalDate dataCriacao) {
         this.dataCriacao = dataCriacao;
-    }*/
-    public String getDataModificacao() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
-        return dataModificacao.format(formatter);
     }
 
-    /*public void setDataModificacao(LocalDate dataModificacao) {
+    public LocalDate getDataModificacao() {
+        return dataModificacao;
+    }
+
+    public void setDataModificacao(LocalDate dataModificacao) {
         this.dataModificacao = dataModificacao;
-    }*/
+    }
+
 }
