@@ -4,7 +4,9 @@
  */
 package model;
 
+import control.Util;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  *
@@ -16,8 +18,8 @@ public class Pessoas {
     private String nome;
     private LocalDate nascimento;
     private String telefone;
-    private LocalDate dataCriacao;
-    private LocalDate dataModificacao;
+    private LocalDateTime dataCriacao;
+    private LocalDateTime dataModificacao;
 
     @Override
     public int hashCode() {
@@ -102,20 +104,19 @@ public class Pessoas {
         this.telefone = telefone;
     }
 
-    public LocalDate getDataCriacao() {
-        return dataCriacao;
+    public String getDataCriacao() {
+        return Util.formatarData(dataCriacao);
     }
-
-    public void setDataCriacao(LocalDate dataCriacao) {
+    
+    public void setDataCriacao(LocalDateTime dataCriacao) {
         this.dataCriacao = dataCriacao;
     }
-
-    public LocalDate getDataModificacao() {
-        return dataModificacao;
+   
+    public String getDataModificacao() {
+        return Util.formatarData(dataModificacao);
     }
-
-    public void setDataModificacao(LocalDate dataModificacao) {
+    
+    public void setDataModificacao(LocalDateTime dataModificacao) {
         this.dataModificacao = dataModificacao;
     }
-
 }
