@@ -12,6 +12,7 @@ import java.time.LocalDate;
  * @author CAUPT - ALUNOS
  */
 public class Presentes {
+
     long id;
     String nome;
     String tipo;
@@ -27,10 +28,12 @@ public class Presentes {
     }
 
     
-
     @Override
     public String toString() {
-        return "Presentes{" + "id=" + id + ", nome=" + nome + ", tipo=" + tipo + ", valor=" + valor + ", pessoa=" + pessoa + ", dataCriacao=" + dataCriacao + ", dataModificacao=" + dataModificacao + '}';
+
+        return "ID: " + id + " | Nome: " + nome + " | Tipo: " + tipo
+                + " | Valor: " + valor + " | Pessoa: " + pessoa
+                + " | Data de Criação: " + dataCriacao + " | Última Modificação: " + dataModificacao;
     }
 
     @Override
@@ -55,7 +58,6 @@ public class Presentes {
         return this.id == other.id;
     }
 
-    
     public long getId() {
         return id;
     }
@@ -111,12 +113,5 @@ public class Presentes {
     public void setDataModificacao(LocalDate dataModificacao) {
         this.dataModificacao = dataModificacao;
     }
-    
-    
-    
-    
-    
-    
+
 }
-
-

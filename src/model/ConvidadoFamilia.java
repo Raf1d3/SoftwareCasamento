@@ -5,7 +5,7 @@
 package model;
 
 import java.time.LocalDate;
-
+import control.Util;
 /**
  *
  * @author CAUPT - ALUNOS
@@ -20,7 +20,18 @@ public class ConvidadoFamilia {
     LocalDate dataModificacao;
 
     public ConvidadoFamilia() {
+        
+        String CaracteresAleatorios = Util.gerarStringAleatoria(4);
         this.confirmacao = "Não Confirmado";
+        this.acesso = CaracteresAleatorios;
+    }
+
+    @Override
+    public String toString() {
+
+        return "ID: " + id + " | Nome da família: " + nomeDaFamilia + " | Acesso: " + acesso
+                + " | Confirmacão: " + confirmacao + " | Data de Criação: " + dataCriacao
+                + " | Última Modificação: " + dataModificacao;
     }
 
     public long getId() {
@@ -41,10 +52,6 @@ public class ConvidadoFamilia {
 
     public String getAcesso() {
         return acesso;
-    }
-
-    public void setAcesso(String acesso) {
-        this.acesso = acesso;
     }
 
     public String getConfirmacao() {

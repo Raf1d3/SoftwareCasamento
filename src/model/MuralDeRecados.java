@@ -11,6 +11,7 @@ import java.time.LocalDate;
  * @author CAUPT - ALUNOS
  */
 public class MuralDeRecados {
+
     long id;
     Pessoas pessoa;
     String comentario;
@@ -81,8 +82,8 @@ public class MuralDeRecados {
 
     @Override
     public String toString() {
-        return "MuralDeRecados{" + "id=" + id + ", pessoa=" + pessoa + ", comentario=" + comentario + ", dataCriacao=" + dataCriacao + ", dataModificacao=" + dataModificacao + '}';
+
+        return "ID: " + id + " | Pessoa: " + pessoa + " | Comentário: " + comentario
+                + " | Data de Criação: " + dataCriacao + " | Última Modificação: " + dataModificacao;
     }
-    
-    
 }

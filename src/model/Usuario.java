@@ -20,17 +20,18 @@ public class Usuario {
     private LocalDate dataCriacao;
     private LocalDate dataModificacao;
 
-    
     public Usuario(String tipo, String login, String senha, Pessoas pessoa) {
         this.tipo = tipo;
         this.login = login;
         this.senha = senha;
         this.pessoa = pessoa;
     }
-
+    
     @Override
     public String toString() {
-        return "Usuario{" + "id=" + id + ", pessoa=" + pessoa + ", tipo=" + tipo + ", dataCriacao=" + dataCriacao + ", dataModificacao=" + dataModificacao + '}';
+
+        return "ID: " + id + " | Pessoa: " + pessoa + " | Tipo: " + tipo
+                + " | Data de Criação: " + dataCriacao + " | Última Modificação: " + dataModificacao;
     }
 
     @Override
@@ -58,7 +59,7 @@ public class Usuario {
     public long getId() {
         return id;
     }
-    
+
     public void setId(long id) {
         this.id = id;
     }

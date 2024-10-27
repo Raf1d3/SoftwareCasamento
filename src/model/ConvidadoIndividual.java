@@ -26,8 +26,12 @@ public class ConvidadoIndividual {
 
     @Override
     public String toString() {
-        return "ConvidadoIndividual{" + "id=" + id + ", pessoa=" + pessoa + ", Familia=" + Familia + ", parentesco=" + parentesco + ", confirmacao=" + confirmacao + ", dataCriacao=" + dataCriacao + ", dataModificacao=" + dataModificacao + '}';
+
+        return "ID: " + id + " | Pessoa: " + pessoa + " | Família: " + Familia
+                + " | Parentesco: " + parentesco + " | Confirmação: " + confirmacao + " | Data de Criação: " + dataCriacao
+                + " | Última Modificação: " + dataModificacao;
     }
+    
 
     @Override
     public int hashCode() {
@@ -50,18 +54,21 @@ public class ConvidadoIndividual {
         final ConvidadoIndividual other = (ConvidadoIndividual) obj;
         return this.id == other.id;
     }
-    
-    
+
     public void setId(long id) {
         this.id = id;
     }
-    
+
     public long getId() {
         return id;
     }
 
     public Pessoas getPessoa() {
         return pessoa;
+    }
+
+    public String getFamilia() {
+        return Familia;
     }
 
     public void setPessoa(Pessoas pessoa) {
