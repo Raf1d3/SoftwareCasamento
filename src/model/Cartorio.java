@@ -32,7 +32,6 @@ public class Cartorio {
         + " | Nome: " + nome 
         + " | Endereco: " + endereco 
         + " | Tel: " + telefone 
-        + " | Data: " + data
         + " | Data de Criação: " + getDataCriacao() 
         + " | Última Modificação: " + getDataModificacao() + "\n";
     }
@@ -84,6 +83,10 @@ public class Cartorio {
         this.endereco = endereco;
     }
     
+    public void setData(LocalDate data) {
+        this.data = data;
+    }
+    
     public String getTelefone() {
         return telefone;
     }
@@ -95,15 +98,15 @@ public class Cartorio {
     public String getDataCriacao() {
         return Util.formatarData(dataCriacao);
     }
-    
+
     public void setDataCriacao(LocalDateTime dataCriacao) {
         this.dataCriacao = dataCriacao;
     }
-   
+
     public String getDataModificacao() {
         return Util.formatarData(dataModificacao);
     }
-    
+
     public void setDataModificacao(LocalDateTime dataModificacao) {
         this.dataModificacao = dataModificacao;
     }

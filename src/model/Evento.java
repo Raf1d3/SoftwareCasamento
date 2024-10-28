@@ -29,20 +29,27 @@ public class Evento {
         this.dataModificacao = LocalDateTime.now();
     }
     
-    @Override
-    public String toString() {
-        return "ID: " + id 
+   @Override
+public String toString() {
+    return "ID: " + id 
+        + " | Nome do Evento: " + nome
         + " | Noiva: " + noiva.getNome()
         + " | Noivo: " + noivo.getNome()
-        + " | Data do evento: " + dataEvento + "\n" 
-        + " | Igreja: " + igreja.getNome() + " | " + igreja.getEndereco() + " | " 
-        + igreja.getTelefone() + "\n"
-        + " | Cartorio: " + cartorio.getNome() + " | " + cartorio.getEndereco()
-        + " | " + cartorio.getTelefone() + "\n"
-        + " | Data de Criação: " + getDataCriacao()
-        + " | Última Modificação: " + getDataModificacao() + "\n\n\n";
-    }
+        + " Data do Evento: " + getDataEvento() + "\n"
+    
+        + "Igreja: " + igreja.getNome() 
+        + " | Endereço: " + igreja.getEndereco()
+        + " |Telefone: " + igreja.getTelefone() + "\n"
+        
+        + "Cartório: " + "Nome: " + cartorio.getNome() 
+        + " | Endereço: " + cartorio.getEndereco()
+        + " | Telefone: " + cartorio.getTelefone() + "\n"
+        
+        + "Registro do Evento: " + " Data de Criação: " + getDataCriacao()
+        + " Última Modificação: " + getDataModificacao() + "\n\n";
+}
 
+     
     public long getId() {
         return id;
     }
@@ -50,11 +57,19 @@ public class Evento {
     public void setId(long id) {
         this.id = id;
     }
-
-    public LocalDate getDataEvento() {
-        return dataEvento;
+    
+    public String getNome() {
+        return nome;
     }
 
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public String getDataEvento() {
+        return Util.formatarDataLocal(dataEvento);
+    }
+    
     public void setDataEvento(LocalDate dataEvento) {
         this.dataEvento = dataEvento;
     }
@@ -103,6 +118,7 @@ public class Evento {
         return Util.formatarData(dataCriacao);
     }
     
+    
     public void setDataCriacao(LocalDateTime dataCriacao) {
         this.dataCriacao = dataCriacao;
     }
@@ -113,6 +129,10 @@ public class Evento {
     
     public void setDataModificacao(LocalDateTime dataModificacao) {
         this.dataModificacao = dataModificacao;
+    }
+    
+     public LocalDate getDataCriacaoSomenteData() {
+        return dataCriacao.toLocalDate();
     }
 }
 

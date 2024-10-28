@@ -682,6 +682,10 @@ public Fornecedor CriarFornecedor() {
     String cnpj = mostrarMensagemInput("Cnpj:", "Cnpj", 3, "2.345.678/0001-99");
     String telefone = mostrarMensagemInput("Telefone:", "telefone", 3, "(11) 91234-5678");
 
+    String nomeFornecedor = mostrarMensagemInput("Nome Fornecedor:", "Nome", 3, "Ana");
+    Pessoas pessoa = new Pessoas();
+    pessoa.setNome(nomeFornecedor);
+         
     double valorAPagar = 0.0;
     while (true) {
         String valorStr = mostrarMensagemInput("valor a pagar:", "valor a pagar", 3, "100");
@@ -722,13 +726,15 @@ public Fornecedor CriarFornecedor() {
     
     String estado = mostrarMensagemInput("Estado:", "Estado", 3, "Pagando");
 
-    Fornecedor f = new Fornecedor();
+    Fornecedor f = new Fornecedor();   
+     f.setPessoa(pessoa);
     f.setNome(nome);
     f.setCnpj(cnpj);
     f.setTelefone(telefone);
     f.setValorAPagar(valorAPagar);
     f.setParcelas(parcelas);
     f.setEstado(estado);
+
     return f;
 }
 
@@ -796,6 +802,7 @@ public Fornecedor CriarFornecedor() {
 
     public Evento CriarEvento() {
         LocalDate data = null;
+        String nome = mostrarMensagemInput("Nome do evento:", "Nome", 3, "Casorio");
         String dataEvento = mostrarMensagemInput("Data do Evento:", "Data", 3, "13/01/2000");
         String nomeNoiva = mostrarMensagemInput("Nome da Noiva:", "Nome", 3, "Ana");
         String nomeNoivo = mostrarMensagemInput("Nome do Noivo:", "Nome", 3, "Carlos");
@@ -812,6 +819,7 @@ public Fornecedor CriarFornecedor() {
         Cartorio cartorio = criarCartorio();
 
         Evento e = new Evento();
+        e.setNome(nome);
         e.setDataEvento(data);
         e.setNoiva(noiva);
         e.setNoivo(noivo);
@@ -844,8 +852,9 @@ public Fornecedor CriarFornecedor() {
     }
      */
 public Pagamentos CriarPagamento(Fornecedor fornecedor) {
-    LocalDate data = null;
     
+
+    LocalDate data = null;
     // Solicita a data até que seja válida ou o usuário decida cancelar
     while (data == null) {
         String input_data = mostrarMensagemInput("Data (YYYY-MM-DD):", "Data", 3, "2024-10-26");

@@ -5,7 +5,6 @@
 package model;
 
 import control.Util;
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -47,7 +46,7 @@ public class Pagamentos {
         }
         return "ID: " + id
                 + " | idf: " + fornecedor.getId()
-                + " | Data: " + data
+                + " | Data: " + getData()
                 + " | Pessoa: " + pessoa
                 + " | Fornecedor: " + fornecedor.getNome()
                 + " | Valor combinado: " + fornecedor.getValorOriginalAPagar()
@@ -91,11 +90,11 @@ public class Pagamentos {
         this.id = id;
     }
 
-    public LocalDate getData() {
-        return data;
+    public String getData() {
+        return Util.formatarDataLocal(data);
     }
-
-    public void setData(LocalDate data) {
+    
+    public void setDataEvento(LocalDate data) {
         this.data = data;
     }
 
@@ -161,9 +160,5 @@ public class Pagamentos {
 
     public void setAgendado(boolean agendado) {
         this.agendado = agendado;
-    }
-
-    public long getFornecedorId() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }

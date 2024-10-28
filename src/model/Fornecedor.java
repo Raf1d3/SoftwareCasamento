@@ -21,6 +21,7 @@ public class Fornecedor {
     private double valorAPagar;
     private double valorOriginalAPagar;
     private double valorPago;
+    private Pessoas pessoa;
     private int parcelas;
     private String estado;
     private LocalDateTime dataCriacao;
@@ -39,6 +40,7 @@ public class Fornecedor {
     public String toString() {
         return "ID: " + id
                 + " | Nome: " + nome
+                + " | Pessoa: " + pessoa.getNome()
                 + " | CNPJ: " + cnpj
                 + " | Tel: " + telefone
                 + " | Valor combinado: " + valorOriginalAPagar
@@ -114,6 +116,14 @@ public class Fornecedor {
          if (this.valorOriginalAPagar == 0.0) {
             this.valorOriginalAPagar = valorAPagar;
         }
+    }
+    
+    public Pessoas getPessoa() {
+        return pessoa;
+    }
+
+    public void setPessoa(Pessoas pessoa) {
+        this.pessoa = pessoa;
     }
 
     public int getParcelas() {

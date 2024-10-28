@@ -78,4 +78,8 @@ public class Util {
         return Period.between(dataNascimento, dataAtual).getYears();
     }
 
+    public static String formatarDataLocal(LocalDateTime dataCriacao) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
 }

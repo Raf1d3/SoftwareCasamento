@@ -4,8 +4,6 @@
  */
 package control;
 
-import java.util.ArrayList;
-import java.util.List;
 import view.GUI;
 import model.Pessoas;
 import model.Fornecedor;
@@ -14,7 +12,6 @@ import model.ConvidadoIndividual;
 import model.Evento;
 import model.MuralDeRecados;
 import model.Pagamentos;
-import model.Presentes;
 import model.Usuario;
 
 /**

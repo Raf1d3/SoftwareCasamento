@@ -4,8 +4,10 @@
  */
 package model;
 
+import control.Util;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  *
@@ -18,13 +20,15 @@ public class Presentes {
     String tipo;
     BigDecimal valor;
     Pessoas pessoa;
-    LocalDate dataCriacao;
-    LocalDate dataModificacao;
+    LocalDateTime dataCriacao;
+    LocalDateTime dataModificacao;
 
     public Presentes(String nome, String tipo, BigDecimal valor) {
         this.nome = nome;
         this.tipo = tipo;
         this.valor = valor;
+        this.dataCriacao = LocalDateTime.now();
+        this.dataModificacao = LocalDateTime.now();
     }
 
     
@@ -33,7 +37,7 @@ public class Presentes {
 
         return "ID: " + id + " | Nome: " + nome + " | Tipo: " + tipo
                 + " | Valor: " + valor + " | Pessoa: " + pessoa
-                + " | Data de Criação: " + dataCriacao + " | Última Modificação: " + dataModificacao;
+                + " | Data de Criação: " + getDataCriacao() + " | Última Modificação: " + getDataModificacao();
     }
 
     @Override
@@ -98,19 +102,19 @@ public class Presentes {
         this.pessoa = pessoa;
     }
 
-    public LocalDate getDataCriacao() {
-        return dataCriacao;
+    public String getDataCriacao() {
+        return Util.formatarData(dataCriacao);
     }
-
-    public void setDataCriacao(LocalDate dataCriacao) {
+    
+    public void setDataCriacao(LocalDateTime dataCriacao) {
         this.dataCriacao = dataCriacao;
     }
-
-    public LocalDate getDataModificacao() {
-        return dataModificacao;
+   
+    public String getDataModificacao() {
+        return Util.formatarData(dataModificacao);
     }
-
-    public void setDataModificacao(LocalDate dataModificacao) {
+    
+    public void setDataModificacao(LocalDateTime dataModificacao) {
         this.dataModificacao = dataModificacao;
     }
 
