@@ -277,7 +277,7 @@ public class GUI {
         menu.append("<p style='font-size:18px; font-weight:bold;'>GERENCIADOR DE CASAMENTOS</p>");
         menu.append("<p style='font-size:12px;'>Oque deseja fazer hoje?</p><br><div></body></html>");
 
-        Object[] options = {"Criar novo fornecedor", "Escolher um fornecedor", "Voltar"};
+        Object[] options = {"Criar novo fornecedor", "Pagar um Fornecedor", "Voltar"};
 
         int resposta = mostrarMensagemBots(menu.toString(), "Menu usuarios escolha", -1, options);
         if (resposta != options.length - 1) {
@@ -620,6 +620,26 @@ public class GUI {
 
     }
 
+    //Tela do Relatorio de convidados
+    public void RelatorioPagamento(String vetmural[], double ValorTotal) {
+        StringBuilder menu = new StringBuilder();
+
+        menu.append("<html><body><br>");
+        menu.append("<div width='1010px' align='center'>");
+        menu.append("<p style='font-size:18px; font-weight:bold;'>GERENCIADOR DE CASAMENTOS</p>");
+        menu.append("<p style='font-size:14px;'>Relatorio De Pagamento</p><br>");
+        for (Object recado : vetmural) {
+            if (recado != "") {
+                menu.append("<p style='font-size:12px; font-weight:bold;'>" + recado + "</p>");
+            }
+        }
+        menu.append("<p style='font-size:12px; font-weight:bold;'>Valor Total: " + ValorTotal + "</p>");
+        menu.append("<br></div></body></html>");
+
+        mostrarMensagemAviso(menu.toString(), "Relatorio de Pagamento", -1);
+
+    }
+
     //Tela do Relatorio de convidados Confirmados
     public void RelatorioConvidadosConfirmados(String[] vetmural, double totalPTS) {
         StringBuilder menu = new StringBuilder();
@@ -633,6 +653,7 @@ public class GUI {
                 menu.append("<p style='font-size:12px; font-weight:bold;'>" + recado + "</p>");
             }
         }
+        menu.append("<p style='font-size:12px; font-weight:bold;'>Total de pontos: " + totalPTS + "</p>");
         menu.append("<br></div></body></html>");
 
         mostrarMensagemAviso(menu.toString(), "Relatorio de Convidados Confirmados", -1);
@@ -677,60 +698,51 @@ public class GUI {
         return u;
     }
 
-public Fornecedor CriarFornecedor() {
-    String nome = mostrarMensagemInput("Nome:", "Nome", 3, "João Silva - Carnes");
-    String cnpj = mostrarMensagemInput("Cnpj:", "Cnpj", 3, "2.345.678/0001-99");
-    String telefone = mostrarMensagemInput("Telefone:", "telefone", 3, "(11) 91234-5678");
+    public Fornecedor CriarFornecedor() {
+        String nome = mostrarMensagemInput("Nome:", "Nome", 3, "João Silva - Carnes");
+        String cnpj = mostrarMensagemInput("Cnpj:", "Cnpj", 3, "2.345.678/0001-99");
+        String telefone = mostrarMensagemInput("Telefone:", "telefone", 3, "(11) 91234-5678");
 
-    double valorAPagar = 0.0;
-    while (true) {
-        String valorStr = mostrarMensagemInput("valor a pagar:", "valor a pagar", 3, "100");
-        if (valorStr != null) {
-            if (!valorStr.trim().isEmpty()) {
-                try {
-                    valorAPagar = Double.parseDouble(valorStr);
-                    break;
-                } catch (NumberFormatException e) {
-                    mostrarMensagemAviso("Valor inválido. Por favor, insira um número válido.", "Erro", 2);
+        double valorAPagar = 0.0;
+        boolean verificacao = false;
+        while (verificacao != true) {
+            String valorStr = mostrarMensagemInput("valor a pagar:", "valor a pagar", 3, "100");
+            if (valorStr != null) {
+                if (validarStringToDouble(valorStr) != -1) {
+                    valorAPagar = validarStringToDouble(valorStr);
+                    verificacao = true;
+                } else {
+                    mostrarMensagemAviso("Valor invalido", "Aviso", 2);
                 }
             } else {
-                mostrarMensagemAviso("Campo valor a pagar não pode estar vazio.", "Erro", 2);
+                break;
             }
-        } else {
-            break;
         }
-    }
 
-    int parcelas = 0;
-    while (true) {
-        String parcelasStr = mostrarMensagemInput("Parcelas:", "Parcelas", 3, "2");
-        if (parcelasStr != null) {
-            if (!parcelasStr.trim().isEmpty()) {
-                try {
-                    parcelas = Integer.parseInt(parcelasStr);
-                    break;
-                } catch (NumberFormatException e) {
-                    mostrarMensagemAviso("Número de parcelas inválido. Por favor, insira um número inteiro válido.", "Erro", 2);
+        int parcelas = 0;
+        verificacao = false;
+        while (verificacao != true) {
+            String parcelasStr = mostrarMensagemInput("Parcelas:", "Parcelas", 3, "2");
+            if (parcelasStr != null) {
+                if (validarStringToInt(parcelasStr) != -1) {
+                    parcelas = validarStringToInt(parcelasStr);
+                    verificacao = true;
+                } else {
+                    mostrarMensagemAviso("Valor invalido", "Aviso", 2);
                 }
             } else {
-                mostrarMensagemAviso("Campo parcelas não pode estar vazio.", "Erro", 2);
+                break;
             }
-        } else {
-            break; 
         }
-    }
-    
-    String estado = mostrarMensagemInput("Estado:", "Estado", 3, "Pagando");
 
-    Fornecedor f = new Fornecedor();
-    f.setNome(nome);
-    f.setCnpj(cnpj);
-    f.setTelefone(telefone);
-    f.setValorAPagar(valorAPagar);
-    f.setParcelas(parcelas);
-    f.setEstado(estado);
-    return f;
-}
+        Fornecedor f = new Fornecedor();
+        f.setNome(nome);
+        f.setCnpj(cnpj);
+        f.setTelefone(telefone);
+        f.setValorAPagar(valorAPagar);
+        f.setParcelas(parcelas);
+        return f;
+    }
 
     public ConvidadoFamilia CriarConvidadoFamilia() {
         String nomefamilia = mostrarMensagemInput("Nome da família", "Nome da Família", 3, "Almeida");
@@ -831,121 +843,20 @@ public Fornecedor CriarFornecedor() {
         return mr;
     }
 
-    /*
-    public Calendario CriarCalendario() {
-        Calendario ca = new Calendario();
-        
-        LocalDate data = null;
-        String dataEvento = mostrarMensagemInput("Data do Evento:", "Data", 3, "26/10/2024");
-        data = validarData(dataEvento);
-        ca.setDataAtual(data);
-     
-        return ca;
-    }
-     */
-public Pagamentos CriarPagamento(Fornecedor fornecedor) {
-    LocalDate data = null;
-    
-    // Solicita a data até que seja válida ou o usuário decida cancelar
-    while (data == null) {
-        String input_data = mostrarMensagemInput("Data (YYYY-MM-DD):", "Data", 3, "2024-10-26");
-        if (input_data != null) {
-            try {
-                data = LocalDate.parse(input_data);
-            } catch (DateTimeParseException e) {
-                mostrarMensagemAviso("Data inválida. Tente novamente no formato YYYY-MM-DD.", "Aviso", 2);
-            }
-        } else {
-            break; // Permite sair caso o input seja nulo
+    public Pagamentos CriarPagamento(Fornecedor fornecedor, Pessoas pessoa) {
+        String descricao = mostrarMensagemInput("Descrição:", "Descrição", 3, "Pagamento de serviço");
+
+        // Definindo o tipo de pagamento com uma entrada do usuário
+        boolean agendado = false;
+        String tipoPagamento = mostrarMensagemInput("Escolha o tipo de pagamento: 1 para Regular, 2 para Agendado:", "Tipo de Pagamento", 1, "1");
+        if (tipoPagamento == "2") {
+            agendado = true;
         }
+
+        Pagamentos pagamento = new Pagamentos(descricao, fornecedor, agendado, pessoa);
+
+        return pagamento;
     }
-
-    String descricao = mostrarMensagemInput("Descrição:", "Descrição", 3, "Pagamento de serviço");
-
-    double valor = 0.0;
-    while (true) {
-        String valorStr = mostrarMensagemInput("Valor:", "Valor", 3, "100");
-        if (valorStr != null) {
-            if (!valorStr.trim().isEmpty()) {
-                try {
-                    valor = Double.parseDouble(valorStr);
-                    if (valor <= fornecedor.getValorAPagar()) {
-                        break;
-                    } else {
-                        mostrarMensagemAviso("O valor a pagar não pode ser maior que " + fornecedor.getValorAPagar() + ". Tente novamente.", "Erro", 2);
-                    }
-                } catch (NumberFormatException e) {
-                    mostrarMensagemAviso("Valor inválido. Por favor, insira um número válido.", "Erro", 2);
-                }
-            } else {
-                mostrarMensagemAviso("Campo valor não pode estar vazio.", "Erro", 2);
-            }
-        } else {
-            break; // Permite sair caso o input seja nulo
-        }
-    }
-
-    int parcela = 0;
-    while (true) {
-        String parcelasStr = mostrarMensagemInput("Parcela:", "Parcela", 3, "2");
-        if (parcelasStr != null) {
-            if (!parcelasStr.trim().isEmpty()) {
-                try {
-                    parcela = Integer.parseInt(parcelasStr);
-                    if (parcela <= fornecedor.getParcelas()) {
-                        break;
-                    } else {
-                        mostrarMensagemAviso("O número de parcelas não pode ser maior que " + fornecedor.getParcelas() + ". Tente novamente.", "Erro", 2);
-                    }
-                } catch (NumberFormatException e) {
-                    mostrarMensagemAviso("Número de parcelas inválido. Por favor, insira um número inteiro válido.", "Erro", 2);
-                }
-            } else {
-                mostrarMensagemAviso("Campo parcelas não pode estar vazio.", "Erro", 2);
-            }
-        } else {
-            break;
-        }
-    }
-
-    // Definindo o tipo de pagamento com uma entrada do usuário
-    boolean agendado = false;
-    String tipoPagamento = mostrarMensagemInput("Escolha o tipo de pagamento: 1 para Regular, 2 para Agendado:", "Tipo de Pagamento", 1, "1");
-    if ("2".equals(tipoPagamento)) {
-        agendado = true;
-    }
-
-    // Cria o pagamento com o valor dos parâmetros, incluindo o tipo de pagamento
-    Pagamentos pagamento = new Pagamentos(data, descricao, valor, parcela, fornecedor, agendado);
-    
-    // Se o pagamento não for agendado, o fornecedor é atualizado imediatamente
-    if (!agendado) {
-        atualizarFornecedor(fornecedor, valor);
-    }
-
-    return pagamento;
-}
-
-
-
-private void atualizarFornecedor(Fornecedor fornecedor, double valor) {
-    
-    if (fornecedor.getValorAPagar() >= valor) {
-        fornecedor.setValorAPagar(fornecedor.getValorAPagar() - valor);
-        fornecedor.setValorPago(fornecedor.getValorPago() + valor);
-
-        if (fornecedor.getValorAPagar() == 0) {
-            fornecedor.setEstado("pago");
-        }
-    } else {
-        mostrarMensagemAviso("Erro: O valor a pagar é maior do que o valor restante do fornecedor.", "Erro", 2);
-    }
-}
-
-
-
-
-
 
     public Presentes CriarPresente(Pessoas p) {
         String nome = mostrarMensagemInput("Nome:", "Nome", 3, "Jogo de pratos");
@@ -969,6 +880,17 @@ private void atualizarFornecedor(Fornecedor fornecedor, double valor) {
     public int validarStringToInt(String inputString) {
         try {
             return Integer.parseInt(inputString);
+        } catch (NumberFormatException e) {
+            return -1;
+        }
+    }
+
+    public double validarStringToDouble(String inputString) {
+        if (inputString == "") {
+            return -1;
+        }
+        try {
+            return Double.parseDouble(inputString);
         } catch (NumberFormatException e) {
             return -1;
         }

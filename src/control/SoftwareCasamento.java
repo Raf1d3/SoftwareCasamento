@@ -84,40 +84,6 @@ public class SoftwareCasamento {
         System.out.println("Menu Fechado");
     }
 
-    /*
-    //parte generica para testes
-    private void menuTesteLoop(int opcaoUsuario) {
-
-        while (opcaoUsuario != 9) {
-            switch (opcaoUsuario) {
-                case 0:
-                    Gui.mostrarMensagemAviso("Criando", "Aviso", 1);
-                    break;
-                case 1:
-                    Gui.mostrarMensagemAviso("Mostranado", "Aviso", 1);
-                    break;
-                case 2:
-                    Gui.mostrarMensagemAviso("Deletando", "Aviso", 1);
-                    break;
-                case 3:
-                    Gui.mostrarMensagemAviso("Alterarando", "Aviso", 1);
-                    break;
-                case 4:
-                    Gui.mostrarMensagemAviso("Buscando", "Aviso", 1);
-                case 9:
-                    Gui.mostrarMensagemAviso("Saindo", "Aviso", 1);
-                    break;
-                default:
-                    Gui.mostrarMensagemAviso("Escolha uma opcao valida !!", "Aviso", 1);
-                    break;
-            }
-
-            opcaoUsuario = Gui.menuPessoaOpcoes();
-
-        }
-        System.out.println("Menu Fechado");
-    }
-     */
     // Respostas do painel de convidado (sem login)
     private boolean MenuLoginConvidadoLoop(int opcaoUsuario) {
         while (opcaoUsuario != 9) {
@@ -1308,23 +1274,8 @@ public class SoftwareCasamento {
         while (opcaoUsuario != 9) {
             switch (opcaoUsuario) {
                 case 0:
-                    boolean FornecedorTemPagamentos = false;
 
-                    for (Fornecedor fornecedor : FornecedorDao.GetDataBase()) {
-                        boolean estaAssociada = false;
-
-                        for (Pagamentos pagamentos : PagamentosDao.GetDataBase()) {
-                            if (pagamentos.getFornecedor() != null && pagamentos.getFornecedor().getId() == fornecedor.getId()) {
-                                estaAssociada = true;
-                                break;
-                            }
-                        }
-                        if (!estaAssociada) {
-                            FornecedorTemPagamentos = true;
-                        }
-                    }
-
-                    // caso não tenha nenhum fornecedor cadastrado ou nenhum fornecedor que não esteja atrelada a um pagamento
+                    // caso não tenha nenhum fornecedor cadastrado
                     if (FornecedorDao.mostrar(null).equals("")) {
                         Gui.mostrarMensagemAviso("Nenhum fornecedor disponivel encontrado insira informações de fornecedores referente a esse pagamento", "Aviso", 1);
                         Fornecedor f = Gui.CriarFornecedor();
@@ -1332,11 +1283,8 @@ public class SoftwareCasamento {
                         if (FornecedorDao.inserir(f) != -1) {
                             Gui.mostrarMensagemAviso("Fornecedor Criado", "Aviso", 1);
 
-                            Gui.mostrarMensagemAviso("Agora insira as informações de pagamento", "Aviso", 1);
-                            if (PagamentosDao.inserir(Gui.CriarPagamento(f)) != -1) {
-                                Gui.mostrarMensagemAviso("Pagamento Criado", "Aviso", 1);
-                            } else {
-                                Gui.mostrarMensagemAviso("Erro ao Criar Pagamento ", "Aviso", 2);
+                            if (!menuFornecedorInserirEscolhaLoop(Gui.menuPagamentoInserirEscolhaOpcoes())) {
+                                return false;
                             }
                         } else {
                             Gui.mostrarMensagemAviso("Erro ao Criar Fornecedor", "Aviso", 2);
@@ -1357,7 +1305,7 @@ public class SoftwareCasamento {
                     break;
                 case 2:
                     int idAltera = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID de um Pagamento a ser alterado", "Alterar Pagamento", 1, "0"));
-                    if (PagamentosDao.alterar(Gui.CriarPagamento(), idAltera) != false) {
+                    if (PagamentosDao.alterar(Gui.CriarPagamento(PagamentosDao.buscar(idAltera).getFornecedor(), PagamentosDao.buscar(idAltera).getPessoa()), idAltera) != false) {
                         Gui.mostrarMensagemAviso("Pagamento Alterado", "Aviso", 1);
                     } else {
                         Gui.mostrarMensagemAviso("Erro ao Aterar o Pagamento", "Aviso", 2);
@@ -1395,21 +1343,10 @@ public class SoftwareCasamento {
     }
 
     private boolean menuFornecedorInserirEscolhaLoop(int opcaoUsuario) {
-
-        int tamVet = 1000;
-        long[] idsFornecedoresSemPagamento = new long[tamVet];
-        long[] idsFornecedoresComPagamento = new long[tamVet];
-
-        // Inicializa os arrays com -1 para indicar posições vazias
-        for (int i = 0; i < tamVet; i++) {
-            idsFornecedoresSemPagamento[i] = -1;
-            idsFornecedoresComPagamento[i] = -1;
-        }
-
         while (opcaoUsuario != 9) {
             switch (opcaoUsuario) {
                 case 0:
-                     if (FornecedorDao.inserir(Gui.CriarFornecedor()) != -1) {
+                    if (FornecedorDao.inserir(Gui.CriarFornecedor()) != -1) {
                         Gui.mostrarMensagemAviso("Fornecedor Criado", "Aviso", 1);
                     } else {
                         Gui.mostrarMensagemAviso("Erro ao Criar Fornecedor", "Aviso", 2);
@@ -1417,77 +1354,132 @@ public class SoftwareCasamento {
                     break;
 
                 case 1:
-                    
-                    StringBuilder stringFornecedoresComValorAPagar = new StringBuilder();
-                    boolean temFornecedorDisponivel = false;
-                    int index = 0;
+                    int tamVet = 1000;
+                    long[] idsFornecedoresSemPagamento = new long[tamVet];
+                    for (int i = 0; i < tamVet; i++) {
+                        idsFornecedoresSemPagamento[i] = -1;
+                    }
 
-                    for (Fornecedor fornecedor : FornecedorDao.GetDataBase()) {
-                        if (fornecedor.getValorAPagar() > 0 && !"pago".equalsIgnoreCase(fornecedor.getEstado())) {
-                            if (index < tamVet) {
-                                idsFornecedoresSemPagamento[index] = fornecedor.getId();
-                                index++;
+                    String stringFornecedoresComValorAPagar = "";
+                    int j = 0;
+
+                    for (Fornecedor f : FornecedorDao.GetDataBase()) {
+                        if (f.getEstado().equals("A pagar")) {
+                            stringFornecedoresComValorAPagar += FornecedorDao.mostrar(f);
+                            idsFornecedoresSemPagamento[j] = f.getId();
+                            j++;
+                        }
+                    }
+
+                    if (!stringFornecedoresComValorAPagar.equals("")) {
+                        boolean verificacao = false;
+                        int option;
+                        while (verificacao != true) {
+                            String resp = Gui.mostrarMensagemInput("Qual Fornecedor Sera pago? Digite o ID:\n" + stringFornecedoresComValorAPagar, "Opções", 1, "0");
+
+                            if (resp == null) {
+                                return true;
+                            } else {
+                                option = Gui.validarStringToInt(resp);
                             }
-                            stringFornecedoresComValorAPagar.append(FornecedorDao.mostrar(fornecedor)).append("\n");
-                            temFornecedorDisponivel = true;
-                        }
-                    }
 
-                    if (!temFornecedorDisponivel) {
-                        Gui.mostrarMensagemAviso("Todos os fornecedores disponíveis já estão pagos.", "Aviso", 1);
-                        return true;
-                    }
-
-                    boolean verificacao = false;
-                    while (!verificacao) {
-                        String resp = Gui.mostrarMensagemInput(
-                                "Qual Fornecedor será atrelado ao Pagamento? Digite o ID:\n" + stringFornecedoresComValorAPagar,
-                                "Opções", 1, "0"
-                        );
-
-                        if (resp == null) {
-                            return true;
-                        }
-                        int option = Gui.validarStringToInt(resp);
-
-                        for (int i = 0; i < index; i++) {
-                            if (idsFornecedoresSemPagamento[i] == option) {
-                                verificacao = true;
-                                Fornecedor fornecedorSelecionado = FornecedorDao.buscar(option);
-
-                                boolean pagamentoExistente = false;
-                                for (long id : idsFornecedoresComPagamento) {
-                                    if (id == fornecedorSelecionado.getId()) {
-                                        pagamentoExistente = true;
-                                        break;
-                                    }
+                            for (Long fornecedores : idsFornecedoresSemPagamento) {
+                                if (fornecedores == option && option != -1) {
+                                    verificacao = true;
                                 }
+                            }
 
-                                if (pagamentoExistente) {
-                                    if (PagamentosDao.alterar(Gui.CriarPagamento(fornecedorSelecionado), option)) {
-                                        Gui.mostrarMensagemAviso("Pagamento Atualizado", "Aviso", 1);
-                                    } else {
-                                        Gui.mostrarMensagemAviso("Erro ao Atualizar Pagamento", "Aviso", 2);
-                                    }
-                                } else {
-                                    if (PagamentosDao.inserir(Gui.CriarPagamento(fornecedorSelecionado)) != -1) {
-                                        Gui.mostrarMensagemAviso("Pagamento Criado", "Aviso", 1);
-                                        for (int j = 0; j < tamVet; j++) {
-                                            if (idsFornecedoresComPagamento[j] == -1) {
-                                                idsFornecedoresComPagamento[j] = fornecedorSelecionado.getId();
-                                                break;
+                            if (verificacao == true) {
+
+                                Pessoas pessoa = null;
+                                boolean verificacao1 = false;
+                                option = 0;
+                                if (!PessoasDao.mostrar(null).equals("")) {
+                                    while (verificacao1 != true) {
+                                        resp = Gui.mostrarMensagemInput("Qual pessoa será atrelada a fornecedor? Digite o ID:\n" + PessoasDao.mostrar(null), "Opções", 1, "0");
+
+                                        if (resp == null) {
+                                            return true;
+                                        } else {
+                                            option = Gui.validarStringToInt(resp);
+                                        }
+
+                                        for (Pessoas p : PessoasDao.GetDataBase()) {
+                                            if (p.getId() == option && option != -1) {
+                                                verificacao1 = true;
                                             }
                                         }
+                                        if (verificacao1 == true) {
+                                            pessoa = PessoasDao.buscar(option);
+                                            break;
+                                        } else {
+                                            Gui.mostrarMensagemAviso("ID invalido", "Aviso", 1);
+                                        }
+                                    }
+                                } else {
+                                    Gui.mostrarMensagemAviso("Nenhuma pessoa cadastrada insira informações da pessoa referente a esse Fornecedor", "Aviso", 1);
+                                    pessoa = Gui.CriarPessoa();
+                                    if (PessoasDao.inserir(pessoa) != -1) {
+                                        Gui.mostrarMensagemAviso("Pessoa Criada", "Aviso", 1);
+                                        if (FornecedorDao.inserir(Gui.CriarFornecedor()) != -1) {
+                                            Gui.mostrarMensagemAviso("Fornecedor Criado", "Aviso", 1);
+                                        } else {
+                                            Gui.mostrarMensagemAviso("Erro ao Criar Fornecedor", "Aviso", 2);
+                                        }
                                     } else {
-                                        Gui.mostrarMensagemAviso("Erro ao Criar Pagamento", "Aviso", 2);
+                                        Gui.mostrarMensagemAviso("Erro ao Criar Pessoa", "Aviso", 2);
                                     }
                                 }
-                                break;
-                            }
-                        }
 
-                        if (!verificacao) {
-                            Gui.mostrarMensagemAviso("Id inválido", "Aviso", 1);
+                                Fornecedor fornecedorSelecionado = FornecedorDao.buscar(option);
+                                Pagamentos pagamentoDoFornecedor = Gui.CriarPagamento(fornecedorSelecionado, pessoa);
+                                pagamentoDoFornecedor.setParcela(fornecedorSelecionado.getParcelas());
+                                fornecedorSelecionado.setParcelas(0);
+
+                                if (PagamentosDao.inserir(pagamentoDoFornecedor) != -1) {
+                                    Gui.mostrarMensagemAviso("Pagamento Criado", "Aviso", 1);
+                                } else {
+                                    Gui.mostrarMensagemAviso("Erro ao Criar Pagamento", "Aviso", 2);
+                                }
+
+                                if (pagamentoDoFornecedor.getParcela() > 1) {
+                                    if (!(fornecedorSelecionado.getParcelas() == pagamentoDoFornecedor.getParcela())) {
+                                        System.out.println(fornecedorSelecionado.getValorAPagar() + "/" + pagamentoDoFornecedor.getParcela() + "-" + fornecedorSelecionado.getParcelas());
+
+                                        pagamentoDoFornecedor.setValor(fornecedorSelecionado.getValorAPagar() / (pagamentoDoFornecedor.getParcela() - fornecedorSelecionado.getParcelas()));
+                                        fornecedorSelecionado.setParcelas(+1);
+
+                                    } else {
+                                        fornecedorSelecionado.setEstado("Pago");
+                                    }
+
+                                    if (fornecedorSelecionado.getValorAPagar() != 0) {
+                                        fornecedorSelecionado.setValorAPagar(fornecedorSelecionado.getValorAPagar() - pagamentoDoFornecedor.getValor());
+                                        fornecedorSelecionado.setValorPago(fornecedorSelecionado.getValorOriginalAPagar() - fornecedorSelecionado.getValorAPagar());
+                                    }
+
+                                } else {
+                                    fornecedorSelecionado.setEstado("Pago");
+                                    pagamentoDoFornecedor.setValor(fornecedorSelecionado.getValorOriginalAPagar());
+                                    pagamentoDoFornecedor.setParcela(0);
+                                    fornecedorSelecionado.setValorPago(pagamentoDoFornecedor.getValor());
+                                    fornecedorSelecionado.setValorAPagar(0);
+                                    System.out.println("A Vista");
+                                }
+
+                            } else {
+                                Gui.mostrarMensagemAviso("Nenhum fornecedor disponivel encontrado insira informações de fornecedores referente a esse pagamento", "Aviso", 1);
+
+                            }
+
+                        }
+                    } else {
+                        Gui.mostrarMensagemAviso("Nenhum fornecedor disponivel encontrado insira informações de fornecedores referente a esse pagamento", "Aviso", 1);
+                        Fornecedor f = Gui.CriarFornecedor();
+                        if (FornecedorDao.inserir(f) != -1) {
+                            Gui.mostrarMensagemAviso("Fornecedor Criado", "Aviso", 1);
+                        } else {
+                            Gui.mostrarMensagemAviso("Erro ao Criar Fornecedor", "Aviso", 2);
                         }
                     }
                     break;
@@ -1704,7 +1696,34 @@ public class SoftwareCasamento {
 
                 case 3:
                     if (!PagamentosDao.mostrar(null).equals("")) {
-                        Gui.mostrarMensagemAviso("Gerando relatorio de pagamento", "Aviso", 1);
+                        int j = 0;
+                        int tamVet = 1000;
+                        String[] conteudoP = new String[tamVet];
+
+                        for (int i = 0; i < conteudoP.length; i++) {
+                            conteudoP[i] = "";
+                        }
+                        double valorTotal = 0;
+                        for (Pagamentos p : PagamentosDao.GetDataBase()) {
+                            if (j <= tamVet) {
+                                conteudoP[j] += "ID: ";
+                                conteudoP[j] += p.getId();
+                                conteudoP[j] += " | Nome: ";
+                                conteudoP[j] += p.getPessoa().getNome();
+                                conteudoP[j] += " | Descrição: ";
+                                conteudoP[j] += p.getDescricao();
+                                conteudoP[j] += " | Valor: ";
+                                conteudoP[j] += p.getValor();
+                                conteudoP[j] += " | Parcelas: ";
+                                conteudoP[j] += p.getParcela();
+                                j++;
+                                valorTotal += p.getValor();
+                            } else {
+                                Gui.mostrarMensagemAviso("Quantidade maxima de relatorios atingida, se nescessario contrate uma expansão.", "Aviso", 2);
+                            }
+                        }
+
+                        Gui.RelatorioPagamento(conteudoP, valorTotal);
                     } else {
                         Gui.mostrarMensagemAviso("Nenhum pagamento cadastrado", "Aviso", 2);
                     }
@@ -1777,11 +1796,6 @@ public class SoftwareCasamento {
                                 ponto = 0.5;
                             } else {
                                 ponto = 1;
-                            }
-                            for (Fornecedor f : FornecedorDao.GetDataBase()) {
-                                if (ci.getPessoa().equals(f)) {
-
-                                }
                             }
 
                             if (j <= tamVet) {
