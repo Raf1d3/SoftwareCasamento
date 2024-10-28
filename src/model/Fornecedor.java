@@ -32,6 +32,7 @@ public class Fornecedor {
         this.dataCriacao = LocalDateTime.now();
         this.dataModificacao = LocalDateTime.now();
         this.valorOriginalAPagar = valorAPagar;
+        this.estado = "A pagar";
     }
     
 

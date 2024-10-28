@@ -25,11 +25,11 @@ public class Pagamentos {
     private LocalDateTime dataModificacao;
     private boolean agendado;
 
-    public Pagamentos(LocalDate data, String descricao, double valor, int parcela, Fornecedor fornecedor, boolean agendado) {
+    public Pagamentos(String descricao, Fornecedor fornecedor, boolean agendado, Pessoas pessoa) {
         this.descricao = descricao;
-        this.data = data;
-        this.valor = valor;
-        this.parcela = parcela;
+        this.data = Util.getDataAtual();
+        this.parcela = 0;
+        this.pessoa = pessoa;
         this.fornecedor = fornecedor;
         this.agendado = agendado;
         this.dataCriacao = LocalDateTime.now();
@@ -45,17 +45,13 @@ public class Pagamentos {
             tipoPagamento = "Regular";
         }
         return "ID: " + id
-                + " | idf: " + fornecedor.getId()
-                + " | Data: " + getData()
-                + " | Pessoa: " + pessoa
-                + " | Fornecedor: " + fornecedor.getNome()
-                + " | Valor combinado: " + fornecedor.getValorOriginalAPagar()
-                + " | Valor pago: " + fornecedor.getValorPago()
-                + " | Valor a pagar: " + fornecedor.getValorAPagar()
+                + " | Data: " + data
+                + " | Pessoa: [" + pessoa
+                + "] | Descrição: " + descricao
+                + " | Fornecedor: [" + fornecedor
+                + "] | Valor Pago: " + valor
+                + " | Parcelas: " + parcela
                 + " | Tipo de Pagamento: " + tipoPagamento
-                + " | Estado Pagamento: " + fornecedor.getEstado()
-                + " | Descrição: " + descricao
-                + " | Parcelas: " + fornecedor.getParcelas()
                 + " | Data de Criação: " + getDataCriacao()
                 + " | Última Modificação: " + getDataModificacao() + "\n";
     }
