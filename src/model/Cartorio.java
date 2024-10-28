@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
  * @author CAUPT - ALUNOS
  */
 public class Cartorio {
+
     private Long id;
     private String nome;
     private String endereco;
@@ -22,28 +23,27 @@ public class Cartorio {
     private LocalDateTime dataModificacao;
 
     public Cartorio() {
-       this.dataCriacao = LocalDateTime.now();
-       this.dataModificacao = LocalDateTime.now();
+        this.dataCriacao = LocalDateTime.now();
+        this.dataModificacao = LocalDateTime.now();
     }
-    
+
     @Override
     public String toString() {
-        return "ID: " + id 
-        + " | Nome: " + nome 
-        + " | Endereco: " + endereco 
-        + " | Tel: " + telefone 
-        + " | Data: " + data
-        + " | Data de Criação: " + getDataCriacao() 
-        + " | Última Modificação: " + getDataModificacao() + "\n";
+        return "ID: " + id
+                + " | Nome: " + nome
+                + " | Endereco: " + endereco
+                + " | Tel: " + telefone
+                + " | Data de Criação: " + getDataCriacao()
+                + " | Última Modificação: " + getDataModificacao() + "\n";
     }
-    
+
     @Override
     public int hashCode() {
         int hash = 7;
         hash = 97 * hash + (int) (this.id ^ (this.id >>> 32));
         return hash;
     }
-    
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -58,52 +58,55 @@ public class Cartorio {
         final Cartorio other = (Cartorio) obj;
         return this.id == other.id;
     }
-    
-    
+
     public long getId() {
         return id;
     }
-    
+
+    public void setData(LocalDate data) {
+        this.data = data;
+    }
+
     public void setId(long id) {
         this.id = id;
     }
-    
+
     public String getNome() {
         return nome;
     }
-    
+
     public void setNome(String nome) {
         this.nome = nome;
     }
-    
+
     public String getEndereco() {
         return endereco;
     }
-    
+
     public void setEndereco(String endereco) {
         this.endereco = endereco;
     }
-    
+
     public String getTelefone() {
         return telefone;
     }
-    
+
     public void setTelefone(String telefone) {
         this.telefone = telefone;
     }
-    
+
     public String getDataCriacao() {
         return Util.formatarData(dataCriacao);
     }
-    
+
     public void setDataCriacao(LocalDateTime dataCriacao) {
         this.dataCriacao = dataCriacao;
     }
-   
+
     public String getDataModificacao() {
         return Util.formatarData(dataModificacao);
     }
-    
+
     public void setDataModificacao(LocalDateTime dataModificacao) {
         this.dataModificacao = dataModificacao;
     }

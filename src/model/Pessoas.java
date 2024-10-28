@@ -21,6 +21,11 @@ public class Pessoas {
     private LocalDateTime dataCriacao;
     private LocalDateTime dataModificacao;
 
+    public Pessoas() {
+        this.dataCriacao = LocalDateTime.now();
+        this.dataModificacao = LocalDateTime.now();
+    }
+
     @Override
     public int hashCode() {
         int hash = 7;
@@ -67,9 +72,9 @@ public class Pessoas {
     @Override
     public String toString() {
 
-        return "ID: " + id + " | Nome: " + nome + " | Nascimento: " + nascimento
-                + " | Telefone: " + telefone + " | Data de Criação: " + dataCriacao
-                + " | Última Modificação: " + dataModificacao;
+        return "ID: " + id + " | Nome: " + nome + " | Nascimento: " + Util.formatarDataLocal(nascimento)
+                + " | Telefone: " + telefone + " | Data de Criação: " + getDataCriacao()
+                + " | Última Modificação: " + getDataModificacao();
     }
 
     public long getId() {
@@ -107,15 +112,15 @@ public class Pessoas {
     public String getDataCriacao() {
         return Util.formatarData(dataCriacao);
     }
-    
+
     public void setDataCriacao(LocalDateTime dataCriacao) {
         this.dataCriacao = dataCriacao;
     }
-   
+
     public String getDataModificacao() {
         return Util.formatarData(dataModificacao);
     }
-    
+
     public void setDataModificacao(LocalDateTime dataModificacao) {
         this.dataModificacao = dataModificacao;
     }

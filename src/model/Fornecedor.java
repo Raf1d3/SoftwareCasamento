@@ -21,11 +21,11 @@ public class Fornecedor {
     private double valorAPagar;
     private double valorOriginalAPagar;
     private double valorPago;
+    private Pessoas pessoa;
     private int parcelas;
     private String estado;
     private LocalDateTime dataCriacao;
     private LocalDateTime dataModificacao;
-    
 
     public Fornecedor() {
         this.dataCriacao = LocalDateTime.now();
@@ -33,13 +33,12 @@ public class Fornecedor {
         this.valorOriginalAPagar = valorAPagar;
         this.estado = "A pagar";
     }
-    
-
 
     @Override
     public String toString() {
         return "ID: " + id
                 + " | Nome: " + nome
+                + " | Pessoa: " + pessoa.getNome()
                 + " | CNPJ: " + cnpj
                 + " | Tel: " + telefone
                 + " | Valor combinado: " + valorOriginalAPagar
@@ -71,6 +70,14 @@ public class Fornecedor {
         }
         final Fornecedor other = (Fornecedor) obj;
         return this.id == other.id;
+    }
+
+    public Pessoas getPessoa() {
+        return pessoa;
+    }
+
+    public void setPessoa(Pessoas pessoa) {
+        this.pessoa = pessoa;
     }
 
     public long getId() {
@@ -111,8 +118,8 @@ public class Fornecedor {
 
     public void setValorAPagar(double valorAPagar) {
         this.valorAPagar = valorAPagar;
-        
-         if (this.valorOriginalAPagar == 0.0) {
+
+        if (this.valorOriginalAPagar == 0.0) {
             this.valorOriginalAPagar = valorAPagar;
         }
     }
@@ -160,8 +167,8 @@ public class Fornecedor {
     public double getValorOriginalAPagar() {
         return valorOriginalAPagar;
     }
-    
-        public void setValorOriginalAPagar(double valorOriginalAPagar) {
+
+    public void setValorOriginalAPagar(double valorOriginalAPagar) {
         this.valorOriginalAPagar = valorOriginalAPagar;
     }
 }

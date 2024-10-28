@@ -5,7 +5,6 @@
 package model;
 
 import control.Util;
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -87,8 +86,8 @@ public class Pagamentos {
         this.id = id;
     }
 
-    public LocalDate getData() {
-        return data;
+    public String getData() {
+        return Util.formatarDataLocal(data);
     }
 
     public void setData(LocalDate data) {

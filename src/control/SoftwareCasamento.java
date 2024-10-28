@@ -4,8 +4,6 @@
  */
 package control;
 
-import java.util.ArrayList;
-import java.util.List;
 import view.GUI;
 import model.Pessoas;
 import model.Fornecedor;
@@ -14,7 +12,6 @@ import model.ConvidadoIndividual;
 import model.Evento;
 import model.MuralDeRecados;
 import model.Pagamentos;
-import model.Presentes;
 import model.Usuario;
 
 /**
@@ -64,6 +61,7 @@ public class SoftwareCasamento {
                         Gui.mostrarMensagemAviso("Usuario invalido", "Aviso", 2);
                         System.out.println("Usuario invalido detectado...");
                     }
+
                     break;
                 case 1:
                     if (!MenuLoginConvidadoLoop(Gui.menuLoginConvidadoOpcoes())) {
@@ -841,7 +839,10 @@ public class SoftwareCasamento {
             opcaoUsuario = Gui.menuFamiliaOpcoes();
 
         }
-        System.out.println("Menu Fechado");
+
+        System.out.println(
+                "Menu Fechado");
+
         return true;
     }
 

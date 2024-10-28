@@ -4,8 +4,9 @@
  */
 package model;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import control.Util;
+
 /**
  *
  * @author CAUPT - ALUNOS
@@ -16,22 +17,24 @@ public class ConvidadoFamilia {
     String nomeDaFamilia;
     String acesso;
     String confirmacao;
-    LocalDate dataCriacao;
-    LocalDate dataModificacao;
+    LocalDateTime dataCriacao;
+    LocalDateTime dataModificacao;
 
     public ConvidadoFamilia() {
-        
+
         String CaracteresAleatorios = Util.gerarStringAleatoria(4);
         this.confirmacao = "Não Confirmado";
         this.acesso = CaracteresAleatorios;
+        this.dataCriacao = LocalDateTime.now();
+        this.dataModificacao = LocalDateTime.now();
     }
 
     @Override
     public String toString() {
 
         return "ID: " + id + " | Nome da família: " + nomeDaFamilia + " | Acesso: " + acesso
-                + " | Confirmacão: " + confirmacao + " | Data de Criação: " + dataCriacao
-                + " | Última Modificação: " + dataModificacao;
+                + " | Confirmacão: " + confirmacao + " | Data de Criação: " + getDataCriacao()
+                + " | Última Modificação: " + getDataModificacao();
     }
 
     public long getId() {
@@ -62,19 +65,19 @@ public class ConvidadoFamilia {
         this.confirmacao = confirmacao;
     }
 
-    public LocalDate getDataCriacao() {
-        return dataCriacao;
+    public String getDataCriacao() {
+        return Util.formatarData(dataCriacao);
     }
 
-    public void setDataCriacao(LocalDate dataCriacao) {
+    public void setDataCriacao(LocalDateTime dataCriacao) {
         this.dataCriacao = dataCriacao;
     }
 
-    public LocalDate getDataModificacao() {
-        return dataModificacao;
+    public String getDataModificacao() {
+        return Util.formatarData(dataModificacao);
     }
 
-    public void setDataModificacao(LocalDate dataModificacao) {
+    public void setDataModificacao(LocalDateTime dataModificacao) {
         this.dataModificacao = dataModificacao;
     }
 

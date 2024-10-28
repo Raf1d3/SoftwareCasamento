@@ -33,9 +33,8 @@ public class Util {
     public static void retrocederDias(int dias) {
         dataAtual = dataAtual.minusDays(dias);
     }
-    
 
-        // Formata LocalDateTime para String
+    // Formata LocalDateTime para String
     public static String formatarData(LocalDateTime data) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
         return data.format(formatter);
@@ -58,7 +57,6 @@ public class Util {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         return LocalDate.parse(dataString, formatter);
     }
-    
 
     public static String gerarStringAleatoria(int tamanho) {
         String caracteres = "abcdefghijklmnopqrstuvwxyz";
@@ -79,4 +77,3 @@ public class Util {
     }
 
 }
-

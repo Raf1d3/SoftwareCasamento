@@ -4,7 +4,9 @@
  */
 package model;
 
+import control.Util;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  *
@@ -15,8 +17,13 @@ public class MuralDeRecados {
     long id;
     Pessoas pessoa;
     String comentario;
-    LocalDate dataCriacao;
-    LocalDate dataModificacao;
+    LocalDateTime dataCriacao;
+    LocalDateTime dataModificacao;
+
+    public MuralDeRecados() {
+        this.dataCriacao = LocalDateTime.now();
+        this.dataModificacao = LocalDateTime.now();
+    }
 
     @Override
     public int hashCode() {
@@ -52,12 +59,12 @@ public class MuralDeRecados {
         return comentario;
     }
 
-    public LocalDate getDataCriacao() {
-        return dataCriacao;
+    public String getDataCriacao() {
+        return Util.formatarData(dataCriacao);
     }
 
-    public LocalDate getDataModificacao() {
-        return dataModificacao;
+    public String getDataModificacao() {
+        return Util.formatarData(dataModificacao);
     }
 
     public void setId(long id) {
@@ -72,11 +79,11 @@ public class MuralDeRecados {
         this.comentario = comentario;
     }
 
-    public void setDataCriacao(LocalDate dataCriacao) {
+    public void setDataCriacao(LocalDateTime dataCriacao) {
         this.dataCriacao = dataCriacao;
     }
 
-    public void setDataModificacao(LocalDate dataModificacao) {
+    public void setDataModificacao(LocalDateTime dataModificacao) {
         this.dataModificacao = dataModificacao;
     }
 
@@ -84,6 +91,6 @@ public class MuralDeRecados {
     public String toString() {
 
         return "ID: " + id + " | Pessoa: " + pessoa + " | Comentário: " + comentario
-                + " | Data de Criação: " + dataCriacao + " | Última Modificação: " + dataModificacao;
+                + " | Data de Criação: " + getDataCriacao() + " | Última Modificação: " + getDataModificacao();
     }
 }

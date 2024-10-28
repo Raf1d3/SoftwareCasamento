@@ -4,7 +4,8 @@
  */
 package model;
 
-import java.time.LocalDate;
+import control.Util;
+import java.time.LocalDateTime;
 
 /**
  *
@@ -17,21 +18,22 @@ public class ConvidadoIndividual {
     private String Familia;
     private String parentesco;
     private String confirmacao;
-    private LocalDate dataCriacao;
-    private LocalDate dataModificacao;
+    private LocalDateTime dataCriacao;
+    private LocalDateTime dataModificacao;
 
     public ConvidadoIndividual() {
         this.confirmacao = "Não Confirmado";
+        this.dataCriacao = LocalDateTime.now();
+        this.dataModificacao = LocalDateTime.now();
     }
 
     @Override
     public String toString() {
 
         return "ID: " + id + " | Pessoa: " + pessoa + " | Família: " + Familia
-                + " | Parentesco: " + parentesco + " | Confirmação: " + confirmacao + " | Data de Criação: " + dataCriacao
-                + " | Última Modificação: " + dataModificacao;
+                + " | Parentesco: " + parentesco + " | Confirmação: " + confirmacao + " | Data de Criação: " + getDataCriacao()
+                + " | Última Modificação: " + getDataModificacao();
     }
-    
 
     @Override
     public int hashCode() {
@@ -95,20 +97,19 @@ public class ConvidadoIndividual {
         this.confirmacao = confirmacao;
     }
 
-    public LocalDate getDataCriacao() {
-        return dataCriacao;
+    public String getDataCriacao() {
+        return Util.formatarData(dataCriacao);
     }
 
-    public void setDataCriacao(LocalDate dataCriacao) {
+    public void setDataCriacao(LocalDateTime dataCriacao) {
         this.dataCriacao = dataCriacao;
     }
 
-    public LocalDate getDataModificacao() {
-        return dataModificacao;
+    public String getDataModificacao() {
+        return Util.formatarData(dataModificacao);
     }
 
-    public void setDataModificacao(LocalDate dataModificacao) {
+    public void setDataModificacao(LocalDateTime dataModificacao) {
         this.dataModificacao = dataModificacao;
     }
-
 }

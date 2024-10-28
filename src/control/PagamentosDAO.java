@@ -12,6 +12,7 @@ import model.Pagamentos;
  */
 public class PagamentosDAO extends GenericDAO<Pagamentos> {
   public class PagamentosDao {
+
 }
 
 }

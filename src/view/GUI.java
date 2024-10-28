@@ -703,6 +703,10 @@ public class GUI {
         String cnpj = mostrarMensagemInput("Cnpj:", "Cnpj", 3, "2.345.678/0001-99");
         String telefone = mostrarMensagemInput("Telefone:", "telefone", 3, "(11) 91234-5678");
 
+        String nomeFornecedor = mostrarMensagemInput("Nome Fornecedor:", "Nome", 3, "Ana");
+        Pessoas pessoa = new Pessoas();
+        pessoa.setNome(nomeFornecedor);
+
         double valorAPagar = 0.0;
         boolean verificacao = false;
         while (verificacao != true) {
@@ -736,6 +740,7 @@ public class GUI {
         }
 
         Fornecedor f = new Fornecedor();
+        f.setPessoa(pessoa);
         f.setNome(nome);
         f.setCnpj(cnpj);
         f.setTelefone(telefone);
@@ -743,37 +748,6 @@ public class GUI {
         f.setParcelas(parcelas);
         return f;
     }
-
-    int parcelas = 0;
-    while (true) {
-        String parcelasStr = mostrarMensagemInput("Parcelas:", "Parcelas", 3, "2");
-        if (parcelasStr != null) {
-            if (!parcelasStr.trim().isEmpty()) {
-                try {
-                    parcelas = Integer.parseInt(parcelasStr);
-                    break;
-                } catch (NumberFormatException e) {
-                    mostrarMensagemAviso("Número de parcelas inválido. Por favor, insira um número inteiro válido.", "Erro", 2);
-                }
-            } else {
-                mostrarMensagemAviso("Campo parcelas não pode estar vazio.", "Erro", 2);
-            }
-        } else {
-            break; 
-        }
-    }
-    
-    String estado = mostrarMensagemInput("Estado:", "Estado", 3, "Pagando");
-
-    Fornecedor f = new Fornecedor();
-    f.setNome(nome);
-    f.setCnpj(cnpj);
-    f.setTelefone(telefone);
-    f.setValorAPagar(valorAPagar);
-    f.setParcelas(parcelas);
-    f.setEstado(estado);
-    return f;
-}
 
     public ConvidadoFamilia CriarConvidadoFamilia() {
         String nomefamilia = mostrarMensagemInput("Nome da família", "Nome da Família", 3, "Almeida");
@@ -839,6 +813,7 @@ public class GUI {
 
     public Evento CriarEvento() {
         LocalDate data = null;
+        String nome = mostrarMensagemInput("Nome do evento:", "Nome", 3, "Casorio");
         String dataEvento = mostrarMensagemInput("Data do Evento:", "Data", 3, "13/01/2000");
         String nomeNoiva = mostrarMensagemInput("Nome da Noiva:", "Nome", 3, "Ana");
         String nomeNoivo = mostrarMensagemInput("Nome do Noivo:", "Nome", 3, "Carlos");
@@ -855,6 +830,7 @@ public class GUI {
         Cartorio cartorio = criarCartorio();
 
         Evento e = new Evento();
+        e.setNome(nome);
         e.setDataEvento(data);
         e.setNoiva(noiva);
         e.setNoivo(noivo);
