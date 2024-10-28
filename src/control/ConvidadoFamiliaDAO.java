@@ -4,6 +4,8 @@
  */
 package control;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import model.ConvidadoFamilia;
 
 /**
@@ -13,21 +15,20 @@ import model.ConvidadoFamilia;
 public class ConvidadoFamiliaDAO extends GenericDAO<ConvidadoFamilia> {
 
     public ConvidadoFamiliaDAO() {
-        
         ConvidadoFamilia admin = new ConvidadoFamilia();
         admin.setNomeDaFamilia("portela");
-        admin.setAcesso("");
         inserir(admin);
     }
-    
-    public boolean autenticar(String login, String senha) {
+
+    public ConvidadoFamilia autenticar(String login, String senha) {
         for (ConvidadoFamilia u : GetDataBase()) {
-            if (u.getNomeDaFamilia().equals(login) && u.getAcesso().equals(senha)) {
-                return true;
+            if (login != null && senha != null) {
+                if (u.getNomeDaFamilia().toLowerCase().equals(login.toLowerCase()) && u.getAcesso().toLowerCase().equals(senha.toLowerCase())) {
+                    return u;
+                }
             }
         }
-        return false;
+        return null;
     }
-    
-    
+
 }
