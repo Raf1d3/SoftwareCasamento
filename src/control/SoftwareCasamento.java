@@ -64,7 +64,6 @@ public class SoftwareCasamento {
                         Gui.mostrarMensagemAviso("Usuario invalido", "Aviso", 2);
                         System.out.println("Usuario invalido detectado...");
                     }
-
                     break;
                 case 1:
                     if (!MenuLoginConvidadoLoop(Gui.menuLoginConvidadoOpcoes())) {
@@ -842,10 +841,7 @@ public class SoftwareCasamento {
             opcaoUsuario = Gui.menuFamiliaOpcoes();
 
         }
-
-        System.out.println(
-                "Menu Fechado");
-
+        System.out.println("Menu Fechado");
         return true;
     }
 

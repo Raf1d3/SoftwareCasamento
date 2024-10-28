@@ -744,6 +744,37 @@ public class GUI {
         return f;
     }
 
+    int parcelas = 0;
+    while (true) {
+        String parcelasStr = mostrarMensagemInput("Parcelas:", "Parcelas", 3, "2");
+        if (parcelasStr != null) {
+            if (!parcelasStr.trim().isEmpty()) {
+                try {
+                    parcelas = Integer.parseInt(parcelasStr);
+                    break;
+                } catch (NumberFormatException e) {
+                    mostrarMensagemAviso("Número de parcelas inválido. Por favor, insira um número inteiro válido.", "Erro", 2);
+                }
+            } else {
+                mostrarMensagemAviso("Campo parcelas não pode estar vazio.", "Erro", 2);
+            }
+        } else {
+            break; 
+        }
+    }
+    
+    String estado = mostrarMensagemInput("Estado:", "Estado", 3, "Pagando");
+
+    Fornecedor f = new Fornecedor();
+    f.setNome(nome);
+    f.setCnpj(cnpj);
+    f.setTelefone(telefone);
+    f.setValorAPagar(valorAPagar);
+    f.setParcelas(parcelas);
+    f.setEstado(estado);
+    return f;
+}
+
     public ConvidadoFamilia CriarConvidadoFamilia() {
         String nomefamilia = mostrarMensagemInput("Nome da família", "Nome da Família", 3, "Almeida");
 
