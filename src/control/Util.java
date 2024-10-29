@@ -57,7 +57,7 @@ public class Util {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         return LocalDate.parse(dataString, formatter);
     }
-
+    
     public static String gerarStringAleatoria(int tamanho) {
         String caracteres = "abcdefghijklmnopqrstuvwxyz";
         StringBuilder stringAleatoria = new StringBuilder(tamanho);
@@ -70,10 +70,10 @@ public class Util {
 
         return stringAleatoria.toString();
     }
-
+    
     public static int calcularIdade(LocalDate dataNascimento) {
-        LocalDate dataAtual = LocalDate.now();
-        return Period.between(dataNascimento, dataAtual).getYears();
+        return Period.between(dataNascimento, getDataAtual()).getYears();
     }
+    
 
 }

@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 public class Fornecedor {
 
     private long id;
-    private String nome;
+    private String nomeServico;
     private String cnpj;
     private String telefone;
     private double valorAPagar;
@@ -37,14 +37,15 @@ public class Fornecedor {
     @Override
     public String toString() {
         return "ID: " + id
-                + " | Nome: " + nome
-                + " | Pessoa: " + pessoa.getNome()
+                + " | Nome do serviço: " + nomeServico
+                + " | Nome do fornecedor: " + pessoa.getNome()
+                + " | Tel pessoal: " + pessoa.getTelefone()
                 + " | CNPJ: " + cnpj
-                + " | Tel: " + telefone
-                + " | Valor combinado: " + valorOriginalAPagar
+                + " | Tel profissional: " + telefone
+                + "\n | Valor combinado: " + valorOriginalAPagar
                 + " | Valor a Pagar: " + valorAPagar
                 + " | Valor pago: " + valorPago
-                + " | Parcelas: " + parcelas
+                + " | Parcela atual: " + parcelas
                 + " | Estado: " + estado
                 + " | Data de Criação: " + getDataCriacao()
                 + " | Última Modificação: " + getDataModificacao() + "\n";
@@ -88,12 +89,12 @@ public class Fornecedor {
         this.id = id;
     }
 
-    public String getNome() {
-        return nome;
+    public String getNomeServico() {
+        return nomeServico;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public void setNomeServico(String nome) {
+        this.nomeServico = nome;
     }
 
     public String getCnpj() {

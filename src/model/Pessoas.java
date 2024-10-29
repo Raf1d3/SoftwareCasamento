@@ -48,32 +48,14 @@ public class Pessoas {
         return this.id == other.id;
     }
 
-    /*
-    @Override
-    public String toString() {
-        return "[ID: " + id + "] | [Nome: " + nome + "] | [Nascimento: " + nascimento
-                + "] | [Telefone: " + telefone + "] | [Criado em: " + dataCriacao
-                + "] | [Modificado em: " + dataModificacao + "]";
-    }
-    
-    @Override
-    public String toString() {
-        return String.format(
-                "| %-5s | %-35s | %-12s | %-15s | %-12s | %-15s |",
-                "ID: " + id,
-                "Nome: " + nome,
-                "Nascimento: " + nascimento,
-                "Telefone: " + telefone,
-                "Criado em: " + dataCriacao,
-                "Modificado em: " + dataModificacao
-        );
-    }
-     */
     @Override
     public String toString() {
 
-        return "ID: " + id + " | Nome: " + nome + " | Nascimento: " + Util.formatarDataLocal(nascimento)
-                + " | Telefone: " + telefone + " | Data de Criação: " + getDataCriacao()
+        return "ID: " + id 
+                + " | Nome: " + nome 
+                + " | Nascimento: " + Util.formatarDataLocal(nascimento)
+                + " | Telefone: " + telefone 
+                + "\nData de Criação: " + getDataCriacao()
                 + " | Última Modificação: " + getDataModificacao();
     }
 
