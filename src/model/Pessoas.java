@@ -21,7 +21,10 @@ public class Pessoas {
     private LocalDateTime dataCriacao;
     private LocalDateTime dataModificacao;
 
-    public Pessoas() {
+    public Pessoas(String nome, LocalDate nascimento, String telefone) {
+        this.nome = nome;
+        this.nascimento = nascimento;
+        this.telefone = telefone;
         this.dataCriacao = LocalDateTime.now();
         this.dataModificacao = LocalDateTime.now();
     }
@@ -48,33 +51,15 @@ public class Pessoas {
         return this.id == other.id;
     }
 
-    /*
-    @Override
-    public String toString() {
-        return "[ID: " + id + "] | [Nome: " + nome + "] | [Nascimento: " + nascimento
-                + "] | [Telefone: " + telefone + "] | [Criado em: " + dataCriacao
-                + "] | [Modificado em: " + dataModificacao + "]";
-    }
-    
-    @Override
-    public String toString() {
-        return String.format(
-                "| %-5s | %-35s | %-12s | %-15s | %-12s | %-15s |",
-                "ID: " + id,
-                "Nome: " + nome,
-                "Nascimento: " + nascimento,
-                "Telefone: " + telefone,
-                "Criado em: " + dataCriacao,
-                "Modificado em: " + dataModificacao
-        );
-    }
-     */
     @Override
     public String toString() {
 
-        return "ID: " + id + " | Nome: " + nome + " | Nascimento: " + Util.formatarDataLocal(nascimento)
-                + " | Telefone: " + telefone + " | Data de Criação: " + getDataCriacao()
-                + " | Última Modificação: " + getDataModificacao();
+        return "ID: " + id 
+                + " | Nome: " + nome 
+                + " | Nascimento: " + Util.formatarDataLocal(nascimento)
+                + " | Telefone: " + telefone 
+                + "\nData de Criação: " + Util.formatarData(dataCriacao)
+                + " | Última Modificação: " + Util.formatarData(dataCriacao);
     }
 
     public long getId() {
@@ -109,16 +94,16 @@ public class Pessoas {
         this.telefone = telefone;
     }
 
-    public String getDataCriacao() {
-        return Util.formatarData(dataCriacao);
+    public LocalDateTime getDataCriacao() {
+        return dataCriacao;
     }
 
     public void setDataCriacao(LocalDateTime dataCriacao) {
         this.dataCriacao = dataCriacao;
     }
 
-    public String getDataModificacao() {
-        return Util.formatarData(dataModificacao);
+    public LocalDateTime getDataModificacao() {
+        return dataModificacao;
     }
 
     public void setDataModificacao(LocalDateTime dataModificacao) {

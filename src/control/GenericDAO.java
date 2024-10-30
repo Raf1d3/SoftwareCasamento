@@ -67,7 +67,7 @@ public class GenericDAO<T> {
         T objAntigo = buscar(id);
         int indice = database.indexOf(objAntigo);
 
-        //caso o idexOf ache o elemento
+        //caso o indexOf ache o elemento
         if (indice != -1) {
             try {
                 Field[] campos = objNovo.getClass().getDeclaredFields();

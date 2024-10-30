@@ -35,7 +35,7 @@ public String toString() {
         + " | Nome do Evento: " + nome
         + " | Noiva: " + noiva.getNome()
         + " | Noivo: " + noivo.getNome()
-        + " Data do Evento: " + getDataEvento() + "\n"
+        + " | Data do Evento: " + Util.formatarDataLocal(dataEvento) + "\n"
     
         + "Igreja: " + igreja.getNome() 
         + " | Endereço: " + igreja.getEndereco()
@@ -66,8 +66,8 @@ public String toString() {
         this.nome = nome;
     }
 
-    public String getDataEvento() {
-        return Util.formatarDataLocal(dataEvento);
+    public LocalDate getDataEvento() {
+        return dataEvento;
     }
     
     public void setDataEvento(LocalDate dataEvento) {

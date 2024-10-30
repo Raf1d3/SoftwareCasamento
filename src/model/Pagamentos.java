@@ -25,9 +25,13 @@ public class Pagamentos {
     private LocalDateTime dataModificacao;
     private boolean agendado;
 
-    public Pagamentos(String descricao, Fornecedor fornecedor, boolean agendado, Pessoas pessoa) {
+    public Pagamentos(String descricao, Fornecedor fornecedor, boolean agendado, LocalDate data, Pessoas pessoa) {
         this.descricao = descricao;
-        this.data = Util.getDataAtual();
+        if(agendado == true && data != null){
+            this.data = data;
+        }else{
+            this.data = Util.getDataAtual();
+        }
         this.parcela = 0;
         this.pessoa = pessoa;
         this.fornecedor = fornecedor;
@@ -45,14 +49,22 @@ public class Pagamentos {
             tipoPagamento = "Regular";
         }
         return "ID: " + id
-                + " | Data: " + data
-                + " | Pessoa: [" + pessoa
-                + "] | Descrição: " + descricao
-                + " | Fornecedor: [" + fornecedor
-                + "] | Valor Pago: " + valor
-                + " | Parcelas: " + parcela
+                + " | nome: " + pessoa.getNome()
+                + " | telefone: " + pessoa.getTelefone()
+                + " | Data de pagamento: " + Util.formatarDataLocal(data)
+                + " | Descrição: " + descricao
+                + "\nValor Pago: " + valor
+                + " | Valor a Pagar: " + fornecedor.getValorAPagar()
+                + " | Valor Total: " + fornecedor.getValorOriginalAPagar()
+                + " | Total de parcelas: " + parcela
+                + " | Parcela atual: " + fornecedor.getParcelas()
+                + "\nEstado do pagamento: " + fornecedor.getEstado()
                 + " | Tipo de Pagamento: " + tipoPagamento
-                + " | Data de Criação: " + getDataCriacao()
+                + "\nNome fornecedor: " + fornecedor.getPessoa().getNome()
+                + " | Nome serviço : " + fornecedor.getNomeServico()
+                + " | Telefone: " + fornecedor.getTelefone()
+                + " | Cnpj: " + fornecedor.getCnpj()
+                + "\nData de Criação: " + getDataCriacao()
                 + " | Última Modificação: " + getDataModificacao() + "\n";
     }
 
@@ -86,8 +98,8 @@ public class Pagamentos {
         this.id = id;
     }
 
-    public String getData() {
-        return Util.formatarDataLocal(data);
+    public LocalDate getData() {
+        return data;
     }
 
     public void setData(LocalDate data) {
@@ -150,7 +162,7 @@ public class Pagamentos {
         this.dataModificacao = dataModificacao;
     }
 
-    public boolean isAgendado() {
+    public boolean getAgendado() {
         return agendado;
     }
 

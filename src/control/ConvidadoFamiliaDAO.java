@@ -16,7 +16,7 @@ public class ConvidadoFamiliaDAO extends GenericDAO<ConvidadoFamilia> {
 
     public ConvidadoFamiliaDAO() {
         ConvidadoFamilia admin = new ConvidadoFamilia();
-        admin.setNomeDaFamilia("portela");
+        admin.setNomeDaFamilia("almeida");
         inserir(admin);
     }
 
