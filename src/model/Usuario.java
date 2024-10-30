@@ -34,8 +34,16 @@ public class Usuario {
     @Override
     public String toString() {
 
-        return "ID: " + id + " | Pessoa: " + pessoa + " | Tipo: " + tipo
-                + " | Data de Criação: " + getDataCriacao() + " | Última Modificação: " + getDataModificacao();
+        String retorno = "ID: " + id;
+        if (pessoa != null) {
+            retorno += " | Nome: " + pessoa.getNome();
+            retorno += " | Nascimento: " + Util.formatarDataLocal(pessoa.getNascimento());
+            retorno += " | Telefone: " + pessoa.getTelefone();
+        }
+            retorno += " | Tipo: " + tipo
+            + "\nData de Criação: " + getDataCriacao()
+            + " | Última Modificação: " + getDataModificacao();
+        return retorno;
     }
 
     @Override
@@ -99,7 +107,7 @@ public class Usuario {
     public void setSenha(String senha) {
         this.senha = senha;
     }
-    
+
     public String getDataCriacao() {
         return Util.formatarData(dataCriacao);
     }

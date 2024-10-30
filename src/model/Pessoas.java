@@ -21,7 +21,10 @@ public class Pessoas {
     private LocalDateTime dataCriacao;
     private LocalDateTime dataModificacao;
 
-    public Pessoas() {
+    public Pessoas(String nome, LocalDate nascimento, String telefone) {
+        this.nome = nome;
+        this.nascimento = nascimento;
+        this.telefone = telefone;
         this.dataCriacao = LocalDateTime.now();
         this.dataModificacao = LocalDateTime.now();
     }
@@ -55,8 +58,8 @@ public class Pessoas {
                 + " | Nome: " + nome 
                 + " | Nascimento: " + Util.formatarDataLocal(nascimento)
                 + " | Telefone: " + telefone 
-                + "\nData de Criação: " + getDataCriacao()
-                + " | Última Modificação: " + getDataModificacao();
+                + "\nData de Criação: " + Util.formatarData(dataCriacao)
+                + " | Última Modificação: " + Util.formatarData(dataCriacao);
     }
 
     public long getId() {
@@ -91,16 +94,16 @@ public class Pessoas {
         this.telefone = telefone;
     }
 
-    public String getDataCriacao() {
-        return Util.formatarData(dataCriacao);
+    public LocalDateTime getDataCriacao() {
+        return dataCriacao;
     }
 
     public void setDataCriacao(LocalDateTime dataCriacao) {
         this.dataCriacao = dataCriacao;
     }
 
-    public String getDataModificacao() {
-        return Util.formatarData(dataModificacao);
+    public LocalDateTime getDataModificacao() {
+        return dataModificacao;
     }
 
     public void setDataModificacao(LocalDateTime dataModificacao) {

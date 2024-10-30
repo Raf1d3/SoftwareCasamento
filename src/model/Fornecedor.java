@@ -42,7 +42,7 @@ public class Fornecedor {
                 + " | Tel pessoal: " + pessoa.getTelefone()
                 + " | CNPJ: " + cnpj
                 + " | Tel profissional: " + telefone
-                + "\n | Valor combinado: " + valorOriginalAPagar
+                + "\nValor combinado: " + valorOriginalAPagar
                 + " | Valor a Pagar: " + valorAPagar
                 + " | Valor pago: " + valorPago
                 + " | Parcela atual: " + parcelas

@@ -157,7 +157,7 @@ public class GUI {
         StringBuilder menu = new StringBuilder("");
 
         menu.append("<html><body><br>");
-        menu.append("<div width='790px' align='center'>");
+        menu.append("<div width='355px' align='center'>");
         menu.append("<p style='font-size:18px; font-weight:bold;'>GERENCIADOR DE CASAMENTOS</p>");
         menu.append("<p style='font-size:12px;'>Oque deseja fazer hoje?</p><br></div></body></html>");
 
@@ -574,7 +574,7 @@ public class GUI {
         menu.append(ci.getPessoa().getNome());
         menu.append("</p><br>");
         menu.append("<p style='font-size:12px;'>• Data de Nascimento: ");
-        menu.append(ci.getPessoa().getNascimento());
+        menu.append(Util.formatarDataLocal(ci.getPessoa().getNascimento()));
         menu.append("</p><br>");
         menu.append("<p style='font-size:12px;'>• Família: ");
         menu.append(ci.getFamilia());
@@ -699,10 +699,7 @@ public class GUI {
         }
         String telefone = mostrarMensagemInput("Digite um telefone", "Telefone", 3, "40028922");
 
-        Pessoas p = new Pessoas();
-        p.setNome(nome);
-        p.setNascimento(nascimento);
-        p.setTelefone(telefone);
+        Pessoas p = new Pessoas(nome, nascimento, telefone);
 
         return p;
     }
@@ -822,26 +819,35 @@ public class GUI {
     public Cartorio criarCartorio() {
         String nome = mostrarMensagemInput("Nome do Cartório:", "Nome", 3, "Cartório Municipal");
         String endereco = mostrarMensagemInput("Endereço:", "Endereço", 3, "Av. Central, 456");
+        String telefone = mostrarMensagemInput("Telefone:", "Telefone Cartorio", 3, "33714482");
+       
+
+        LocalDate nascimento = null;
+        while (nascimento == null) {
+             String input_data = mostrarMensagemInput("Digite a data do evento no cartorio:", "Data", 3, "15/10/2024");
+            if (input_data != null) {
+                nascimento = validarData(input_data);
+                if (nascimento == null) {
+                    mostrarMensagemAviso("Data inválida. Tente novamente no formato dia/mes/ano.", "Aviso", 2);
+                }
+            } else {
+                break;
+            }
+        }
 
         Cartorio cartorio = new Cartorio();
+        cartorio.setTelefone(telefone);
+        cartorio.setData(nascimento);
         cartorio.setNome(nome);
         cartorio.setEndereco(endereco);
         return cartorio;
     }
 
-    public Evento CriarEvento() {
+    public Evento CriarEvento(Pessoas noivo, Pessoas noiva) {
         LocalDate data = null;
         String nome = mostrarMensagemInput("Nome do evento:", "Nome", 3, "Casorio");
         String dataEvento = mostrarMensagemInput("Data do Evento:", "Data", 3, "13/01/2000");
-        String nomeNoiva = mostrarMensagemInput("Nome da Noiva:", "Nome", 3, "Ana");
-        String nomeNoivo = mostrarMensagemInput("Nome do Noivo:", "Nome", 3, "Carlos");
         data = validarData(dataEvento);
-
-        Pessoas noiva = new Pessoas();
-        noiva.setNome(nomeNoiva);
-
-        Pessoas noivo = new Pessoas();
-        noivo.setNome(nomeNoivo);
 
         Cerimonial cerimonial = criarCerimonial();
         Igreja igreja = criarIgreja();
@@ -875,7 +881,7 @@ public class GUI {
 
         Object[] options = {"Regular", "Agendado"};
         int tipoPagamento = mostrarMensagemBots("Qual tipo de pagamento voce gosria de realizar?", "Tipo de Pagamento", -1, options);
-        
+
         if (tipoPagamento == 1) {
             agendado = true;
         }

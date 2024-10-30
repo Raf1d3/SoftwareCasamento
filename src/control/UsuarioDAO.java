@@ -14,10 +14,11 @@ import model.Pessoas;
  */
 public class UsuarioDAO extends GenericDAO<Usuario> {
 
-    public UsuarioDAO() {
-        inserir(new Usuario("administrador", "admin", "", null));
+    public UsuarioDAO(Pessoas p) {
+        inserir(new Usuario("administrador", "admin", "123", p));
+        
     }
-
+    
     public boolean autenticar(String login, String senha) {
         if (login != null && senha != null) {
             for (Usuario u : GetDataBase()) {

@@ -30,8 +30,11 @@ public class ConvidadoIndividual {
     @Override
     public String toString() {
 
-        return "ID: " + id + " | Pessoa: " + pessoa + " | Família: " + Familia
-                + " | Parentesco: " + parentesco + " | Confirmação: " + confirmacao + " | Data de Criação: " + getDataCriacao()
+        return "ID: " + id + " | Pessoa: " + pessoa 
+                + " | Família: " + Familia
+                + " | Parentesco: " + parentesco 
+                + "\nConfirmação: " + confirmacao 
+                + " | Data de Criação: " + getDataCriacao()
                 + " | Última Modificação: " + getDataModificacao();
     }
 

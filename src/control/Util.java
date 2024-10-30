@@ -36,28 +36,40 @@ public class Util {
 
     // Formata LocalDateTime para String
     public static String formatarData(LocalDateTime data) {
+        if (data == null) {
+            return null;
+        }
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
         return data.format(formatter);
     }
 
     // Converte de String para LocalDateTime
     public static LocalDateTime parseData(String dataString) {
+        if (dataString == null) {
+            return null;
+        }
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
         return LocalDateTime.parse(dataString, formatter);
     }
 
     // Formata LocalDate para String 
     public static String formatarDataLocal(LocalDate data) {
+        if (data == null) {
+            return null;
+        }
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         return data.format(formatter);
     }
 
     // Converte de String para LocalDate
     public static LocalDate parseDataLocal(String dataString) {
+        if (dataString == null) {
+            return null;
+        }
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         return LocalDate.parse(dataString, formatter);
     }
-    
+
     public static String gerarStringAleatoria(int tamanho) {
         String caracteres = "abcdefghijklmnopqrstuvwxyz";
         StringBuilder stringAleatoria = new StringBuilder(tamanho);
@@ -70,10 +82,9 @@ public class Util {
 
         return stringAleatoria.toString();
     }
-    
+
     public static int calcularIdade(LocalDate dataNascimento) {
         return Period.between(dataNascimento, getDataAtual()).getYears();
     }
-    
 
 }
