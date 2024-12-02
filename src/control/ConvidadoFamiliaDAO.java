@@ -14,14 +14,12 @@ import model.ConvidadoFamilia;
  */
 public class ConvidadoFamiliaDAO extends GenericDAO<ConvidadoFamilia> {
 
-    public ConvidadoFamiliaDAO() {
-        ConvidadoFamilia admin = new ConvidadoFamilia();
-        admin.setNomeDaFamilia("almeida");
-        inserir(admin);
+    public ConvidadoFamiliaDAO(Class<ConvidadoFamilia> classe) {
+        super(classe);
     }
 
     public ConvidadoFamilia autenticar(String login, String senha) {
-        for (ConvidadoFamilia u : GetDataBase()) {
+        for (ConvidadoFamilia u : listar()) {
             if (login != null && senha != null) {
                 if (u.getNomeDaFamilia().toLowerCase().equals(login.toLowerCase()) && u.getAcesso().toLowerCase().equals(senha.toLowerCase())) {
                     return u;

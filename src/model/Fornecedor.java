@@ -7,12 +7,14 @@ package model;
 import control.Util;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
  * @author CAUPT - ALUNOS
  */
-public class Fornecedor {
+public class Fornecedor implements InterfaceGenericDAO{
 
     private long id;
     private String nomeServico;
@@ -27,11 +29,52 @@ public class Fornecedor {
     private LocalDateTime dataCriacao;
     private LocalDateTime dataModificacao;
 
-    public Fornecedor() {
+    
+    @Override
+    public List<Object> getValoresAtributos() {
+        List<Object> valores = new ArrayList();
+        valores.add(this.nomeServico);
+        valores.add(this.cnpj);
+        valores.add(this.telefone);
+        valores.add(this.valorAPagar);
+        valores.add(this.valorOriginalAPagar);
+        valores.add(this.valorPago);
+        valores.add(this.pessoa.getId());
+        valores.add(this.parcelas);
+        valores.add(this.estado);
+        valores.add(this.dataCriacao);
+        valores.add(this.dataModificacao);
+        return valores;
+    }
+    
+    public Fornecedor(Long id, String nomeServico, String cnpj, String telefone, double valorAPagar, double valorOriginalAPagar, 
+    double valorPago, Pessoas pessoa, int parcelas, String estado, LocalDateTime dataCriacao, LocalDateTime dataModificacao) {
+        this.id = id;
+        this.nomeServico = nomeServico;
+        this.cnpj = cnpj;
+        this.telefone = telefone;
+        this.valorAPagar = valorAPagar;
+        this.valorOriginalAPagar = valorOriginalAPagar;
+        this.valorPago = valorPago;
+        this.pessoa = pessoa;
+        this.parcelas = parcelas;
+        this.estado = estado;
+        this.dataCriacao = dataCriacao;
+        this.dataModificacao = dataModificacao;
+    }
+    
+    public Fornecedor(String nomeServico, String cnpj, String telefone, double valorAPagar, Pessoas pessoa, int parcelas) {
+        this.nomeServico = nomeServico;
+        this.cnpj = cnpj;
+        this.telefone = telefone;
+        this.valorAPagar = valorAPagar;
+        this.valorOriginalAPagar = valorAPagar;
+        this.valorPago = 0;
+        this.pessoa = pessoa;
+        this.parcelas = parcelas;
+        this.estado = "A pagar";
         this.dataCriacao = LocalDateTime.now();
         this.dataModificacao = LocalDateTime.now();
-        this.valorOriginalAPagar = valorAPagar;
-        this.estado = "A pagar";
     }
 
     @Override
@@ -47,8 +90,8 @@ public class Fornecedor {
                 + " | Valor pago: " + valorPago
                 + " | Parcela atual: " + parcelas
                 + " | Estado: " + estado
-                + " | Data de Criação: " + getDataCriacao()
-                + " | Última Modificação: " + getDataModificacao() + "\n";
+                + " | Data de Criação: " + Util.formatarData(dataCriacao)
+                + " | Última Modificação: " + Util.formatarData(dataModificacao);
     }
 
     @Override
@@ -83,10 +126,6 @@ public class Fornecedor {
 
     public long getId() {
         return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 
     public String getNomeServico() {
@@ -141,16 +180,12 @@ public class Fornecedor {
         this.estado = estado;
     }
 
-    public String getDataCriacao() {
-        return Util.formatarData(dataCriacao);
+    public LocalDateTime getDataCriacao() {
+        return dataCriacao;
     }
 
-    public void setDataCriacao(LocalDateTime dataCriacao) {
-        this.dataCriacao = dataCriacao;
-    }
-
-    public String getDataModificacao() {
-        return Util.formatarData(dataModificacao);
+    public LocalDateTime getDataModificacao() {
+        return dataModificacao;
     }
 
     public void setDataModificacao(LocalDateTime dataModificacao) {
@@ -172,4 +207,5 @@ public class Fornecedor {
     public void setValorOriginalAPagar(double valorOriginalAPagar) {
         this.valorOriginalAPagar = valorOriginalAPagar;
     }
+
 }

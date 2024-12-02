@@ -6,22 +6,52 @@ package model;
 
 import control.Util;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
  * @author CAUPT - ALUNOS
  */
-public class ConvidadoIndividual {
+public class ConvidadoIndividual implements InterfaceGenericDAO {
 
     private long id;
     private Pessoas pessoa;
-    private String Familia;
+    private String familia;
     private String parentesco;
     private String confirmacao;
     private LocalDateTime dataCriacao;
     private LocalDateTime dataModificacao;
 
-    public ConvidadoIndividual() {
+    
+    
+    @Override
+    public List<Object> getValoresAtributos() {
+        List<Object> valores = new ArrayList();
+        valores.add(this.id);
+        valores.add(this.pessoa.getId());
+        valores.add(this.familia);
+        valores.add(this.parentesco);
+        valores.add(this.confirmacao);
+        valores.add(this.dataCriacao);
+        valores.add(this.dataModificacao);
+        return valores;
+    }
+
+    public ConvidadoIndividual(Long id, Pessoas pessoa, String Familia, String parentesco, String confirmacao, LocalDateTime dataCriacao, LocalDateTime dataModificacao) {
+        this.id = id;
+        this.pessoa = pessoa;
+        this.familia = Familia;
+        this.parentesco = parentesco;
+        this.confirmacao = confirmacao;
+        this.dataCriacao = dataCriacao;
+        this.dataModificacao = dataModificacao;
+    }
+
+    public ConvidadoIndividual(Pessoas pessoa, String Familia, String parentesco) {
+        this.pessoa = pessoa;
+        this.familia = Familia;
+        this.parentesco = parentesco;
         this.confirmacao = "Não Confirmado";
         this.dataCriacao = LocalDateTime.now();
         this.dataModificacao = LocalDateTime.now();
@@ -30,12 +60,12 @@ public class ConvidadoIndividual {
     @Override
     public String toString() {
 
-        return "ID: " + id + " | Pessoa: " + pessoa 
-                + " | Família: " + Familia
-                + " | Parentesco: " + parentesco 
-                + "\nConfirmação: " + confirmacao 
-                + " | Data de Criação: " + getDataCriacao()
-                + " | Última Modificação: " + getDataModificacao();
+        return "ID: " + id + " | Pessoa: " + pessoa
+                + " | Família: " + familia
+                + " | Parentesco: " + parentesco
+                + "\nConfirmação: " + confirmacao
+                + " | Data de Criação: " + Util.formatarData(dataCriacao)
+                + " | Última Modificação: " + Util.formatarData(dataModificacao);
     }
 
     @Override
@@ -60,10 +90,6 @@ public class ConvidadoIndividual {
         return this.id == other.id;
     }
 
-    public void setId(long id) {
-        this.id = id;
-    }
-
     public long getId() {
         return id;
     }
@@ -73,7 +99,7 @@ public class ConvidadoIndividual {
     }
 
     public String getFamilia() {
-        return Familia;
+        return familia;
     }
 
     public void setPessoa(Pessoas pessoa) {
@@ -81,7 +107,7 @@ public class ConvidadoIndividual {
     }
 
     public void setFamilia(String familia) {
-        this.Familia = familia;
+        this.familia = familia;
     }
 
     public String getParentesco() {
@@ -100,19 +126,16 @@ public class ConvidadoIndividual {
         this.confirmacao = confirmacao;
     }
 
-    public String getDataCriacao() {
-        return Util.formatarData(dataCriacao);
+    public LocalDateTime getDataCriacao() {
+        return dataCriacao;
     }
 
-    public void setDataCriacao(LocalDateTime dataCriacao) {
-        this.dataCriacao = dataCriacao;
-    }
-
-    public String getDataModificacao() {
-        return Util.formatarData(dataModificacao);
+    public LocalDateTime getDataModificacao() {
+        return dataModificacao;
     }
 
     public void setDataModificacao(LocalDateTime dataModificacao) {
         this.dataModificacao = dataModificacao;
     }
+
 }

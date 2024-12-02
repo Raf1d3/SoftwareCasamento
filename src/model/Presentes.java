@@ -8,12 +8,14 @@ import control.Util;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
  * @author CAUPT - ALUNOS
  */
-public class Presentes {
+public class Presentes implements InterfaceGenericDAO{
 
     long id;
     String nome;
@@ -23,6 +25,26 @@ public class Presentes {
     LocalDateTime dataCriacao;
     LocalDateTime dataModificacao;
 
+    @Override
+    public List<Object> getValoresAtributos() {
+        List<Object> valores = new ArrayList();
+        valores.add(this.nome);
+        valores.add(this.tipo);
+        valores.add(this.valor);
+        valores.add(this.pessoa.getId());
+        valores.add(this.dataCriacao);
+        valores.add(this.dataModificacao);
+        return valores;
+    }
+
+    public Presentes(Long id, String nome, String tipo, BigDecimal valor, LocalDateTime dataCriacao, LocalDateTime dataModificacao) {
+        this.nome = nome;
+        this.tipo = tipo;
+        this.valor = valor;
+        this.dataCriacao = dataCriacao;
+        this.dataModificacao = dataModificacao;
+    }
+        
     public Presentes(String nome, String tipo, BigDecimal valor) {
         this.nome = nome;
         this.tipo = tipo;
@@ -34,9 +56,13 @@ public class Presentes {
     @Override
     public String toString() {
 
-        return "ID: " + id + " | Nome: " + nome + " | Tipo: " + tipo
-                + " | Valor: " + valor + " | Pessoa: " + pessoa
-                + " | Data de Criação: " + getDataCriacao() + " | Última Modificação: " + getDataModificacao();
+        return "ID: " + id 
+                + " | Nome: " + nome 
+                + " | Tipo: " + tipo
+                + " | Valor: " + valor 
+                + " | Pessoa: " + pessoa
+                + " | Data de Criação: " + Util.formatarData(dataCriacao) 
+                + " | Última Modificação: " + Util.formatarData(dataModificacao);
     }
 
     @Override
@@ -63,10 +89,6 @@ public class Presentes {
 
     public long getId() {
         return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 
     public String getNome() {
@@ -101,16 +123,12 @@ public class Presentes {
         this.pessoa = pessoa;
     }
 
-   public String getDataCriacao() {
-        return Util.formatarData(dataCriacao);
-    }
-    
-    public void setDataCriacao(LocalDateTime dataCriacao) {
-        this.dataCriacao = dataCriacao;
+   public LocalDateTime getDataCriacao() {
+        return dataCriacao;
     }
    
-    public String getDataModificacao() {
-        return Util.formatarData(dataModificacao);
+    public LocalDateTime getDataModificacao() {
+        return dataModificacao;
     }
     
     public void setDataModificacao(LocalDateTime dataModificacao) {

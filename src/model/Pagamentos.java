@@ -7,12 +7,14 @@ package model;
 import control.Util;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
  * @author CAUPT - ALUNOS
  */
-public class Pagamentos {
+public class Pagamentos implements InterfaceGenericDAO{
 
     private long id;
     private LocalDate data;
@@ -25,7 +27,38 @@ public class Pagamentos {
     private LocalDateTime dataModificacao;
     private boolean agendado;
 
-    public Pagamentos(String descricao, Fornecedor fornecedor, boolean agendado, LocalDate data, Pessoas pessoa) {
+    @Override
+    public List<Object> getValoresAtributos() {
+        List<Object> valores = new ArrayList();
+        valores.add(this.data);
+        valores.add(this.pessoa.getId());
+        valores.add(this.descricao);
+        valores.add(this.fornecedor.getId());
+        valores.add(this.valor);
+        valores.add(this.parcela);
+        valores.add(this.dataCriacao);
+        valores.add(this.dataModificacao);
+        valores.add(this.agendado);
+        return valores;
+    }
+    
+    
+    public Pagamentos(Long id, LocalDate data, Pessoas pessoa, String descricao, Fornecedor fornecedor, double valor, int parcela, 
+            LocalDateTime dataCriacao, LocalDateTime dataModificacao, boolean agendado) {
+        this.id = id;
+        this.data = data;
+        this.pessoa = pessoa;
+        this.descricao = descricao;
+        this.fornecedor = fornecedor;
+        this.valor = valor;
+        this.parcela = parcela;
+        this.dataCriacao = dataCriacao;
+        this.dataModificacao = dataModificacao;
+        this.agendado = agendado;
+
+    }
+
+    public Pagamentos(LocalDate data, Pessoas pessoa, String descricao, Fornecedor fornecedor, boolean agendado) {
         this.descricao = descricao;
         if(agendado == true && data != null){
             this.data = data;
@@ -64,8 +97,8 @@ public class Pagamentos {
                 + " | Nome serviço : " + fornecedor.getNomeServico()
                 + " | Telefone: " + fornecedor.getTelefone()
                 + " | Cnpj: " + fornecedor.getCnpj()
-                + "\nData de Criação: " + getDataCriacao()
-                + " | Última Modificação: " + getDataModificacao() + "\n";
+                + "\nData de Criação: " + Util.formatarData(dataCriacao)
+                + " | Última Modificação: " + Util.formatarData(dataModificacao) + "\n";
     }
 
     @Override
@@ -92,10 +125,6 @@ public class Pagamentos {
 
     public long getId() {
         return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 
     public LocalDate getData() {
@@ -146,16 +175,12 @@ public class Pagamentos {
         this.parcela = parcela;
     }
 
-    public String getDataCriacao() {
-        return Util.formatarData(dataCriacao);
+    public LocalDateTime getDataCriacao() {
+        return dataCriacao;
     }
 
-    public void setDataCriacao(LocalDateTime dataCriacao) {
-        this.dataCriacao = dataCriacao;
-    }
-
-    public String getDataModificacao() {
-        return Util.formatarData(dataModificacao);
+    public LocalDateTime getDataModificacao() {
+        return dataModificacao;
     }
 
     public void setDataModificacao(LocalDateTime dataModificacao) {
@@ -173,4 +198,5 @@ public class Pagamentos {
     public long getFornecedorId() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
+
 }

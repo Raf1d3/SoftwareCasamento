@@ -8,6 +8,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -32,6 +33,16 @@ public class Util {
 
     public static void retrocederDias(int dias) {
         dataAtual = dataAtual.minusDays(dias);
+    }
+
+    public static String ListToString(List lista) {
+        String toStringLista = "";
+        if (!lista.isEmpty()) {
+            for (int i = 0; i < lista.size(); i++) {
+                toStringLista += lista.get(i).toString() + "\n";
+            }
+        }
+        return toStringLista;
     }
 
     // Formata LocalDateTime para String

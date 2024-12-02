@@ -4,9 +4,7 @@
  */
 package control;
 
-import control.GenericDAO;
 import model.Usuario;
-import model.Pessoas;
 
 /**
  *
@@ -14,14 +12,14 @@ import model.Pessoas;
  */
 public class UsuarioDAO extends GenericDAO<Usuario> {
 
-    public UsuarioDAO(Pessoas p) {
-        inserir(new Usuario("administrador", "admin", "123", p));
-        
+    public UsuarioDAO(Class<Usuario> classe) {
+        super(classe);
     }
-    
+
     public boolean autenticar(String login, String senha) {
+        
         if (login != null && senha != null) {
-            for (Usuario u : GetDataBase()) {
+            for (Usuario u : listar()) {
                 if (u.getLogin().toLowerCase().equals(login.toLowerCase()) && u.getSenha().toLowerCase().equals(senha.toLowerCase())) {
                     return true;
                 }

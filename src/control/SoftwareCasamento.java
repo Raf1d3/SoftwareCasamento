@@ -4,18 +4,16 @@
  */
 package control;
 
-
-import model.Cartorio;
-import model.Cerimonial;
+import java.util.List;
 import view.GUI;
 import model.Pessoas;
 import model.Fornecedor;
 import model.ConvidadoFamilia;
 import model.ConvidadoIndividual;
 import model.Evento;
-import model.Igreja;
 import model.MuralDeRecados;
 import model.Pagamentos;
+import model.Presentes;
 import model.Usuario;
 
 /**
@@ -25,24 +23,25 @@ import model.Usuario;
 public class SoftwareCasamento {
 
     GUI Gui = new GUI();
+    GenericDAO<Fornecedor> FornecedorDao = new GenericDAO(Fornecedor.class);
+    GenericDAO<MuralDeRecados> MuralDeRecadosDao = new GenericDAO(MuralDeRecados.class);
+    GenericDAO<Pagamentos> PagamentosDao = new GenericDAO(Pagamentos.class);
+    GenericDAO<Presentes> PresentesDao = new GenericDAO(Presentes.class);
+    GenericDAO<Pessoas> PessoasDao = new GenericDAO(Pessoas.class);
+    UsuarioDAO UsuarioDao = new UsuarioDAO(Usuario.class);
+    GenericDAO<Evento> EventoDao = new GenericDAO(Evento.class);
+    ConvidadoFamiliaDAO ConvidadoFamiliaDao = new ConvidadoFamiliaDAO(ConvidadoFamilia.class);
+    GenericDAO<ConvidadoIndividual> ConvidadoIndividualDao = new GenericDAO(ConvidadoIndividual.class);
 
-    GenericDAO<Fornecedor> FornecedorDao = new GenericDAO<>();
-    GenericDAO<MuralDeRecados> MuralDeRecadosDao = new GenericDAO<>();
-    GenericDAO<Pagamentos> PagamentosDao = new GenericDAO<>();
-    IgrejaDAO IgrejaDao = new IgrejaDAO();
-    CerimonialDAO CerimonialDao = new CerimonialDAO();
-    CartorioDAO CartorioDao = new CartorioDAO();
-    PresentesDAO PresentesDao = new PresentesDAO();
-    ConvidadoFamiliaDAO ConvidadoFamiliaDao = new ConvidadoFamiliaDAO();
-    PessoasDAO PessoasDao = new PessoasDAO();
-    UsuarioDAO UsuarioDao = new UsuarioDAO(PessoasDao.buscar(0));
-    EventoDAO EventoDao = new EventoDAO(CartorioDao.buscar(0), CerimonialDao.buscar(0), IgrejaDao.buscar(0), PessoasDao.buscar(1), PessoasDao.buscar(0));
-    ConvidadoIndividualDAO ConvidadoIndividualDao = new ConvidadoIndividualDAO(PessoasDao.buscar(7));
-    
     public SoftwareCasamento() {
         System.out.println("Iniciando Logs do programa...");
-        System.out.println(ConvidadoFamiliaDao.mostrar(null));
-        MenuLoginLoop(Gui.MenuLoginOpcoes(EventoDao.GetDataBase()));
+
+        ConexaoBanco.setParametrosDeConexao("root", "admin", "BDSofwareDeCasamento");
+        
+        
+        System.out.println(Util.ListToString(ConvidadoFamiliaDao.listar()));
+        MenuLoginLoop(Gui.MenuLoginOpcoes(EventoDao.listar()));
+
         System.out.println("Programa finalizado...");
     }
 
@@ -83,7 +82,7 @@ public class SoftwareCasamento {
                     break;
             }
 
-            opcaoUsuario = Gui.MenuLoginOpcoes(EventoDao.GetDataBase());
+            opcaoUsuario = Gui.MenuLoginOpcoes(EventoDao.listar());
 
         }
         System.out.println("Menu Fechado");
@@ -94,12 +93,12 @@ public class SoftwareCasamento {
         while (opcaoUsuario != 9) {
             switch (opcaoUsuario) {
                 case 0:
-                    if (!PessoasDao.mostrar(null).equals("")) {
+                    if (!PessoasDao.listar().isEmpty()) {
                         Gui.mostrarMensagemAviso("Digite a seguir seu nome e data de nascimento de acordo com o seu convite", "Aviso", 1);
                         String nome = Gui.mostrarMensagemInput("Digite seu nome:", "Nome", 3, "Beatriz Almeida");
                         String dataNasc = Gui.mostrarMensagemInput("Digite sua data de nascimento:", "Data de Nascimento", 3, "22/11/2012");
                         Pessoas pessoaEncontrada = null;
-                        for (Pessoas pessoas : PessoasDao.GetDataBase()) {
+                        for (Pessoas pessoas : PessoasDao.listar()) {
                             if (pessoas.getNome().equals(nome) && pessoas.getNascimento().equals(Gui.validarData(dataNasc))) {
                                 pessoaEncontrada = pessoas;
                                 break;
@@ -119,12 +118,12 @@ public class SoftwareCasamento {
                     }
                     break;
                 case 1:
-                    if (!PessoasDao.mostrar(null).equals("")) {
+                    if (!PessoasDao.listar().isEmpty()) {
                         Gui.mostrarMensagemAviso("Digite a seguir seu nome e data de nascimento de acordo com o seu convite", "Aviso", 1);
                         String nome = Gui.mostrarMensagemInput("Digite seu nome:", "Nome", 3, "Juliana Lima");
                         String dataNasc = Gui.mostrarMensagemInput("Digite sua data de nascimento:", "Data de Nascimento", 3, "28/07/1994");
                         Pessoas pessoaEncontrada = null;
-                        for (Pessoas pessoas : PessoasDao.GetDataBase()) {
+                        for (Pessoas pessoas : PessoasDao.listar()) {
                             if (pessoas.getNome().equals(nome) && pessoas.getNascimento().equals(Gui.validarData(dataNasc))) {
                                 pessoaEncontrada = pessoas;
                                 break;
@@ -232,24 +231,31 @@ public class SoftwareCasamento {
         while (opcaoUsuario != 9) {
             switch (opcaoUsuario) {
                 case 0:
-                    int idresposta = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID de um dos presentes abaixo que voce irá presentear\n" + PresentesDao.mostrar(null), "Alterar Presente", 1, ""));
-                    if (PresentesDao.buscar(idresposta) != null) {
-                        PresentesDao.buscar(idresposta).setPessoa(p);
-                        Gui.mostrarMensagemAviso("Presente Confirmado.", "Aviso", 1);
+                    List<Presentes> listaPresentes = PresentesDao.listar();
+                    if (!listaPresentes.isEmpty()) {
+                        int idresposta = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID de um dos presentes abaixo que voce irá presentear\n" + Util.ListToString(listaPresentes), "Alterar Presente", 1, ""));
+                        if (PresentesDao.buscar(idresposta) != null) {
+                            PresentesDao.buscar(idresposta).setPessoa(p);
+                            Gui.mostrarMensagemAviso("Presente Confirmado.", "Aviso", 1);
+                        } else {
+                            Gui.mostrarMensagemAviso("ID invalido", "Aviso", 2);
+                        }
                     } else {
-                        Gui.mostrarMensagemAviso("ID invalido", "Aviso", 2);
+                        Gui.mostrarMensagemAviso("Nenhum Presente cadastrado", "Aviso", 2);
                     }
 
                     break;
                 case 1:
-                    if (!PresentesDao.mostrar(null).equals("")) {
-                        Gui.mostrarMensagemAviso("Presentes : \n" + PresentesDao.mostrar(null), "Aviso", 1);
+                    listaPresentes = PresentesDao.listar();
+                    if (!listaPresentes.isEmpty()) {
+                        Gui.mostrarMensagemAviso("Presentes : \n" + Util.ListToString(listaPresentes), "Aviso", 1);
                     } else {
                         Gui.mostrarMensagemAviso("Nenhum Presente cadastrado", "Aviso", 2);
                     }
                     break;
                 case 2:
-                    idresposta = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID de um dos presentes abaixo que voce irá cancelar\n" + PresentesDao.mostrar(null), "Alterar Presente", 1, ""));
+                    listaPresentes = PresentesDao.listar();
+                    int idresposta = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID de um dos presentes abaixo que voce irá cancelar\n" + Util.ListToString(listaPresentes), "Alterar Presente", 1, ""));
                     if (PresentesDao.buscar(idresposta) != null) {
                         if (PresentesDao.buscar(idresposta).getPessoa() != null
                                 && PresentesDao.buscar(idresposta).getPessoa().equals(p)) {
@@ -283,15 +289,16 @@ public class SoftwareCasamento {
         while (opcaoUsuario != 9) {
             switch (opcaoUsuario) {
                 case 0:
-                    if (MuralDeRecadosDao.inserir(Gui.CriarRecado(p)) != -1) {
+                    if (MuralDeRecadosDao.adiciona(Gui.CriarRecado(p)) != -1) {
                         Gui.mostrarMensagemAviso("Recado Criado", "Aviso", 1);
                     } else {
                         Gui.mostrarMensagemAviso("Erro ao Criar Recado", "Aviso", 2);
                     }
                     break;
                 case 1:
-                    if (!MuralDeRecadosDao.mostrar(null).equals("")) {
-                        Gui.mostrarMensagemAviso("Recados : \n" + MuralDeRecadosDao.mostrar(null), "Aviso", 1);
+                    List<MuralDeRecados> listaMuralDeRecados = MuralDeRecadosDao.listar();
+                    if (!listaMuralDeRecados.isEmpty()) {
+                        Gui.mostrarMensagemAviso("Recados : \n" + Util.ListToString(listaMuralDeRecados), "Aviso", 1);
                     } else {
                         Gui.mostrarMensagemAviso("Não há registro de recados", "Aviso", 2);
                     }
@@ -299,7 +306,7 @@ public class SoftwareCasamento {
                 case 2:
                     int idAltera = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID de um Recado a ser alterado", "Alterar Recado", 1, "0"));
                     if (MuralDeRecadosDao.buscar(idAltera).getPessoa().equals(p)) {
-                        if (MuralDeRecadosDao.alterar(Gui.CriarRecado(p), idAltera) != false) {
+                        if (MuralDeRecadosDao.alterar(idAltera, Gui.CriarRecado(p)) != false) {
                             Gui.mostrarMensagemAviso("Recado Alterado", "Aviso", 1);
                         } else {
                             Gui.mostrarMensagemAviso("Erro ao Alterar Recado", "Aviso", 2);
@@ -313,7 +320,7 @@ public class SoftwareCasamento {
                     if (MuralDeRecadosDao.buscar(idDelete) != null
                             && MuralDeRecadosDao.buscar(idDelete).getPessoa().equals(p)) {
 
-                        if (MuralDeRecadosDao.deletar(idDelete)) {
+                        if (MuralDeRecadosDao.deletar(idDelete) != null) {
                             Gui.mostrarMensagemAviso("Recado Deletado", "Aviso", 1);
                         } else {
                             Gui.mostrarMensagemAviso("Erro ao Deletar Recado", "Aviso", 2);
@@ -325,7 +332,7 @@ public class SoftwareCasamento {
                 case 4:
                     int idBuscar = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID do Recado a ser buscado", "Buscar Recado", 1, "0"));
                     if (MuralDeRecadosDao.buscar(idBuscar) != null) {
-                        Gui.mostrarMensagemAviso("Recado : \n" + MuralDeRecadosDao.mostrar(MuralDeRecadosDao.buscar(idBuscar)), "Aviso", 1);
+                        Gui.mostrarMensagemAviso("Recado : \n" + MuralDeRecadosDao.buscar(idBuscar).toString(), "Aviso", 1);
                     } else {
                         Gui.mostrarMensagemAviso("Recado não encontrado", "Aviso", 2);
                     }
@@ -351,23 +358,25 @@ public class SoftwareCasamento {
         while (opcaoUsuario != 9) {
             switch (opcaoUsuario) {
                 case 0:
-                    if (PessoasDao.inserir(Gui.CriarPessoa()) != -1) {
+                    if (PessoasDao.adiciona(Gui.CriarPessoa()) != -1) {
                         Gui.mostrarMensagemAviso("Pessoa Criada", "Aviso", 1);
                     } else {
                         Gui.mostrarMensagemAviso("Erro ao Criar Pessoa", "Aviso", 2);
                     }
                     break;
                 case 1:
-                    if (!PessoasDao.mostrar(null).equals("")) {
-                        Gui.mostrarMensagemAviso("Pessoas: \n" + PessoasDao.mostrar(null), "Aviso", 1);
+                    List<Pessoas> listaPessoas = PessoasDao.listar();
+                    if (!listaPessoas.isEmpty()) {
+                        Gui.mostrarMensagemAviso("Pessoas: \n" + Util.ListToString(PessoasDao.listar()), "Aviso", 1);
                     } else {
                         Gui.mostrarMensagemAviso("Nenhuma pessoa cadastrada", "Aviso", 2);
                     }
+
                     break;
                 case 2:
 
                     int idAltera = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID do usuario a ser alterado", "Alterar Usuario", 1, "0"));
-                    if (PessoasDao.alterar(Gui.CriarPessoa(), idAltera) != false) {
+                    if (PessoasDao.alterar(idAltera, Gui.CriarPessoa()) != false) {
                         Gui.mostrarMensagemAviso("Pessoa Alterada", "Aviso", 3);
                     } else {
                         Gui.mostrarMensagemAviso("Erro ao Alterar Pessoa", "Aviso", 2);
@@ -375,7 +384,7 @@ public class SoftwareCasamento {
                     break;
                 case 3:
                     int idDelete = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID do usuario a ser deletado", "Deletar Usuario", 1, "0"));
-                    if (PessoasDao.deletar(idDelete)) {
+                    if (PessoasDao.deletar(idDelete) != null) {
                         Gui.mostrarMensagemAviso("Pessoa Deletada", "Aviso", 3);
                     } else {
                         Gui.mostrarMensagemAviso("Erro ao Deletar Pessoa", "Aviso", 2);
@@ -384,7 +393,7 @@ public class SoftwareCasamento {
                 case 4:
                     int idBuscar = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID do usuario a ser buscado", "Buscar Usuario", 1, "0"));
                     if (PessoasDao.buscar(idBuscar) != null) {
-                        Gui.mostrarMensagemAviso("Pessoas : \n" + PessoasDao.mostrar(PessoasDao.buscar(idBuscar)), "Aviso", 3);
+                        Gui.mostrarMensagemAviso("Pessoas : \n" + PessoasDao.buscar(idBuscar).toString(), "Aviso", 3);
 
                     } else {
                         Gui.mostrarMensagemAviso("Pessoa não encontrada", "Aviso", 2);
@@ -412,10 +421,10 @@ public class SoftwareCasamento {
                     // verifica nos vetores de usuario e pessoa se eles estão associados
                     boolean PessoaTemUsuario = false;
 
-                    for (Pessoas pessoa : PessoasDao.GetDataBase()) {
+                    for (Pessoas pessoa : PessoasDao.listar()) {
                         boolean estaAssociada = false;
 
-                        for (Usuario usuario : UsuarioDao.GetDataBase()) {
+                        for (Usuario usuario : UsuarioDao.listar()) {
                             if (usuario.getPessoa() != null && usuario.getPessoa().getId() == pessoa.getId()) {
                                 estaAssociada = true;
                                 break;
@@ -427,15 +436,15 @@ public class SoftwareCasamento {
                     }
 
                     // caso não tenha nenhuma pessoa cadastrada ou nenhuma pessoa que não esteja atrelada a um usuario 
-                    if (!PessoaTemUsuario || PessoasDao.mostrar(null).equals("")) {
+                    if (!PessoaTemUsuario || PessoasDao.listar().isEmpty()) {
                         Gui.mostrarMensagemAviso("Nenhuma pessoa disponivel encontrada insira informações da pessoa referente a esse usuario", "Aviso", 1);
                         Pessoas p = Gui.CriarPessoa();
 
-                        if (PessoasDao.inserir(p) != -1) {
+                        if (PessoasDao.adiciona(p) != -1) {
                             Gui.mostrarMensagemAviso("Pessoa Criada", "Aviso", 1);
 
                             Gui.mostrarMensagemAviso("Agora insira as informações do usuario", "Aviso", 1);
-                            if (UsuarioDao.inserir(Gui.CriarUsuario(p)) != -1) {
+                            if (UsuarioDao.adiciona(Gui.CriarUsuario(p)) != -1) {
                                 Gui.mostrarMensagemAviso("Usuario Criado", "Aviso", 1);
                             } else {
                                 Gui.mostrarMensagemAviso("Erro ao Criar Usuario ", "Aviso", 2);
@@ -451,16 +460,16 @@ public class SoftwareCasamento {
 
                     break;
                 case 1:
-                    if (!UsuarioDao.mostrar(null).equals("")) {
-                        Gui.mostrarMensagemAviso("Usuarios : \n" + UsuarioDao.mostrar(null), "Aviso", 1);
+                    List<Usuario> listaUsuario = UsuarioDao.listar();
+                    if (!listaUsuario.isEmpty()) {
+                        Gui.mostrarMensagemAviso("Usuarios : \n" + Util.ListToString(listaUsuario), "Aviso", 1);
                     } else {
                         Gui.mostrarMensagemAviso("Nenhum Usuario cadastrado", "Aviso", 2);
                     }
                     break;
                 case 2:
                     int idAltera = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID do usuario a ser alterado", "Alterar Usuario", 1, "0"));
-                    if (UsuarioDao.buscar(idAltera) != null
-                            && UsuarioDao.alterar(Gui.CriarUsuario(UsuarioDao.buscar(idAltera).getPessoa()), idAltera)) {
+                    if (UsuarioDao.alterar(idAltera, Gui.CriarUsuario(UsuarioDao.buscar(idAltera).getPessoa()))) {
                         Gui.mostrarMensagemAviso("Usuario Alterada", "Aviso", 1);
                     } else {
                         Gui.mostrarMensagemAviso("Erro ao Alterar Usuario ", "Aviso", 2);
@@ -468,7 +477,7 @@ public class SoftwareCasamento {
                     break;
                 case 3:
                     int idDelete = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID do usuario a ser deletado", "Deletar Usuario", 1, "0"));
-                    if (UsuarioDao.deletar(idDelete)) {
+                    if (UsuarioDao.deletar(idDelete) != null) {
                         Gui.mostrarMensagemAviso("Usuario Deletada", "Aviso", 1);
                     } else {
                         Gui.mostrarMensagemAviso("Erro ao Deletar Usuario", "Aviso", 2);
@@ -478,7 +487,7 @@ public class SoftwareCasamento {
                 case 4:
                     int idBuscar = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID do usuario a ser buscado", "Buscar Usuario", 1, "0"));
                     if (UsuarioDao.buscar(idBuscar) != null) {
-                        Gui.mostrarMensagemAviso("Usuario : \n" + UsuarioDao.mostrar(UsuarioDao.buscar(idBuscar)), "Aviso", 1);
+                        Gui.mostrarMensagemAviso("Usuario : \n" + UsuarioDao.buscar(idBuscar).toString(), "Aviso", 1);
                     } else {
                         Gui.mostrarMensagemAviso("Usuario não encontrada", "Aviso", 2);
                     }
@@ -503,9 +512,9 @@ public class SoftwareCasamento {
             switch (opcaoUsuario) {
                 case 0:
                     Pessoas p = Gui.CriarPessoa();
-                    if (PessoasDao.inserir(p) != -1) {
+                    if (PessoasDao.adiciona(p) != -1) {
                         Gui.mostrarMensagemAviso("Pessoa Criada", "Aviso", 1);
-                        if (UsuarioDao.inserir(Gui.CriarUsuario(p)) != -1) {
+                        if (UsuarioDao.adiciona(Gui.CriarUsuario(p)) != -1) {
                             Gui.mostrarMensagemAviso("Usuario Criado", "Aviso", 1);
                         } else {
                             Gui.mostrarMensagemAviso("Erro ao Criar Usuario ", "Aviso", 2);
@@ -524,9 +533,9 @@ public class SoftwareCasamento {
                     String StringPessoasSemUsuario = "";
 
                     int j = 0;
-                    for (Pessoas pessoa : PessoasDao.GetDataBase()) {
+                    for (Pessoas pessoa : PessoasDao.listar()) {
                         boolean PessoatemUsuario = false;
-                        for (Usuario usuario : UsuarioDao.GetDataBase()) {
+                        for (Usuario usuario : UsuarioDao.listar()) {
                             if (usuario.getPessoa() != null && usuario.getPessoa().getId() == pessoa.getId()) {
                                 PessoatemUsuario = true;
                             }
@@ -534,7 +543,7 @@ public class SoftwareCasamento {
 
                         if (!PessoatemUsuario && j <= tamVet) {
                             idsPessoaSemUsuario[j] = pessoa.getId();
-                            StringPessoasSemUsuario += PessoasDao.mostrar(pessoa) + "\n";
+                            StringPessoasSemUsuario += PessoasDao.buscar(pessoa.getId()).toString() + "\n";
                             j++;
                         }
                     }
@@ -558,7 +567,7 @@ public class SoftwareCasamento {
                         if (verificacao == true) {
                             Pessoas p2 = PessoasDao.buscar(option);
 
-                            if (UsuarioDao.inserir(Gui.CriarUsuario(p2)) != -1) {
+                            if (UsuarioDao.adiciona(Gui.CriarUsuario(p2)) != -1) {
                                 Gui.mostrarMensagemAviso("Usuario Criado", "Aviso", 1);
                             } else {
                                 Gui.mostrarMensagemAviso("Erro ao Criar Usuario ", "Aviso", 2);
@@ -590,11 +599,11 @@ public class SoftwareCasamento {
             switch (opcaoUsuario) {
                 case 0:
 
-                    if (PessoasDao.mostrar(null).equals("")) {
+                    if (PessoasDao.listar().isEmpty()) {
                         Gui.mostrarMensagemAviso("Nenhuma pessoa disponivel encontrada insira informações da pessoa referente a esse Fornecedor", "Aviso", 1);
                         Pessoas p = Gui.CriarPessoa();
-                        if (PessoasDao.inserir(p) != -1) {
-                            if (FornecedorDao.inserir(Gui.CriarFornecedor(p)) != -1) {
+                        if (PessoasDao.adiciona(p) != -1) {
+                            if (FornecedorDao.adiciona(Gui.CriarFornecedor(p)) != -1) {
                                 Gui.mostrarMensagemAviso("Fornecedor Criado", "Aviso", 1);
                             } else {
                                 Gui.mostrarMensagemAviso("Erro ao Criar Fornecedor", "Aviso", 2);
@@ -609,15 +618,16 @@ public class SoftwareCasamento {
                     }
                     break;
                 case 1:
-                    if (!FornecedorDao.mostrar(null).equals("")) {
-                        Gui.mostrarMensagemAviso("Fornecedores : \n" + FornecedorDao.mostrar(null), "Aviso", 1);
+                    List<Fornecedor> listaFornecedores = FornecedorDao.listar();
+                    if (!listaFornecedores.isEmpty()) {
+                        Gui.mostrarMensagemAviso("Fornecedores : \n" + Util.ListToString(listaFornecedores), "Aviso", 1);
                     } else {
                         Gui.mostrarMensagemAviso("Nenhum Fornecedor Cadastrado", "Aviso", 2);
                     }
                     break;
                 case 2:
                     int idAltera = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID do fornecedor a ser alterado", "Alterar Fornecedor", 1, "0"));
-                    if (FornecedorDao.alterar(Gui.CriarFornecedor(FornecedorDao.buscar(idAltera).getPessoa()), idAltera)) {
+                    if (FornecedorDao.alterar(idAltera, Gui.CriarFornecedor(FornecedorDao.buscar(idAltera).getPessoa()))) {
                         Gui.mostrarMensagemAviso("Fornecedor Alterado", "Aviso", 1);
                     } else {
                         Gui.mostrarMensagemAviso("Erro ao Alterar Fornecedor", "Aviso", 2);
@@ -625,7 +635,7 @@ public class SoftwareCasamento {
                     break;
                 case 3:
                     int idDelete = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID do Fornecedor a ser deletado", "Deletar Fornecedor", 1, "0"));
-                    if (FornecedorDao.deletar(idDelete)) {
+                    if (FornecedorDao.deletar(idDelete)!= null) {
                         Gui.mostrarMensagemAviso("Fornecedor Deletado", "Aviso", 1);
                     } else {
                         Gui.mostrarMensagemAviso("Erro ao Deletar Fornecedor", "Aviso", 2);
@@ -634,7 +644,7 @@ public class SoftwareCasamento {
                 case 4:
                     int idBuscar = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID do Fornecedor a ser buscado", "Buscar Forncededor", 1, "0"));
                     if (FornecedorDao.buscar(idBuscar) != null) {
-                        Gui.mostrarMensagemAviso("Fornecedor : \n" + FornecedorDao.mostrar(FornecedorDao.buscar(idBuscar)), "Aviso", 1);
+                        Gui.mostrarMensagemAviso("Fornecedor : \n" + FornecedorDao.buscar(idBuscar).toString(), "Aviso", 1);
                     } else {
                         Gui.mostrarMensagemAviso("Fornecedor não encontrado", "Aviso", 2);
                     }
@@ -659,9 +669,9 @@ public class SoftwareCasamento {
             switch (opcaoUsuario) {
                 case 0:
                     Pessoas p = Gui.CriarPessoa();
-                    if (PessoasDao.inserir(p) != -1) {
+                    if (PessoasDao.adiciona(p) != -1) {
                         Gui.mostrarMensagemAviso("Pessoa Criada", "Aviso", 1);
-                        if (FornecedorDao.inserir(Gui.CriarFornecedor(p)) != -1) {
+                        if (FornecedorDao.adiciona(Gui.CriarFornecedor(p)) != -1) {
                             Gui.mostrarMensagemAviso("Fornecedor Criado", "Aviso", 1);
                         } else {
                             Gui.mostrarMensagemAviso("Erro ao Criar Fornecedor", "Aviso", 2);
@@ -676,7 +686,7 @@ public class SoftwareCasamento {
                     boolean verificacao = false;
                     int option;
                     while (verificacao != true) {
-                        String resp = Gui.mostrarMensagemInput("Qual Pessoa vai ser atrelado a esse fornecedor? digite o ID: \n" + PessoasDao.mostrar(null), "escolha a pessoa", 3, "0");
+                        String resp = Gui.mostrarMensagemInput("Qual Pessoa vai ser atrelado a esse fornecedor? digite o ID: \n" + PessoasDao.listar().toString(), "escolha a pessoa", 3, "0");
 
                         if (resp == null) {
                             return true;
@@ -684,7 +694,7 @@ public class SoftwareCasamento {
                             option = Gui.validarStringToInt(resp);
                         }
 
-                        for (Pessoas pessoa : PessoasDao.GetDataBase()) {
+                        for (Pessoas pessoa : PessoasDao.listar()) {
                             if (pessoa.getId() == option && option != -1) {
                                 verificacao = true;
                             }
@@ -693,7 +703,7 @@ public class SoftwareCasamento {
                         if (verificacao == true) {
                             Pessoas p2 = PessoasDao.buscar(option);
 
-                            if (FornecedorDao.inserir(Gui.CriarFornecedor(p2)) != -1) {
+                            if (FornecedorDao.adiciona(Gui.CriarFornecedor(p2)) != -1) {
                                 Gui.mostrarMensagemAviso("Fornecedor Criado", "Aviso", 1);
                             } else {
                                 Gui.mostrarMensagemAviso("Erro ao Criar Fornecedor ", "Aviso", 2);
@@ -729,10 +739,10 @@ public class SoftwareCasamento {
                 case 0:
                     String StringConvidadosFamilia = "";
 
-                    for (ConvidadoIndividual ci : ConvidadoIndividualDao.GetDataBase()) {
+                    for (ConvidadoIndividual ci : ConvidadoIndividualDao.listar()) {
                         if (cf.getNomeDaFamilia().equals(ci.getFamilia()) && j <= tamVet) {
                             idsConvidadosFamilia[j] = ci.getId();
-                            StringConvidadosFamilia += ConvidadoIndividualDao.mostrar(ci) + "\n";
+                            StringConvidadosFamilia += ConvidadoIndividualDao.buscar(ci.getId()) + "\n";
                             j++;
                         }
                     }
@@ -766,7 +776,7 @@ public class SoftwareCasamento {
                                 }
 
                                 boolean familiaVai = false;
-                                for (ConvidadoIndividual convidados : ConvidadoIndividualDao.GetDataBase()) {
+                                for (ConvidadoIndividual convidados : ConvidadoIndividualDao.listar()) {
                                     if (convidados.getConfirmacao() == "Confirmado") {
                                         familiaVai = true;
                                     }
@@ -829,16 +839,17 @@ public class SoftwareCasamento {
         while (opcaoUsuario != 9) {
             switch (opcaoUsuario) {
                 case 0:
-                    if (ConvidadoFamiliaDao.inserir(Gui.CriarConvidadoFamilia()) != -1) {
+                    if (ConvidadoFamiliaDao.adiciona(Gui.CriarConvidadoFamilia()) != -1) {
                         Gui.mostrarMensagemAviso("família Criado", "Aviso", 1);
                     } else {
                         Gui.mostrarMensagemAviso("Erro ao Criar família", "Aviso", 2);
                     }
                     break;
                 case 1:
-                    if (!ConvidadoFamiliaDao.mostrar(null).equals("")) {
-                        System.out.println("famílias:" + ConvidadoFamiliaDao.mostrar(null)); 
-                        Gui.mostrarMensagemAviso("famílias : \n" + ConvidadoFamiliaDao.mostrar(null), "Aviso", 1);
+                    List<ConvidadoFamilia> listaConvidadoFamilia = ConvidadoFamiliaDao.listar();
+                    if (!listaConvidadoFamilia.isEmpty()) {
+                        System.out.println("famílias:" + Util.ListToString(listaConvidadoFamilia));
+                        Gui.mostrarMensagemAviso("famílias : \n" + Util.ListToString(listaConvidadoFamilia), "Aviso", 1);
                     } else {
                         Gui.mostrarMensagemAviso("Nenhuma família cadastrada", "Aviso", 2);
                     }
@@ -846,7 +857,7 @@ public class SoftwareCasamento {
                     break;
                 case 2:
                     int idAltera = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID da família a ser alterada", "Alterar família", 1, "0"));
-                    if (ConvidadoFamiliaDao.alterar(Gui.CriarConvidadoFamilia(), idAltera) != false) {
+                    if (ConvidadoFamiliaDao.alterar(idAltera, Gui.CriarConvidadoFamilia()) != false) {
                         Gui.mostrarMensagemAviso("Família Alterada", "Aviso", 1);
                     } else {
                         Gui.mostrarMensagemAviso("Erro ao Alterar família", "Aviso", 2);
@@ -854,7 +865,7 @@ public class SoftwareCasamento {
                     break;
                 case 3:
                     int idDelete = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID da família a ser deletada", "Deletar família", 1, "0"));
-                    if (ConvidadoFamiliaDao.deletar(idDelete)) {
+                    if (ConvidadoFamiliaDao.deletar(idDelete)!= null) {
                         Gui.mostrarMensagemAviso("família Deletada", "Aviso", 1);
                     } else {
                         Gui.mostrarMensagemAviso("Erro ao Deletar família", "Aviso", 2);
@@ -863,16 +874,17 @@ public class SoftwareCasamento {
                 case 4:
                     int idBuscar = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID da família a ser buscada", "Buscar família", 1, "0"));
                     if (ConvidadoFamiliaDao.buscar(idBuscar) != null) {
-                        Gui.mostrarMensagemAviso("família : \n" + ConvidadoFamiliaDao.mostrar(ConvidadoFamiliaDao.buscar(idBuscar)), "Aviso", 1);
+                        Gui.mostrarMensagemAviso("família : \n" + ConvidadoFamiliaDao.buscar(idBuscar).toString(), "Aviso", 1);
                     } else {
                         Gui.mostrarMensagemAviso("família não encontrada", "Aviso", 2);
                     }
                     break;
                 case 5:
+                    listaConvidadoFamilia = ConvidadoFamiliaDao.listar();
                     StringBuilder familias = new StringBuilder("");
 
                     familias.append("<html><body><p style='font-size:10px; font-weight:bold;'>");
-                    for (ConvidadoFamilia cf : ConvidadoFamiliaDao.GetDataBase()) {
+                    for (ConvidadoFamilia cf : listaConvidadoFamilia) {
                         familias.append("ID: ");
                         familias.append(cf.getId());
                         familias.append("&nbsp;&nbsp;Nome da família: ");
@@ -894,7 +906,7 @@ public class SoftwareCasamento {
                             option = Gui.validarStringToInt(resp);
                         }
 
-                        for (ConvidadoFamilia ConvidadoFamilia : ConvidadoFamiliaDao.GetDataBase()) {
+                        for (ConvidadoFamilia ConvidadoFamilia : listaConvidadoFamilia) {
                             if (ConvidadoFamilia.getId() == option && option != -1) {
                                 verificacao = true;
                             }
@@ -939,10 +951,10 @@ public class SoftwareCasamento {
                     // verifica nos vetores de convidado e pessoa se eles estão associados
                     boolean PessoaEhconvidado = false;
 
-                    for (Pessoas pessoa : PessoasDao.GetDataBase()) {
+                    for (Pessoas pessoa : PessoasDao.listar()) {
                         boolean estaAssociada = false;
 
-                        for (ConvidadoIndividual ci : ConvidadoIndividualDao.GetDataBase()) {
+                        for (ConvidadoIndividual ci : ConvidadoIndividualDao.listar()) {
                             if (ci.getPessoa() != null && ci.getPessoa().getId() == pessoa.getId()) {
                                 estaAssociada = true;
                                 break;
@@ -953,15 +965,15 @@ public class SoftwareCasamento {
                         }
                     }
                     // caso não tenha nenhuma pessoa cadastrada ou nenhuma pessoa que não esteja atrelada a um convidado 
-                    if (!PessoaEhconvidado || PessoasDao.mostrar(null).equals("")) {
+                    if (!PessoaEhconvidado || PessoasDao.listar().isEmpty()) {
                         Gui.mostrarMensagemAviso("Nenhuma pessoa disponivel encontrada insira informações da pessoa referente a esse Convidado", "Aviso", 1);
                         Pessoas p = Gui.CriarPessoa();
 
-                        if (PessoasDao.inserir(p) != -1) {
+                        if (PessoasDao.adiciona(p) != -1) {
                             Gui.mostrarMensagemAviso("Pessoa Criada", "Aviso", 1);
 
                             Gui.mostrarMensagemAviso("Agora insira as informações do Convidado", "Aviso", 1);
-                            if (ConvidadoIndividualDao.inserir(Gui.CriarConvidadoIndividual(p)) != -1) {
+                            if (ConvidadoIndividualDao.adiciona(Gui.CriarConvidadoIndividual(p)) != -1) {
                                 Gui.mostrarMensagemAviso("Convidado Criado", "Aviso", 1);
                             } else {
                                 Gui.mostrarMensagemAviso("Erro ao Criar Convidado ", "Aviso", 2);
@@ -977,16 +989,16 @@ public class SoftwareCasamento {
 
                     break;
                 case 1:
-                    if (!ConvidadoIndividualDao.mostrar(null).equals("")) {
-                        Gui.mostrarMensagemAviso("Convidados : \n" + ConvidadoIndividualDao.mostrar(null), "Aviso", 1);
+                    List<ConvidadoIndividual> listaConvidadoIndividual = ConvidadoIndividualDao.listar();
+                    if (!listaConvidadoIndividual.isEmpty()) {
+                        Gui.mostrarMensagemAviso("Convidados : \n" + Util.ListToString(listaConvidadoIndividual), "Aviso", 1);
                     } else {
                         Gui.mostrarMensagemAviso("Nenhum convidado cadastrado", "Aviso", 2);
                     }
                     break;
                 case 2:
                     int idAltera = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID de um Convidado a ser alterado", "Alterar Convidado", 1, "0"));
-                    if (ConvidadoIndividualDao.buscar(idAltera) != null
-                            && ConvidadoIndividualDao.alterar(Gui.CriarConvidadoIndividual(ConvidadoIndividualDao.buscar(idAltera).getPessoa()), idAltera) != false) {
+                    if (ConvidadoIndividualDao.alterar(idAltera, Gui.CriarConvidadoIndividual(ConvidadoIndividualDao.buscar(idAltera).getPessoa())) != false) {
                         Gui.mostrarMensagemAviso("Convidado Alterado", "Aviso", 1);
                     } else {
                         Gui.mostrarMensagemAviso("Erro ao Alterar Convidado", "Aviso", 2);
@@ -994,7 +1006,7 @@ public class SoftwareCasamento {
                     break;
                 case 3:
                     int idDelete = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID do Convidado a ser deletado", "Deletar Convidado", 1, "0"));
-                    if (ConvidadoIndividualDao.deletar(idDelete)) {
+                    if (ConvidadoIndividualDao.deletar(idDelete)!= null) {
                         Gui.mostrarMensagemAviso("Convidado Deletado", "Aviso", 1);
                     } else {
                         Gui.mostrarMensagemAviso("Erro ao Deletar Convidado", "Aviso", 2);
@@ -1003,21 +1015,22 @@ public class SoftwareCasamento {
                 case 4:
                     int idBuscar = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID do Convidado a ser buscado", "Buscar Convidado", 1, "0"));
                     if (ConvidadoIndividualDao.buscar(idBuscar) != null) {
-                        Gui.mostrarMensagemAviso("Convidado : \n" + ConvidadoIndividualDao.mostrar(ConvidadoIndividualDao.buscar(idBuscar)), "Aviso", 1);
+                        Gui.mostrarMensagemAviso("Convidado : \n" + ConvidadoIndividualDao.buscar(idBuscar).toString(), "Aviso", 1);
                     } else {
                         Gui.mostrarMensagemAviso("Convidado não encontrado", "Aviso", 2);
                     }
                     break;
                 case 5:
-                    if (ConvidadoIndividualDao.mostrar(null).equals("")) {
+                    listaConvidadoIndividual = ConvidadoIndividualDao.listar();
+                    if (listaConvidadoIndividual.isEmpty()) {
                         Gui.mostrarMensagemAviso("Nenhum convidado cadastrado", "Aviso", 2);
                     } else {
 
                         StringBuilder convidados = new StringBuilder("");
 
                         convidados.append("<html><body><p style='font-size:10px; font-weight:bold;'>");
-                        for (Pessoas pessoa : PessoasDao.GetDataBase()) {
-                            for (ConvidadoIndividual ci : ConvidadoIndividualDao.GetDataBase()) {
+                        for (Pessoas pessoa : PessoasDao.listar()) {
+                            for (ConvidadoIndividual ci : ConvidadoIndividualDao.listar()) {
                                 if (ci.getPessoa() != null && ci.getPessoa().getId() == pessoa.getId()) {
                                     convidados.append("ID: ");
                                     convidados.append(ci.getId());
@@ -1042,7 +1055,7 @@ public class SoftwareCasamento {
                                 option = Gui.validarStringToInt(resp);
                             }
 
-                            for (ConvidadoIndividual convidadoIndividual : ConvidadoIndividualDao.GetDataBase()) {
+                            for (ConvidadoIndividual convidadoIndividual : ConvidadoIndividualDao.listar()) {
                                 if (convidadoIndividual.getId() == option && option != -1) {
                                     verificacao = true;
                                 }
@@ -1084,11 +1097,11 @@ public class SoftwareCasamento {
             switch (opcaoUsuario) {
                 case 0:
                     Pessoas p = Gui.CriarPessoa();
-                    if (PessoasDao.inserir(p) != -1) {
+                    if (PessoasDao.adiciona(p) != -1) {
                         Gui.mostrarMensagemAviso("Pessoa Criada", "Aviso", 1);
 
                         Gui.mostrarMensagemAviso("Agora insira as informações do Convidado", "Aviso", 1);
-                        if (ConvidadoIndividualDao.inserir(Gui.CriarConvidadoIndividual(p)) != -1) {
+                        if (ConvidadoIndividualDao.adiciona(Gui.CriarConvidadoIndividual(p)) != -1) {
                             Gui.mostrarMensagemAviso("Convidado Criado", "Aviso", 1);
                         } else {
                             Gui.mostrarMensagemAviso("Erro ao Criar Convidado ", "Aviso", 2);
@@ -1108,18 +1121,18 @@ public class SoftwareCasamento {
 
                     String StringPessoasSemConvite = "";
                     int j = 0;
-                    for (Pessoas pessoa : PessoasDao.GetDataBase()) {
+                    for (Pessoas pessoa : PessoasDao.listar()) {
 
                         boolean PessoaEhconvidado = false;
 
-                        for (ConvidadoIndividual ci : ConvidadoIndividualDao.GetDataBase()) {
+                        for (ConvidadoIndividual ci : ConvidadoIndividualDao.listar()) {
                             if (ci.getPessoa() != null && ci.getPessoa().getId() == pessoa.getId()) {
                                 PessoaEhconvidado = true;
                             }
                         }
                         if (!PessoaEhconvidado && j <= tamVet) {
                             idsPessoasSemConvite[j] = pessoa.getId();
-                            StringPessoasSemConvite += PessoasDao.mostrar(pessoa) + "\n";
+                            StringPessoasSemConvite += PessoasDao.buscar(pessoa.getId()).toString() + "\n";
                             j++;
                         }
                     }
@@ -1144,7 +1157,7 @@ public class SoftwareCasamento {
                         if (verificacao == true) {
                             Pessoas p2 = PessoasDao.buscar(option);
 
-                            if (ConvidadoIndividualDao.inserir(Gui.CriarConvidadoIndividual(p2)) != -1) {
+                            if (ConvidadoIndividualDao.adiciona(Gui.CriarConvidadoIndividual(p2)) != -1) {
                                 Gui.mostrarMensagemAviso("Convidado Criado", "Aviso", 1);
                             } else {
                                 Gui.mostrarMensagemAviso("Erro ao Criar Convidado ", "Aviso", 2);
@@ -1176,7 +1189,7 @@ public class SoftwareCasamento {
                     boolean criarNovasPessoas = false;
 
                     //se vetor tem 2 pessoas pelo menos
-                    if (PessoasDao.GetDataBase().size() > 1) {
+                    if (PessoasDao.listar().size() > 1) {
 
                         Object[] options = {"Criar Pessoas", "Escolher pessoas"};
                         int resposta = Gui.mostrarMensagemBots("Voce precisa criar pessoas referente a noivo e noiva oque voce prefere?", "Menu Calendario", -1, options);
@@ -1188,8 +1201,8 @@ public class SoftwareCasamento {
                             int optionNoivo;
                             int optionNoiva;
                             while (verificacao != true) {
-                                String respNoivo = Gui.mostrarMensagemInput("Qual Pessoa vai ser atrelado ao Noivo? digite o ID: \n" + PessoasDao.mostrar(null), "escolha a pessoa", 3, "0");
-                                String respNoiva = Gui.mostrarMensagemInput("Qual Pessoa vai ser atrelado a Noiva? digite o ID: \n" + PessoasDao.mostrar(null), "escolha a pessoa", 3, "0");
+                                String respNoivo = Gui.mostrarMensagemInput("Qual Pessoa vai ser atrelado ao Noivo? digite o ID: \n" + PessoasDao.listar().toString(), "escolha a pessoa", 3, "0");
+                                String respNoiva = Gui.mostrarMensagemInput("Qual Pessoa vai ser atrelado a Noiva? digite o ID: \n" + PessoasDao.listar().toString(), "escolha a pessoa", 3, "0");
 
                                 if (respNoivo == null || respNoiva == null) {
                                     return true;
@@ -1198,7 +1211,7 @@ public class SoftwareCasamento {
                                     optionNoiva = Gui.validarStringToInt(respNoiva);
                                 }
 
-                                for (Pessoas pessoa : PessoasDao.GetDataBase()) {
+                                for (Pessoas pessoa : PessoasDao.listar()) {
                                     if (pessoa.getId() == optionNoivo && optionNoivo != -1) {
                                         verificacao = true;
                                     }
@@ -1214,7 +1227,7 @@ public class SoftwareCasamento {
                                     Pessoas pNoivo = PessoasDao.buscar(optionNoivo);
                                     Pessoas pNoiva = PessoasDao.buscar(optionNoiva);
 
-                                    if (EventoDao.inserir(Gui.CriarEvento(pNoivo, pNoiva)) != -1) {
+                                    if (EventoDao.adiciona(Gui.CriarEvento(pNoivo, pNoiva)) != -1) {
                                         Gui.mostrarMensagemAviso("Evento Criado", "Aviso", 1);
                                     } else {
                                         Gui.mostrarMensagemAviso("Erro ao Criar Evento", "Aviso", 2);
@@ -1235,13 +1248,13 @@ public class SoftwareCasamento {
                         Gui.mostrarMensagemAviso("Poucas ou Nenhuma pessoa encontrada preencha os dados das pessoas referentes ao noivo e noiva", "Aviso", 2);
                         Gui.mostrarMensagemAviso("Primeiro insira a pessoa referente ao noivo", "Aviso", 1);
                         Pessoas pNoivo = Gui.CriarPessoa();
-                        if (PessoasDao.inserir(pNoivo) != -1) {
+                        if (PessoasDao.adiciona(pNoivo) != -1) {
                             Gui.mostrarMensagemAviso("Pessoa referente ao noivo Criado", "Aviso", 1);
                             Gui.mostrarMensagemAviso("Agora insira a pessoa refente a noiva", "Aviso", 1);
                             Pessoas pNoiva = Gui.CriarPessoa();
-                            if (PessoasDao.inserir(pNoiva) != -1) {
+                            if (PessoasDao.adiciona(pNoiva) != -1) {
                                 Gui.mostrarMensagemAviso("Pessoa referente ao noiva Criada", "Aviso", 1);
-                                if (EventoDao.inserir(Gui.CriarEvento(pNoivo, pNoiva)) != -1) {
+                                if (EventoDao.adiciona(Gui.CriarEvento(pNoivo, pNoiva)) != -1) {
                                     Gui.mostrarMensagemAviso("Evento Criado", "Aviso", 1);
                                 } else {
                                     Gui.mostrarMensagemAviso("Erro ao Criar Evento", "Aviso", 2);
@@ -1254,15 +1267,16 @@ public class SoftwareCasamento {
                     break;
 
                 case 1:
-                    if (!EventoDao.mostrar(null).equals("")) {
-                        Gui.mostrarMensagemAviso("Eventos : \n" + EventoDao.mostrar(null), "Aviso", 1);
+                    List<Evento> listaEventos = EventoDao.listar();
+                    if (!listaEventos.isEmpty()) {
+                        Gui.mostrarMensagemAviso("Eventos : \n" + Util.ListToString(listaEventos), "Aviso", 1);
                     } else {
                         Gui.mostrarMensagemAviso("Nenhum evento cadastrado", "Aviso", 2);
                     }
                     break;
                 case 2:
                     int idAltera = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID de um Evento a ser alterado", "Alterar Evento", 1, "0"));
-                    if (EventoDao.alterar(Gui.CriarEvento(EventoDao.buscar(idAltera).getNoivo(), EventoDao.buscar(idAltera).getNoiva()), idAltera) != false) {
+                    if (EventoDao.alterar(idAltera, Gui.CriarEvento(EventoDao.buscar(idAltera).getNoivo(), EventoDao.buscar(idAltera).getNoiva())) != false) {
                         Gui.mostrarMensagemAviso("Evento Alterado", "Aviso", 1);
                     } else {
                         Gui.mostrarMensagemAviso("Erro ao Alterar Evento", "Aviso", 2);
@@ -1270,7 +1284,7 @@ public class SoftwareCasamento {
                     break;
                 case 3:
                     int idDelete = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID do Evento a ser deletado", "Deletar Evento", 1, "0"));
-                    if (EventoDao.deletar(idDelete)) {
+                    if (EventoDao.deletar(idDelete)!= null) {
                         Gui.mostrarMensagemAviso("Evento Deletado", "Aviso", 1);
                     } else {
                         Gui.mostrarMensagemAviso("Erro ao Deletar Evento", "Aviso", 2);
@@ -1279,7 +1293,7 @@ public class SoftwareCasamento {
                 case 4:
                     int idBuscar = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID do Evento a ser buscado", "Buscar Evento", 1, "0"));
                     if (EventoDao.buscar(idBuscar) != null) {
-                        Gui.mostrarMensagemAviso("Evento : \n" + EventoDao.mostrar(EventoDao.buscar(idBuscar)), "Aviso", 1);
+                        Gui.mostrarMensagemAviso("Evento : \n" + EventoDao.buscar(idBuscar).toString(), "Aviso", 1);
                     } else {
                         Gui.mostrarMensagemAviso("Evento não encontrado", "Aviso", 2);
                     }
@@ -1302,18 +1316,18 @@ public class SoftwareCasamento {
         while (opcaoUsuario != 9) {
             switch (opcaoUsuario) {
                 case 0:
-                    if (!PessoasDao.mostrar(null).equals("")) {
+                    if (!PessoasDao.listar().isEmpty()) {
                         if (!menuMuralDeRecadosEscolhaInserirLoop(Gui.menuMuralDeRecadosEscolhaInserirOpcoes())) {
                             return false;
                         }
                     } else {
                         Gui.mostrarMensagemAviso("Nenhuma pessoa cadastrada!! insira as informações da pessoa que deixará o recado", "Aviso", 1);
                         Pessoas p = Gui.CriarPessoa();
-                        if (PessoasDao.inserir(p) != -1) {
+                        if (PessoasDao.adiciona(p) != -1) {
                             Gui.mostrarMensagemAviso("Pessoa Criada", "Aviso", 1);
 
                             Gui.mostrarMensagemAviso("Agora insira seu recado", "Aviso", 1);
-                            if (MuralDeRecadosDao.inserir(Gui.CriarRecado(p)) != -1) {
+                            if (MuralDeRecadosDao.adiciona(Gui.CriarRecado(p)) != -1) {
                                 Gui.mostrarMensagemAviso("Recado Criado", "Aviso", 1);
                             } else {
                                 Gui.mostrarMensagemAviso("Erro ao Criar Recado", "Aviso", 2);
@@ -1325,16 +1339,17 @@ public class SoftwareCasamento {
 
                     break;
                 case 1:
-                    if (!MuralDeRecadosDao.mostrar(null).equals("")) {
-                        Gui.mostrarMensagemAviso("Recados : \n" + MuralDeRecadosDao.mostrar(null), "Aviso", 1);
+                    List<MuralDeRecados> listaMuralDeRecados = MuralDeRecadosDao.listar();
+
+                    if (!listaMuralDeRecados.isEmpty()) {
+                        Gui.mostrarMensagemAviso("Recados : \n" + Util.ListToString(listaMuralDeRecados), "Aviso", 1);
                     } else {
                         Gui.mostrarMensagemAviso("Não há registro de recados", "Aviso", 2);
                     }
                     break;
                 case 2:
                     int idAltera = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID de um Recado a ser alterado", "Alterar Recado", 1, "0"));
-                    if (MuralDeRecadosDao.buscar(idAltera) != null
-                            && MuralDeRecadosDao.alterar(Gui.CriarRecado(MuralDeRecadosDao.buscar(idAltera).getPessoa()), idAltera) != false) {
+                    if (MuralDeRecadosDao.alterar(idAltera, Gui.CriarRecado(MuralDeRecadosDao.buscar(idAltera).getPessoa())) != false) {
                         Gui.mostrarMensagemAviso("Recado Alterado", "Aviso", 1);
                     } else {
                         Gui.mostrarMensagemAviso("Erro ao Alterar Recado", "Aviso", 2);
@@ -1342,7 +1357,7 @@ public class SoftwareCasamento {
                     break;
                 case 3:
                     int idDelete = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID do Recado a ser deletado", "Deletar Recado", 1, "0"));
-                    if (MuralDeRecadosDao.deletar(idDelete)) {
+                    if (MuralDeRecadosDao.deletar(idDelete) != null) {
                         Gui.mostrarMensagemAviso("Recado Deletado", "Aviso", 1);
                     } else {
                         Gui.mostrarMensagemAviso("Erro ao Deletar Recado", "Aviso", 2);
@@ -1351,7 +1366,7 @@ public class SoftwareCasamento {
                 case 4:
                     int idBuscar = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID do Recado a ser buscado", "Buscar Recado", 1, "0"));
                     if (MuralDeRecadosDao.buscar(idBuscar) != null) {
-                        Gui.mostrarMensagemAviso("Recado : \n" + MuralDeRecadosDao.mostrar(MuralDeRecadosDao.buscar(idBuscar)), "Aviso", 1);
+                        Gui.mostrarMensagemAviso("Recado : \n" + MuralDeRecadosDao.buscar(idBuscar).toString(), "Aviso", 1);
                     } else {
                         Gui.mostrarMensagemAviso("Recado não encontrado", "Aviso", 2);
                     }
@@ -1375,11 +1390,11 @@ public class SoftwareCasamento {
             switch (opcaoUsuario) {
                 case 0:
                     Pessoas p = Gui.CriarPessoa();
-                    if (PessoasDao.inserir(p) != -1) {
+                    if (PessoasDao.adiciona(p) != -1) {
                         Gui.mostrarMensagemAviso("Pessoa Criada", "Aviso", 1);
 
                         Gui.mostrarMensagemAviso("Agora insira seu recado", "Aviso", 1);
-                        if (MuralDeRecadosDao.inserir(Gui.CriarRecado(p)) != -1) {
+                        if (MuralDeRecadosDao.adiciona(Gui.CriarRecado(p)) != -1) {
                             Gui.mostrarMensagemAviso("Recado Criado", "Aviso", 1);
                         } else {
                             Gui.mostrarMensagemAviso("Erro ao Criar Recado", "Aviso", 2);
@@ -1390,7 +1405,7 @@ public class SoftwareCasamento {
 
                     break;
                 case 1:
-                    String resp = Gui.mostrarMensagemInput("Qual pessoa vai ser o autor do recado?  digite o ID: \n" + PessoasDao.mostrar(null), "escolha a pessoa", 3, "0");
+                    String resp = Gui.mostrarMensagemInput("Qual pessoa vai ser o autor do recado?  digite o ID: \n" + PessoasDao.listar().toString(), "escolha a pessoa", 3, "0");
                     int option;
                     if (resp == null) {
                         return true;
@@ -1401,7 +1416,7 @@ public class SoftwareCasamento {
                     if (p != null) {
 
                         Gui.mostrarMensagemAviso("Agora insira seu recado", "Aviso", 1);
-                        if (MuralDeRecadosDao.inserir(Gui.CriarRecado(p)) != -1) {
+                        if (MuralDeRecadosDao.adiciona(Gui.CriarRecado(p)) != -1) {
                             Gui.mostrarMensagemAviso("Recado Criado", "Aviso", 1);
                         } else {
                             Gui.mostrarMensagemAviso("Erro ao Criar Recado", "Aviso", 2);
@@ -1432,9 +1447,9 @@ public class SoftwareCasamento {
                 case 0:
 
                     // caso não tenha nenhum fornecedor cadastrado
-                    if (FornecedorDao.mostrar(null).equals("")) {
+                    if (FornecedorDao.listar().isEmpty()) {
 
-                        if (PessoasDao.mostrar(null).equals("")) {
+                        if (PessoasDao.listar().isEmpty()) {
                             Gui.mostrarMensagemAviso("Nenhum fornecedor cadastrado insira as informações do Fornecedor incluindo a pessoa atrelada a esse fornecedor referente a esse Pagamento", "Aviso", 1);
                             if (!menuFornecedorInserirEscolhaLoop(0)) {
                                 return false;
@@ -1458,15 +1473,17 @@ public class SoftwareCasamento {
 
                     break;
                 case 1:
-                    if (!PagamentosDao.mostrar(null).equals("")) {
-                        Gui.mostrarMensagemAviso("Pagamentos : \n" + PagamentosDao.mostrar(null), "Aviso", 1);
+                    List<Pagamentos> listaPagamentos = PagamentosDao.listar();
+                    
+                    if (!listaPagamentos.isEmpty()) {
+                        Gui.mostrarMensagemAviso("Pagamentos : \n" + Util.ListToString(listaPagamentos), "Aviso", 1);
                     } else {
                         Gui.mostrarMensagemAviso("Nenhum pagamento cadastrado", "Aviso", 2);
                     }
                     break;
                 case 2:
                     int idAltera = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID de um Pagamento a ser alterado", "Alterar Pagamento", 1, "0"));
-                    if (PagamentosDao.alterar(Gui.CriarPagamento(PagamentosDao.buscar(idAltera).getFornecedor(), PagamentosDao.buscar(idAltera).getPessoa()), idAltera) != false) {
+                    if (PagamentosDao.alterar(idAltera, Gui.CriarPagamento(PagamentosDao.buscar(idAltera).getFornecedor(), PagamentosDao.buscar(idAltera).getPessoa())) != false) {
                         Gui.mostrarMensagemAviso("Pagamento Alterado", "Aviso", 1);
                     } else {
                         Gui.mostrarMensagemAviso("Erro ao Aterar o Pagamento", "Aviso", 2);
@@ -1474,7 +1491,7 @@ public class SoftwareCasamento {
                     break;
                 case 3:
                     int idDelete = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID do Pagamento a ser deletado", "Deletar Pagamento", 1, "0"));
-                    if (PagamentosDao.deletar(idDelete)) {
+                    if (PagamentosDao.deletar(idDelete)!= null) {
                         Gui.mostrarMensagemAviso("Pagamento Deletado", "Aviso", 1);
                     } else {
                         Gui.mostrarMensagemAviso("Erro ao Deletar Pagamento", "Aviso", 2);
@@ -1483,7 +1500,7 @@ public class SoftwareCasamento {
                 case 4:
                     int idBuscar = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID do Pagamento a ser buscado", "Buscar Pagamento", 1, "0"));
                     if (PagamentosDao.buscar(idBuscar) != null) {
-                        Gui.mostrarMensagemAviso("Pagamento : \n" + PagamentosDao.mostrar(PagamentosDao.buscar(idBuscar)), "Aviso", 1);
+                        Gui.mostrarMensagemAviso("Pagamento : \n" + PagamentosDao.buscar(idBuscar).toString(), "Aviso", 1);
                     } else {
                         Gui.mostrarMensagemAviso("Pagamento não encontrado", "Aviso", 2);
                     }
@@ -1516,9 +1533,9 @@ public class SoftwareCasamento {
                     String stringFornecedoresComValorAPagar = "";
                     int j = 0;
 
-                    for (Fornecedor f : FornecedorDao.GetDataBase()) {
+                    for (Fornecedor f : FornecedorDao.listar()) {
                         if (f.getEstado().equals("A pagar")) {
-                            stringFornecedoresComValorAPagar += FornecedorDao.mostrar(f);
+                            stringFornecedoresComValorAPagar += FornecedorDao.buscar(f.getId());
                             idsFornecedoresSemPagamento[j] = f.getId();
                             j++;
                         }
@@ -1547,9 +1564,9 @@ public class SoftwareCasamento {
                                 Pessoas pessoa = null;
                                 boolean verificacao1 = false;
                                 int optionPessoa = 0;
-                                if (!PessoasDao.mostrar(null).equals("")) {
+                                if (!PessoasDao.listar().isEmpty()) {
                                     while (verificacao1 != true) {
-                                        resp = Gui.mostrarMensagemInput("Qual pessoa será atrelada ao pagamento ? Digite o ID:\n" + PessoasDao.mostrar(null), "Opções", 1, "0");
+                                        resp = Gui.mostrarMensagemInput("Qual pessoa será atrelada ao pagamento ? Digite o ID:\n" + PessoasDao.listar().toString(), "Opções", 1, "0");
 
                                         if (resp == null) {
                                             return true;
@@ -1557,7 +1574,7 @@ public class SoftwareCasamento {
                                             optionPessoa = Gui.validarStringToInt(resp);
                                         }
 
-                                        for (Pessoas p : PessoasDao.GetDataBase()) {
+                                        for (Pessoas p : PessoasDao.listar()) {
                                             if (p.getId() == optionPessoa && optionPessoa != -1) {
                                                 verificacao1 = true;
                                             }
@@ -1572,7 +1589,7 @@ public class SoftwareCasamento {
                                 } else {
                                     Gui.mostrarMensagemAviso("Nenhuma pessoa cadastrada insira as informações da pessoa referente a esse Pagamento", "Aviso", 1);
                                     pessoa = Gui.CriarPessoa();
-                                    if (PessoasDao.inserir(pessoa) != -1) {
+                                    if (PessoasDao.adiciona(pessoa) != -1) {
                                         Gui.mostrarMensagemAviso("Pessoa Criada", "Aviso", 1);
                                     } else {
                                         Gui.mostrarMensagemAviso("Erro ao Criar Pessoa", "Aviso", 2);
@@ -1584,7 +1601,7 @@ public class SoftwareCasamento {
                                 pagamentoDoFornecedor.setParcela(fornecedorSelecionado.getParcelas());
                                 fornecedorSelecionado.setParcelas(0);
 
-                                if (PagamentosDao.inserir(pagamentoDoFornecedor) != -1) {
+                                if (PagamentosDao.adiciona(pagamentoDoFornecedor) != -1) {
                                     Gui.mostrarMensagemAviso("Pagamento Criado", "Aviso", 1);
                                 } else {
                                     Gui.mostrarMensagemAviso("Erro ao Criar Pagamento", "Aviso", 2);
@@ -1608,7 +1625,7 @@ public class SoftwareCasamento {
                     break;
                 case 1:
 
-                    if (PessoasDao.mostrar(null).equals("")) {
+                    if (PessoasDao.listar().isEmpty()) {
                         Gui.mostrarMensagemAviso("Nenhum fornecedor cadastrado insira as informações do Fornecedor incluindo a pessoa atrelada a esse fornecedor referente a esse Pagamento", "Aviso", 1);
                         if (!menuFornecedorInserirEscolhaLoop(0)) {
                             return false;
@@ -1661,16 +1678,16 @@ public class SoftwareCasamento {
             switch (opcaoUsuario) {
                 case 0:
                     int resposta = 1;
-                    if (!PessoasDao.mostrar(null).equals("")) {
+                    if (!PessoasDao.listar().isEmpty()) {
                         Object[] options = {"Sim", "Não"};
                         resposta = Gui.mostrarMensagemBots("Voce deseja atrelar uma pessoa a esse presente?", "Opção presente", -1, options);
                     }
 
                     if (resposta == 0) {
-                        int idresposta = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID da pessoa que esta presenteando:\n" + PessoasDao.mostrar(null), "Pessoa Presente", 1, "0"));
+                        int idresposta = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID da pessoa que esta presenteando:\n" + PessoasDao.listar().toString(), "Pessoa Presente", 1, "0"));
 
                         if (PessoasDao.buscar(idresposta) != null) {
-                            if (PresentesDao.inserir(Gui.CriarPresente(PessoasDao.buscar(idresposta))) != -1) {
+                            if (PresentesDao.adiciona(Gui.CriarPresente(PessoasDao.buscar(idresposta))) != -1) {
                                 Gui.mostrarMensagemAviso("Presente Criado", "Aviso", 1);
                             } else {
                                 Gui.mostrarMensagemAviso("Erro ao Criar Presente", "Aviso", 2);
@@ -1679,7 +1696,7 @@ public class SoftwareCasamento {
                             Gui.mostrarMensagemAviso("ID invalido", "Aviso", 2);
                         }
                     } else if (resposta == 1) {
-                        if (PresentesDao.inserir(Gui.CriarPresente(null)) != -1) {
+                        if (PresentesDao.adiciona(Gui.CriarPresente(null)) != -1) {
                             Gui.mostrarMensagemAviso("Presente Criado", "Aviso", 1);
                         } else {
                             Gui.mostrarMensagemAviso("Erro ao Criar Presente", "Aviso", 2);
@@ -1687,26 +1704,26 @@ public class SoftwareCasamento {
                     }
                     break;
                 case 1:
-                    if (!PresentesDao.mostrar(null).equals("")) {
-                        Gui.mostrarMensagemAviso("Presentes : \n" + PresentesDao.mostrar(null), "Aviso", 1);
+                    List<Presentes> listaPresentes = PresentesDao.listar();
+                    if (!listaPresentes.isEmpty()) {
+                        Gui.mostrarMensagemAviso("Presentes : \n" + Util.ListToString(listaPresentes), "Aviso", 1);
                     } else {
                         Gui.mostrarMensagemAviso("Nenhum Presente cadastrado", "Aviso", 2);
                     }
                     break;
                 case 2:
                     int idAltera = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID de um Presente a ser alterado", "Alterar Presente", 1, "0"));
-                    int idresposta = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID da pessoa que esta presenteando: (deixe vazio caso não queira alterar)\n" + PessoasDao.mostrar(null), "Alterar Presente", 1, ""));
+                    int idresposta = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID da pessoa que esta presenteando: (deixe vazio caso não queira alterar)\n" + PessoasDao.listar().toString(), "Alterar Presente", 1, ""));
 
                     if (PessoasDao.buscar(idresposta) != null) {
-                        if (PresentesDao.buscar(idAltera) != null
-                                && PresentesDao.alterar(Gui.CriarPresente(PresentesDao.buscar(idresposta).getPessoa()), idAltera) != false) {
+                        if (PresentesDao.alterar(idAltera, Gui.CriarRecado(MuralDeRecadosDao.buscar(idAltera).getPessoa())) != false) {
                             Gui.mostrarMensagemAviso("Presente Alterado", "Aviso", 1);
                         } else {
                             Gui.mostrarMensagemAviso("Erro ao Alterar Presente", "Aviso", 2);
                         }
                     } else {
                         if (PresentesDao.buscar(idAltera) != null
-                                && PresentesDao.alterar(Gui.CriarPresente(PresentesDao.buscar(idAltera).getPessoa()), idAltera) != false) {
+                                && PresentesDao.alterar(idAltera, Gui.CriarRecado(MuralDeRecadosDao.buscar(idAltera).getPessoa())) != false) {
                             Gui.mostrarMensagemAviso("Presente Alterado", "Aviso", 1);
                         } else {
                             Gui.mostrarMensagemAviso("Erro ao Alterar Presente", "Aviso", 2);
@@ -1716,7 +1733,7 @@ public class SoftwareCasamento {
                     break;
                 case 3:
                     int idDelete = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID do Presente a ser deletado", "Deletar Presente", 1, "0"));
-                    if (PresentesDao.deletar(idDelete)) {
+                    if (PresentesDao.deletar(idDelete)!= null) {
                         Gui.mostrarMensagemAviso("Presente Deletado", "Aviso", 1);
                     } else {
                         Gui.mostrarMensagemAviso("Erro ao Deletar Presente", "Aviso", 2);
@@ -1726,16 +1743,16 @@ public class SoftwareCasamento {
                 case 4:
                     int idBuscar = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID do Presente a ser buscado", "Recado Presente", 1, "0"));
                     if (PresentesDao.buscar(idBuscar) != null) {
-                        Gui.mostrarMensagemAviso("Presente : \n" + PresentesDao.mostrar(PresentesDao.buscar(idBuscar)), "Aviso", 1);
+                        Gui.mostrarMensagemAviso("Presente : \n" + PresentesDao.buscar(idBuscar).toString(), "Aviso", 1);
                     } else {
                         Gui.mostrarMensagemAviso("Presente não encontrado", "Aviso", 2);
                     }
 
                     break;
                 case 5:
-                    if (!PessoasDao.mostrar(null).equals("")) {
-                        idresposta = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID da pessoa que esta presenteando: \n" + PessoasDao.mostrar(null), "Presentear", 1, "0"));
-                        int idPresente = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID de um Presente a ser atrelado a pessoa \n" + PresentesDao.mostrar(null), "Presentear", 1, "0"));
+                    if (!PessoasDao.listar().isEmpty()) {
+                        idresposta = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID da pessoa que esta presenteando: \n" + PessoasDao.listar().toString(), "Presentear", 1, "0"));
+                        int idPresente = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID de um Presente a ser atrelado a pessoa \n" + PessoasDao.listar().toString(), "Presentear", 1, "0"));
 
                         if (PresentesDao.buscar(idPresente) != null && PessoasDao.buscar(idresposta) != null) {
                             PresentesDao.buscar(idPresente).setPessoa(PessoasDao.buscar(idresposta));
@@ -1767,7 +1784,7 @@ public class SoftwareCasamento {
         while (opcaoUsuario != 9) {
             switch (opcaoUsuario) {
                 case 0:
-                    if (!MuralDeRecadosDao.mostrar(null).equals("")) {
+                    if (!MuralDeRecadosDao.listar().isEmpty()) {
                         int j = 0;
                         int tamVet = 1000;
                         String[] conteudoMr = new String[tamVet];
@@ -1776,7 +1793,7 @@ public class SoftwareCasamento {
                             conteudoMr[i] = "";
                         }
 
-                        for (MuralDeRecados mr : MuralDeRecadosDao.GetDataBase()) {
+                        for (MuralDeRecados mr : MuralDeRecadosDao.listar()) {
                             if (j <= tamVet) {
                                 conteudoMr[j] += "ID: ";
                                 conteudoMr[j] += mr.getId();
@@ -1802,11 +1819,12 @@ public class SoftwareCasamento {
                     break;
 
                 case 1:
-                    if (!ConvidadoIndividualDao.mostrar(null).equals("")) {
+                    List<ConvidadoIndividual> listaConvidadoIndividual = ConvidadoIndividualDao.listar();
+                    if (!listaConvidadoIndividual.isEmpty()) {
                         boolean verificacao = false;
                         int option;
                         while (verificacao != true) {
-                            String resp = Gui.mostrarMensagemInput("Qual convidado você gostaria de Gerar o convite? digite o ID: \n" + ConvidadoIndividualDao.mostrar(null), "Escolha um Convidado", 3, "0");
+                            String resp = Gui.mostrarMensagemInput("Qual convidado você gostaria de Gerar o convite? digite o ID: \n" + Util.ListToString(listaConvidadoIndividual), "Escolha um Convidado", 3, "0");
 
                             if (resp == null) {
                                 return true;
@@ -1814,7 +1832,7 @@ public class SoftwareCasamento {
                                 option = Gui.validarStringToInt(resp);
                             }
 
-                            for (ConvidadoIndividual ci : ConvidadoIndividualDao.GetDataBase()) {
+                            for (ConvidadoIndividual ci : listaConvidadoIndividual) {
                                 if (ci.getId() == option && option != -1) {
                                     verificacao = true;
                                 }
@@ -1832,10 +1850,11 @@ public class SoftwareCasamento {
                     break;
 
                 case 2:
+                    List<ConvidadoFamilia> listaConvidadoFamilia = ConvidadoFamiliaDao.listar();
                     boolean verificacao = false;
                     int option;
                     while (verificacao != true) {
-                        String resp = Gui.mostrarMensagemInput("Qual família você gostaria de Gerar o convite? digite o ID: \n" + ConvidadoFamiliaDao.mostrar(null), "Escolha uma Familia", 3, "0");
+                        String resp = Gui.mostrarMensagemInput("Qual família você gostaria de Gerar o convite? digite o ID: \n" + Util.ListToString(listaConvidadoFamilia), "Escolha uma Familia", 3, "0");
 
                         if (resp == null) {
                             return true;
@@ -1843,7 +1862,7 @@ public class SoftwareCasamento {
                             option = Gui.validarStringToInt(resp);
                         }
 
-                        for (ConvidadoFamilia cf : ConvidadoFamiliaDao.GetDataBase()) {
+                        for (ConvidadoFamilia cf : listaConvidadoFamilia) {
                             if (cf.getId() == option && option != -1) {
                                 verificacao = true;
                             }
@@ -1858,7 +1877,8 @@ public class SoftwareCasamento {
                     break;
 
                 case 3:
-                    if (!PagamentosDao.mostrar(null).equals("")) {
+                    List<Pagamentos> listaPagamentos = PagamentosDao.listar();
+                    if (!listaPagamentos.isEmpty()) {
                         int j = 0;
                         int tamVet = 1000;
                         String[] conteudoP = new String[tamVet];
@@ -1867,7 +1887,7 @@ public class SoftwareCasamento {
                             conteudoP[i] = "";
                         }
                         double valorTotal = 0;
-                        for (Pagamentos p : PagamentosDao.GetDataBase()) {
+                        for (Pagamentos p : listaPagamentos) {
                             if (j <= tamVet) {
                                 conteudoP[j] += "ID: ";
                                 conteudoP[j] += p.getId();
@@ -1893,7 +1913,8 @@ public class SoftwareCasamento {
 
                     break;
                 case 4:
-                    if (!ConvidadoIndividualDao.mostrar(null).equals("")) {
+                    listaConvidadoIndividual = ConvidadoIndividualDao.listar();
+                    if (!listaConvidadoIndividual.isEmpty()) {
                         int j = 0;
                         int tamVet = 1000;
                         String[] conteudoC = new String[tamVet];
@@ -1902,7 +1923,7 @@ public class SoftwareCasamento {
                             conteudoC[i] = "";
                         }
 
-                        for (ConvidadoIndividual ci : ConvidadoIndividualDao.GetDataBase()) {
+                        for (ConvidadoIndividual ci : listaConvidadoIndividual) {
                             if (j <= tamVet) {
                                 conteudoC[j] += "ID: ";
                                 conteudoC[j] += ci.getId();
@@ -1934,7 +1955,7 @@ public class SoftwareCasamento {
                     break;
                 case 5:
                     boolean temConfirmado = false;
-                    for (ConvidadoIndividual c : ConvidadoIndividualDao.GetDataBase()) {
+                    for (ConvidadoIndividual c : ConvidadoIndividualDao.listar()) {
                         if (c.getConfirmacao() == "Confirmado") {
                             temConfirmado = true;
                             break;
@@ -1951,10 +1972,10 @@ public class SoftwareCasamento {
                             conteudoC[i] = "";
                         }
 
-                        for (ConvidadoIndividual ci : ConvidadoIndividualDao.GetDataBase()) {
+                        for (ConvidadoIndividual ci : ConvidadoIndividualDao.listar()) {
                             int idade = Util.calcularIdade(ci.getPessoa().getNascimento());
                             boolean fornecedorEncontrado = false;
-                            for (Fornecedor f : FornecedorDao.GetDataBase()) {
+                            for (Fornecedor f : FornecedorDao.listar()) {
                                 if (f.getPessoa().equals(ci.getPessoa())) {
                                     fornecedorEncontrado = true;
                                 }
@@ -2099,8 +2120,9 @@ public class SoftwareCasamento {
     }
 
     private void verificaPagamentosPrazo() {
-        if (!PagamentosDao.mostrar(null).equals("")) {
-            for (Pagamentos pagamento : PagamentosDao.GetDataBase()) {
+        List<Pagamentos> listaPagamentos = PagamentosDao.listar();
+        if (!listaPagamentos.isEmpty()) {
+            for (Pagamentos pagamento : listaPagamentos) {
 
                 if (pagamento.getFornecedor().getEstado().equals("Vai pagar") && pagamento.getAgendado() == true
                         && (Util.getDataAtual().isAfter(pagamento.getData()) || Util.getDataAtual().isEqual(pagamento.getData()))) {

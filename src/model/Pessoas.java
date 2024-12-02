@@ -7,12 +7,14 @@ package model;
 import control.Util;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
  * @author CAUPT - ALUNOS
  */
-public class Pessoas {
+public class Pessoas implements InterfaceGenericDAO {
 
     private long id;
     private String nome;
@@ -21,14 +23,48 @@ public class Pessoas {
     private LocalDateTime dataCriacao;
     private LocalDateTime dataModificacao;
 
-    public Pessoas(String nome, LocalDate nascimento, String telefone) {
+    @Override
+    public List<Object> getValoresAtributos() {
+        List<Object> valores = new ArrayList();
+
+        valores.add(this.nome);
+        valores.add(this.nascimento);
+        valores.add(this.telefone);
+        valores.add(this.dataCriacao);
+        valores.add(this.dataModificacao);
+        return valores;
+    }
+
+    public Pessoas(Long id, String nome, LocalDate nascimento, String telefone, LocalDateTime dataCriacao, LocalDateTime dataModificacao) {
+        this.id = id;
         this.nome = nome;
         this.nascimento = nascimento;
         this.telefone = telefone;
+        this.dataCriacao = dataCriacao;
+        this.dataModificacao = dataModificacao;
+    }
+
+    public Pessoas(String nome, LocalDate nascimento, String telefone) {
+        this.nome = nome;
+        this.telefone = telefone;
+        this.nascimento = nascimento;
         this.dataCriacao = LocalDateTime.now();
         this.dataModificacao = LocalDateTime.now();
     }
 
+    
+    @Override
+    public String toString() {
+
+        return "ID: " + id
+                + " | Nome: " + nome
+                + " | Nascimento: " + Util.formatarDataLocal(nascimento)
+                + " | Telefone: " + telefone
+                + "\nData de Criação: " + Util.formatarData(dataCriacao)
+                + " | Última Modificação: " + Util.formatarData(dataModificacao);
+    }
+    
+    
     @Override
     public int hashCode() {
         int hash = 7;
@@ -51,23 +87,8 @@ public class Pessoas {
         return this.id == other.id;
     }
 
-    @Override
-    public String toString() {
-
-        return "ID: " + id 
-                + " | Nome: " + nome 
-                + " | Nascimento: " + Util.formatarDataLocal(nascimento)
-                + " | Telefone: " + telefone 
-                + "\nData de Criação: " + Util.formatarData(dataCriacao)
-                + " | Última Modificação: " + Util.formatarData(dataCriacao);
-    }
-
     public long getId() {
         return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 
     public String getNome() {
@@ -98,10 +119,6 @@ public class Pessoas {
         return dataCriacao;
     }
 
-    public void setDataCriacao(LocalDateTime dataCriacao) {
-        this.dataCriacao = dataCriacao;
-    }
-
     public LocalDateTime getDataModificacao() {
         return dataModificacao;
     }
@@ -109,4 +126,5 @@ public class Pessoas {
     public void setDataModificacao(LocalDateTime dataModificacao) {
         this.dataModificacao = dataModificacao;
     }
+
 }

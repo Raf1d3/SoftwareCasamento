@@ -7,22 +7,59 @@ package model;
 import control.Util;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
  * @author CAUPT - ALUNOS
  */
-public class MuralDeRecados {
+public class MuralDeRecados implements InterfaceGenericDAO {
 
-    long id;
-    Pessoas pessoa;
-    String comentario;
-    LocalDateTime dataCriacao;
-    LocalDateTime dataModificacao;
+    private long id;
+    private Pessoas pessoa;
+    private String comentario;
+    private LocalDateTime dataCriacao;
+    private LocalDateTime dataModificacao;
 
-    public MuralDeRecados() {
+    @Override
+    public List<Object> getValoresAtributos() {
+        List<Object> valores = new ArrayList();
+
+        valores.add(this.pessoa.getId());
+        valores.add(this.comentario);
+        valores.add(this.dataCriacao);
+        valores.add(this.dataModificacao);
+        return valores;
+    }
+    
+    
+    public MuralDeRecados(Long id, Pessoas pessoa, String comentario, LocalDateTime dataCriacao, LocalDateTime dataModificacao) {
+        this.id = id;
+        this.pessoa = pessoa;
+        this.comentario = comentario;
+        this.dataCriacao = dataCriacao;
+        this.dataModificacao = dataModificacao;
+    }
+        
+    
+    public MuralDeRecados(Pessoas pessoa, String comentario) {
+        this.pessoa = pessoa;
+        this.comentario = comentario;
         this.dataCriacao = LocalDateTime.now();
         this.dataModificacao = LocalDateTime.now();
+    }
+    
+    
+    
+    @Override
+    public String toString() {
+
+        return "ID: " + id 
+                + " | Pessoa: " + pessoa 
+                + " | Comentário: " + comentario
+                + " | Data de Criação: " + Util.formatarData(dataCriacao) 
+                + " | Última Modificação: " + Util.formatarData(dataModificacao);
     }
 
     @Override
@@ -59,16 +96,12 @@ public class MuralDeRecados {
         return comentario;
     }
 
-    public String getDataCriacao() {
-        return Util.formatarData(dataCriacao);
+    public LocalDateTime getDataCriacao() {
+        return dataCriacao;
     }
 
-    public String getDataModificacao() {
-        return Util.formatarData(dataModificacao);
-    }
-
-    public void setId(long id) {
-        this.id = id;
+    public LocalDateTime getDataModificacao() {
+        return dataModificacao;
     }
 
     public void setPessoa(Pessoas pessoa) {
@@ -79,18 +112,9 @@ public class MuralDeRecados {
         this.comentario = comentario;
     }
 
-    public void setDataCriacao(LocalDateTime dataCriacao) {
-        this.dataCriacao = dataCriacao;
-    }
 
     public void setDataModificacao(LocalDateTime dataModificacao) {
         this.dataModificacao = dataModificacao;
     }
 
-    @Override
-    public String toString() {
-
-        return "ID: " + id + " | Pessoa: " + pessoa + " | Comentário: " + comentario
-                + " | Data de Criação: " + getDataCriacao() + " | Última Modificação: " + getDataModificacao();
-    }
 }

@@ -48,7 +48,7 @@ public class GUI {
         menu.append("<p style='font-size:18px; font-weight:bold;'>GERENCIADOR DE CASAMENTOS</p>");
         menu.append("<p style='font-size:18px; font-weight:bold;'>Entre Tapas e beijos</p>");
 
-        if (arrayEvento.isEmpty() == false) {
+        if (!arrayEvento.isEmpty()) {
             menu.append("<br><p style='font-size:12px;'>Casamendo de ");
             menu.append(arrayEvento.get(0).getNoivo().getNome());
             menu.append(" e ");
@@ -713,7 +713,7 @@ public class GUI {
             login = login.toLowerCase();
         }
 
-        Usuario u = new Usuario(tipo, login, senha, p);
+        Usuario u = new Usuario(p, tipo, login, senha);
         return u;
     }
 
@@ -754,13 +754,7 @@ public class GUI {
             }
         }
 
-        Fornecedor f = new Fornecedor();
-        f.setPessoa(p);
-        f.setNomeServico(nomeServico);
-        f.setCnpj(cnpj);
-        f.setTelefone(telefone);
-        f.setValorAPagar(valorAPagar);
-        f.setParcelas(parcelas);
+        Fornecedor f = new Fornecedor(nomeServico, cnpj, telefone, valorAPagar, p, parcelas);
         return f;
     }
 
@@ -771,9 +765,8 @@ public class GUI {
             nomefamilia = nomefamilia.toLowerCase();
         }
 
-        ConvidadoFamilia cf = new ConvidadoFamilia();
+        ConvidadoFamilia cf = new ConvidadoFamilia(nomefamilia);
 
-        cf.setNomeDaFamilia(nomefamilia);
         return cf;
     }
 
@@ -784,11 +777,8 @@ public class GUI {
         if (familia != null) {
             familia = familia.toLowerCase();
         }
-
-        ConvidadoIndividual ci = new ConvidadoIndividual();
-        ci.setPessoa(p);
-        ci.setParentesco(parentesco);
-        ci.setFamilia(familia);
+        
+        ConvidadoIndividual ci = new ConvidadoIndividual(p, familia, parentesco);
         return ci;
     }
 
@@ -797,10 +787,7 @@ public class GUI {
         String telefone = mostrarMensagemInput("Telefone:", "Telefone", 3, "(11) 98765-4321");
         String email = mostrarMensagemInput("Email:", "email", 3, "cerimonial@email.com");
 
-        Cerimonial cerimonial = new Cerimonial();
-        cerimonial.setNome(nome);
-        cerimonial.setTelefone(telefone);
-        cerimonial.setEmail(email);
+        Cerimonial cerimonial = new Cerimonial(nome, email, telefone);
         return cerimonial;
     }
 
@@ -809,10 +796,7 @@ public class GUI {
         String endereco = mostrarMensagemInput("Endereço:", "Endereço", 3, "Rua Principal, 123");
         String telefone = mostrarMensagemInput("Telefone:", "Telefone", 3, "(11) 98765-4321");
 
-        Igreja igreja = new Igreja();
-        igreja.setNome(nome);
-        igreja.setEndereco(endereco);
-        igreja.setTelefone(telefone);
+        Igreja igreja = new Igreja(nome, endereco, telefone);
         return igreja;
     }
 
@@ -822,12 +806,12 @@ public class GUI {
         String telefone = mostrarMensagemInput("Telefone:", "Telefone Cartorio", 3, "33714482");
        
 
-        LocalDate nascimento = null;
-        while (nascimento == null) {
+        LocalDate data = null;
+        while (data == null) {
              String input_data = mostrarMensagemInput("Digite a data do evento no cartorio:", "Data", 3, "15/10/2024");
             if (input_data != null) {
-                nascimento = validarData(input_data);
-                if (nascimento == null) {
+                data = validarData(input_data);
+                if (data == null) {
                     mostrarMensagemAviso("Data inválida. Tente novamente no formato dia/mes/ano.", "Aviso", 2);
                 }
             } else {
@@ -835,11 +819,7 @@ public class GUI {
             }
         }
 
-        Cartorio cartorio = new Cartorio();
-        cartorio.setTelefone(telefone);
-        cartorio.setData(nascimento);
-        cartorio.setNome(nome);
-        cartorio.setEndereco(endereco);
+        Cartorio cartorio = new Cartorio(nome, endereco, telefone, data);
         return cartorio;
     }
 
@@ -853,24 +833,17 @@ public class GUI {
         Igreja igreja = criarIgreja();
         Cartorio cartorio = criarCartorio();
 
-        Evento e = new Evento();
-        e.setNome(nome);
-        e.setDataEvento(data);
-        e.setNoiva(noiva);
-        e.setNoivo(noivo);
-        e.setCerimonial(cerimonial);
-        e.setIgreja(igreja);
-        e.setCartorio(cartorio);
+        Evento e = new Evento(data, cerimonial, igreja, cartorio, noiva, noivo, nome);
 
         return e;
     }
 
     public MuralDeRecados CriarRecado(Pessoas p) {
-        MuralDeRecados mr = new MuralDeRecados();
+        
         String comentario = mostrarMensagemInput("Comentario:", "Comentario", 3, "Bom dia");
+        
+        MuralDeRecados mr = new MuralDeRecados(p, comentario);
 
-        mr.setPessoa(p);
-        mr.setComentario(comentario);
         return mr;
     }
 
@@ -903,7 +876,7 @@ public class GUI {
             }
         }
 
-        Pagamentos pagamento = new Pagamentos(descricao, fornecedor, agendado, data, pessoa);
+        Pagamentos pagamento = new Pagamentos(data, pessoa, descricao, fornecedor, agendado);
 
         return pagamento;
     }

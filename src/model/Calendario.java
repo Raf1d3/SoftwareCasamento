@@ -5,12 +5,13 @@
 package model;
 
 import java.time.LocalDate;
+import java.util.List;
 
 /**
  *
  * @author Emanuelle
  */
-public class Calendario {
+public class Calendario implements InterfaceGenericDAO{
 
     private LocalDate dataAtual;
 
@@ -32,5 +33,10 @@ public class Calendario {
 
     public void retrocederDia() {
         this.dataAtual = dataAtual.minusDays(1);
+    }
+
+    @Override
+    public List<Object> getValoresAtributos() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }

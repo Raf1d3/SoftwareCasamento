@@ -7,12 +7,14 @@ package model;
 import control.Util;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
  * @author CAUPT - ALUNOS
  */
-public class Usuario {
+public class Usuario implements InterfaceGenericDAO{
 
     private long id;
     private Pessoas pessoa;
@@ -22,7 +24,32 @@ public class Usuario {
     private LocalDateTime dataCriacao;
     private LocalDateTime dataModificacao;
 
-    public Usuario(String tipo, String login, String senha, Pessoas pessoa) {
+    
+    @Override
+    public List<Object> getValoresAtributos() {
+        List<Object> valores = new ArrayList();
+        
+        valores.add(this.pessoa.getId());
+        valores.add(this.tipo);
+        valores.add(this.login);
+        valores.add(this.senha);
+        valores.add(this.dataCriacao);
+        valores.add(this.dataModificacao);
+        return valores;
+    }
+    
+    public Usuario(Long id, Pessoas pessoa, String tipo, String login, String senha, LocalDateTime dataCriacao, LocalDateTime dataModificacao) {
+        this.id = id;
+        this.pessoa = pessoa;
+        this.tipo = tipo;
+        this.login = login;
+        this.senha = senha;
+        this.dataCriacao = dataCriacao;
+        this.dataModificacao = dataModificacao;
+    }
+    
+    
+    public Usuario(Pessoas pessoa, String tipo, String login, String senha) {
         this.tipo = tipo;
         this.login = login;
         this.senha = senha;
@@ -30,7 +57,8 @@ public class Usuario {
         this.dataCriacao = LocalDateTime.now();
         this.dataModificacao = LocalDateTime.now();
     }
-
+    
+    
     @Override
     public String toString() {
 
@@ -41,8 +69,8 @@ public class Usuario {
             retorno += " | Telefone: " + pessoa.getTelefone();
         }
             retorno += " | Tipo: " + tipo
-            + "\nData de Criação: " + getDataCriacao()
-            + " | Última Modificação: " + getDataModificacao();
+            + "\nData de Criação: " + Util.formatarData(dataCriacao)
+            + " | Última Modificação: " + Util.formatarData(dataModificacao);
         return retorno;
     }
 
@@ -70,10 +98,6 @@ public class Usuario {
 
     public long getId() {
         return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 
     public Pessoas getPessoa() {
@@ -108,20 +132,17 @@ public class Usuario {
         this.senha = senha;
     }
 
-    public String getDataCriacao() {
-        return Util.formatarData(dataCriacao);
+    public LocalDateTime getDataCriacao() {
+        return dataCriacao;
     }
 
-    public void setDataCriacao(LocalDateTime dataCriacao) {
-        this.dataCriacao = dataCriacao;
-    }
-
-    public String getDataModificacao() {
-        return Util.formatarData(dataModificacao);
+    public LocalDateTime getDataModificacao() {
+        return dataModificacao;
     }
 
     public void setDataModificacao(LocalDateTime dataModificacao) {
         this.dataModificacao = dataModificacao;
     }
 
+    
 }

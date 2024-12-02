@@ -6,12 +6,14 @@ package model;
 
 import control.Util;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
  * @author CAUPT - ALUNOS
  */
-public class Cerimonial {
+public class Cerimonial implements InterfaceGenericDAO{
     private Long id;
     private String nome;
     private String telefone;
@@ -19,7 +21,32 @@ public class Cerimonial {
     private LocalDateTime dataCriacao;
     private LocalDateTime dataModificacao;
 
-    public Cerimonial() {
+    
+    
+    @Override
+    public List<Object> getValoresAtributos() {
+        List<Object> valores = new ArrayList();
+        valores.add(this.nome);
+        valores.add(this.telefone);
+        valores.add(this.email);
+        valores.add(this.dataCriacao);
+        valores.add(this.dataModificacao);
+        return valores;
+    }
+    
+    public Cerimonial(Long id, String nome, String telefone, String email, LocalDateTime dataCriacao, LocalDateTime dataModificacao) {
+       this.id = id;
+       this.nome = nome;
+       this.telefone = telefone;
+       this.email = email;
+       this.dataCriacao = dataCriacao;
+       this.dataModificacao = dataModificacao;
+    }
+        
+    public Cerimonial(String nome, String telefone, String email) {
+       this.nome = nome;
+       this.telefone = telefone;
+       this.email = email;
        this.dataCriacao = LocalDateTime.now();
        this.dataModificacao = LocalDateTime.now();
     }
@@ -30,8 +57,8 @@ public class Cerimonial {
         + " | Nome: " + nome 
         + " | Tel: " + telefone 
         + " | Email: " + email
-        + " | Data de Criação: " + getDataCriacao() 
-        + " | Última Modificação: " + getDataModificacao() + "\n";
+        + " | Data de Criação: " + Util.formatarData(dataCriacao) 
+        + " | Última Modificação: " + Util.formatarData(dataModificacao);
     }
     
     @Override
@@ -60,10 +87,6 @@ public class Cerimonial {
         return id;
     }
     
-    public void setId(long id) {
-        this.id = id;
-    }
-    
     public String getNome() {
         return nome;
     }
@@ -88,19 +111,16 @@ public class Cerimonial {
         this.email = email;
     }
         
-    public String getDataCriacao() {
-        return Util.formatarData(dataCriacao);
+    public LocalDateTime getDataCriacao() {
+        return dataCriacao;
     }
     
-    public void setDataCriacao(LocalDateTime dataCriacao) {
-        this.dataCriacao = dataCriacao;
-    }
-   
-    public String getDataModificacao() {
-        return Util.formatarData(dataModificacao);
+    public LocalDateTime getDataModificacao() {
+        return dataModificacao;
     }
     
     public void setDataModificacao(LocalDateTime dataModificacao) {
         this.dataModificacao = dataModificacao;
     }
+
 }
