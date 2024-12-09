@@ -25,6 +25,7 @@ public class Fornecedor implements InterfaceGenericDAO{
     private double valorPago;
     private Pessoas pessoa;
     private int parcelas;
+    private int parcelaAtual;
     private String estado;
     private LocalDateTime dataCriacao;
     private LocalDateTime dataModificacao;
@@ -41,14 +42,15 @@ public class Fornecedor implements InterfaceGenericDAO{
         valores.add(this.valorPago);
         valores.add(this.pessoa.getId());
         valores.add(this.parcelas);
+        valores.add(this.parcelaAtual);
         valores.add(this.estado);
         valores.add(this.dataCriacao);
         valores.add(this.dataModificacao);
         return valores;
     }
     
-    public Fornecedor(Long id, String nomeServico, String cnpj, String telefone, double valorAPagar, double valorOriginalAPagar, 
-    double valorPago, Pessoas pessoa, int parcelas, String estado, LocalDateTime dataCriacao, LocalDateTime dataModificacao) {
+    public Fornecedor(Long id, String nomeServico, String cnpj, String telefone, Double valorAPagar, Double valorOriginalAPagar, 
+            Double valorPago, Pessoas pessoa, Integer parcelas, Integer parcelaAtual, String estado, LocalDateTime dataCriacao, LocalDateTime dataModificacao) {
         this.id = id;
         this.nomeServico = nomeServico;
         this.cnpj = cnpj;
@@ -58,6 +60,7 @@ public class Fornecedor implements InterfaceGenericDAO{
         this.valorPago = valorPago;
         this.pessoa = pessoa;
         this.parcelas = parcelas;
+        this.parcelaAtual = parcelaAtual;
         this.estado = estado;
         this.dataCriacao = dataCriacao;
         this.dataModificacao = dataModificacao;
@@ -72,6 +75,7 @@ public class Fornecedor implements InterfaceGenericDAO{
         this.valorPago = 0;
         this.pessoa = pessoa;
         this.parcelas = parcelas;
+        this.parcelaAtual = 0;
         this.estado = "A pagar";
         this.dataCriacao = LocalDateTime.now();
         this.dataModificacao = LocalDateTime.now();
@@ -88,7 +92,8 @@ public class Fornecedor implements InterfaceGenericDAO{
                 + "\nValor combinado: " + valorOriginalAPagar
                 + " | Valor a Pagar: " + valorAPagar
                 + " | Valor pago: " + valorPago
-                + " | Parcela atual: " + parcelas
+                + " | Parcelas: " + parcelas
+                + " | Parcela atual: " + parcelaAtual
                 + " | Estado: " + estado
                 + " | Data de Criação: " + Util.formatarData(dataCriacao)
                 + " | Última Modificação: " + Util.formatarData(dataModificacao);
@@ -170,6 +175,14 @@ public class Fornecedor implements InterfaceGenericDAO{
 
     public void setParcelas(int parcelas) {
         this.parcelas = parcelas;
+    }
+
+    public int getParcelaAtual() {
+        return parcelaAtual;
+    }
+
+    public void setParcelaAtual(int parcelaAtual) {
+        this.parcelaAtual = parcelaAtual;
     }
 
     public String getEstado() {

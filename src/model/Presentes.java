@@ -37,7 +37,8 @@ public class Presentes implements InterfaceGenericDAO{
         return valores;
     }
 
-    public Presentes(Long id, String nome, String tipo, BigDecimal valor, LocalDateTime dataCriacao, LocalDateTime dataModificacao) {
+    public Presentes(Long id, String nome, String tipo, BigDecimal valor, Pessoas pessoa, LocalDateTime dataCriacao, LocalDateTime dataModificacao) {
+        this.id = id;
         this.nome = nome;
         this.tipo = tipo;
         this.valor = valor;

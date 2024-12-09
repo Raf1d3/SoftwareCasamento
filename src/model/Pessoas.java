@@ -15,7 +15,7 @@ import java.util.List;
  * @author CAUPT - ALUNOS
  */
 public class Pessoas implements InterfaceGenericDAO {
-
+    
     private long id;
     private String nome;
     private LocalDate nascimento;

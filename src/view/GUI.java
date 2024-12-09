@@ -823,15 +823,11 @@ public class GUI {
         return cartorio;
     }
 
-    public Evento CriarEvento(Pessoas noivo, Pessoas noiva) {
+    public Evento CriarEvento(Pessoas noivo, Pessoas noiva, Cerimonial cerimonial, Igreja igreja, Cartorio cartorio) {
         LocalDate data = null;
         String nome = mostrarMensagemInput("Nome do evento:", "Nome", 3, "Casorio");
         String dataEvento = mostrarMensagemInput("Data do Evento:", "Data", 3, "13/01/2000");
         data = validarData(dataEvento);
-
-        Cerimonial cerimonial = criarCerimonial();
-        Igreja igreja = criarIgreja();
-        Cartorio cartorio = criarCartorio();
 
         Evento e = new Evento(data, cerimonial, igreja, cartorio, noiva, noivo, nome);
 
@@ -948,7 +944,5 @@ public class GUI {
         return JOptionPane.showOptionDialog(null, mensagem, titulo, JOptionPane.DEFAULT_OPTION, icone, null, options, options[0]);
     }
 
-    public Fornecedor selecionarFornecedor(List<Fornecedor> GetDataBase) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
+
 }

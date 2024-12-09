@@ -62,12 +62,12 @@ public class GenericDAO<T> {
         for (int i = 0; i < parametros.length; i++) {
             Tipoparametros[i] = parametros[i].getClass();
         }
-            //System.out.println(Arrays.toString(Tipoparametros));
-            //System.out.println(Arrays.toString(parametros));
+        //System.out.println(Arrays.toString(Tipoparametros));
+        //System.out.println(Arrays.toString(parametros));
         try {
-            
+
             Constructor<T> constructor = classe.getConstructor(Tipoparametros);
-            
+
             return constructor.newInstance(parametros);
 
         } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
@@ -85,17 +85,17 @@ public class GenericDAO<T> {
             if (!listaAtributos.get(i).equals("id")) {
                 colunasInsert.append(listaAtributos.get(i));
                 camposInsert.append("?");
-                
-                if(!listaAtributos.get(i).equals("dataCriacao")){
-                camposColunasUpdate.append(listaAtributos.get(i)).append(" = ?");
+
+                if (!listaAtributos.get(i).equals("dataCriacao")) {
+                    camposColunasUpdate.append(listaAtributos.get(i)).append(" = ?");
                 }
-                
+
                 if (i != listaAtributos.size() - 1) {
                     colunasInsert.append(",");
                     camposInsert.append(",");
-                    
-                    if(!listaAtributos.get(i).equals("dataCriacao")){
-                    camposColunasUpdate.append(",");
+
+                    if (!listaAtributos.get(i).equals("dataCriacao")) {
+                        camposColunasUpdate.append(",");
                     }
                 }
             }
@@ -116,7 +116,7 @@ public class GenericDAO<T> {
         String campos = GeradorAtributosECampos(2);
         String sql = "insert into " + nomeTabela + " (" + colunas + ") values (" + campos + ")";
         long retornoID = -1;
-        
+
         try (Connection conexao = new ConexaoBanco().getConexao(); PreparedStatement stmt = conexao.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             int indiceDoParametro = 1;
@@ -143,6 +143,12 @@ public class GenericDAO<T> {
                 } else if (valores instanceof java.time.LocalDateTime) {
                     stmt.setTimestamp(indiceDoParametro, java.sql.Timestamp.valueOf((java.time.LocalDateTime) valores));
 
+                } else if (valores instanceof java.lang.Double) {
+                    stmt.setDouble(indiceDoParametro, (Double) valores);
+
+                } else if (valores instanceof java.lang.Boolean) {
+                    stmt.setBoolean(indiceDoParametro, (java.lang.Boolean) valores);
+
                 } else if (valores instanceof java.math.BigDecimal) {
                     stmt.setBigDecimal(indiceDoParametro, (java.math.BigDecimal) valores);
 
@@ -155,8 +161,6 @@ public class GenericDAO<T> {
             stmt.execute();
 
             ResultSet rs = stmt.getGeneratedKeys();
-
-            
 
             if (rs.next()) {
                 retornoID = rs.getInt(1);
@@ -190,7 +194,7 @@ public class GenericDAO<T> {
                     String nomeColuna = ListaAtributos.get(i);
                     Class<?> TipoAtributo = classe.getDeclaredFields()[i].getType();
                     Object valor = null;
-                    
+
                     if (TipoAtributo.equals(String.class)) {
                         valor = rs.getString(nomeColuna);
 
@@ -211,6 +215,9 @@ public class GenericDAO<T> {
 
                     } else if (TipoAtributo.equals(java.math.BigDecimal.class)) {
                         valor = rs.getBigDecimal(nomeColuna);
+
+                    } else if (TipoAtributo.equals(Boolean.class) || TipoAtributo.equals(boolean.class)) {
+                        valor = rs.getBoolean(nomeColuna);
 
                     } else if (TipoAtributo.getPackageName().equals(classe.getPackageName())) {
                         Long idRelacionado = rs.getLong(nomeColuna);
@@ -264,7 +271,6 @@ public class GenericDAO<T> {
                         Class<?> TipoAtributo = classe.getDeclaredFields()[i].getType();
                         Object valor = null;
 
-                        
                         if (TipoAtributo.equals(String.class)) {
                             valor = rs.getString(nomeColuna);
 
@@ -285,6 +291,9 @@ public class GenericDAO<T> {
 
                         } else if (TipoAtributo.equals(java.math.BigDecimal.class)) {
                             valor = rs.getBigDecimal(nomeColuna);
+
+                        } else if (TipoAtributo.equals(Boolean.class) || TipoAtributo.equals(boolean.class)) {
+                            valor = rs.getBoolean(nomeColuna);
 
                         } else if (TipoAtributo.getPackageName().equals(classe.getPackageName())) {
                             Long idRelacionado = rs.getLong(nomeColuna);
@@ -353,6 +362,7 @@ public class GenericDAO<T> {
         String CamposEcolunas = GeradorAtributosECampos(3);
 
         String sql = "update " + nomeTabela + " set " + CamposEcolunas + " where id = ?";
+        
         List<String> ListaAtributos = geraAtributosLista();
         
         int indiceDoParametro = 1;
@@ -360,7 +370,7 @@ public class GenericDAO<T> {
 
             for (Object valores : novoElemento.getValoresAtributos()) {
 
-                if(ListaAtributos.get(indiceDoParametro - 1).equals("dataCriacao")){
+                if (ListaAtributos.get(indiceDoParametro - 1).equals("dataCriacao")) {
                     continue;
                 }
                 
@@ -384,6 +394,12 @@ public class GenericDAO<T> {
                 } else if (valores instanceof java.time.LocalDateTime) {
                     stmt.setTimestamp(indiceDoParametro, java.sql.Timestamp.valueOf((java.time.LocalDateTime) valores));
 
+                } else if (valores instanceof java.lang.Double) {
+                    stmt.setDouble(indiceDoParametro, (Double) valores);
+
+                } else if (valores instanceof java.lang.Boolean) {
+                    stmt.setBoolean(indiceDoParametro, (java.lang.Boolean) valores);
+
                 } else if (valores instanceof java.math.BigDecimal) {
                     stmt.setBigDecimal(indiceDoParametro, (java.math.BigDecimal) valores);
                 } else {
@@ -395,7 +411,7 @@ public class GenericDAO<T> {
             int linhasAfetadas = stmt.executeUpdate();
             if (linhasAfetadas > 0) {
                 System.out.println("Elemento atualizado com sucesso.");
-                
+
             } else {
                 System.out.println("Elemento não encontrado.");
                 return false;
@@ -406,5 +422,5 @@ public class GenericDAO<T> {
         }
         return true;
     }
-    
+
 }

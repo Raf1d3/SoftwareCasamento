@@ -4,8 +4,16 @@
  */
 package control;
 
+import java.time.LocalDate;
+import java.util.List;
+import model.ConvidadoFamilia;
+import model.ConvidadoIndividual;
+import model.Evento;
+import model.Fornecedor;
 import model.MuralDeRecados;
+import model.Pagamentos;
 import model.Pessoas;
+import model.Presentes;
 import model.Usuario;
 
 /**
@@ -20,9 +28,27 @@ public class Teste{
         //GenericDAO<Pessoas> PessoasDao = new GenericDAO(Pessoas.class);
         //GenericDAO<Usuario> UsuarioDao = new GenericDAO(Usuario.class);
         //GenericDAO<MuralDeRecados> MuralDeRecadosDao = new GenericDAO(MuralDeRecados.class);
+        GenericDAO<Fornecedor> FornecedorDao = new GenericDAO(Fornecedor.class);
+        GenericDAO<MuralDeRecados> MuralDeRecadosDao = new GenericDAO(MuralDeRecados.class);
+        GenericDAO<Pagamentos> PagamentosDao = new GenericDAO(Pagamentos.class);
+        GenericDAO<Presentes> PresentesDao = new GenericDAO(Presentes.class);
+        GenericDAO<Pessoas> PessoasDao = new GenericDAO(Pessoas.class);
+        UsuarioDAO UsuarioDao = new UsuarioDAO(Usuario.class);
+        GenericDAO<Evento> EventoDao = new GenericDAO(Evento.class);
+        ConvidadoFamiliaDAO ConvidadoFamiliaDao = new ConvidadoFamiliaDAO(ConvidadoFamilia.class);
+        GenericDAO<ConvidadoIndividual> ConvidadoIndividualDao = new GenericDAO(ConvidadoIndividual.class);
         
+        boolean alterar = PagamentosDao.alterar(1, PagamentosDao.buscar(1));
+        System.out.println(alterar);
         
-        System.out.println(Pessoas.class.getPackageName());
+        /*
+        List<Fornecedor> lista = FornecedorDao.listar();
+        for (Fornecedor fornecedor : lista) {
+        System.out.println(fornecedor.toString());
+        }
+         */
+        
+       
         
         
         

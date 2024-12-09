@@ -31,14 +31,14 @@ public class Evento implements InterfaceGenericDAO {
     public List<Object> getValoresAtributos() {
         List<Object> valores = new ArrayList();
         valores.add(this.dataEvento);
-        valores.add(this.cerimonial);
+        valores.add(this.cerimonial.getId());
         valores.add(this.igreja.getId());
         valores.add(this.cartorio.getId());
         valores.add(this.noiva.getId());
         valores.add(this.noivo.getId());
         valores.add(this.dataCriacao);
         valores.add(this.dataModificacao);
-        valores.add(nome);
+        valores.add(this.nome);
         return valores;
     }
 

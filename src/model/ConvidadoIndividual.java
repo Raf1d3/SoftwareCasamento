@@ -28,7 +28,6 @@ public class ConvidadoIndividual implements InterfaceGenericDAO {
     @Override
     public List<Object> getValoresAtributos() {
         List<Object> valores = new ArrayList();
-        valores.add(this.id);
         valores.add(this.pessoa.getId());
         valores.add(this.familia);
         valores.add(this.parentesco);

@@ -23,9 +23,10 @@ public class Pagamentos implements InterfaceGenericDAO{
     private Fornecedor fornecedor;
     private double valor;
     private int parcela;
+    private boolean agendado;
     private LocalDateTime dataCriacao;
     private LocalDateTime dataModificacao;
-    private boolean agendado;
+    
 
     @Override
     public List<Object> getValoresAtributos() {
@@ -36,15 +37,16 @@ public class Pagamentos implements InterfaceGenericDAO{
         valores.add(this.fornecedor.getId());
         valores.add(this.valor);
         valores.add(this.parcela);
+        valores.add(this.agendado);
         valores.add(this.dataCriacao);
         valores.add(this.dataModificacao);
-        valores.add(this.agendado);
+        
         return valores;
     }
     
     
-    public Pagamentos(Long id, LocalDate data, Pessoas pessoa, String descricao, Fornecedor fornecedor, double valor, int parcela, 
-            LocalDateTime dataCriacao, LocalDateTime dataModificacao, boolean agendado) {
+    public Pagamentos(Long id, LocalDate data, Pessoas pessoa, String descricao, Fornecedor fornecedor, Double valor, Integer parcela, Boolean agendado, 
+            LocalDateTime dataCriacao, LocalDateTime dataModificacao) {
         this.id = id;
         this.data = data;
         this.pessoa = pessoa;
@@ -81,16 +83,16 @@ public class Pagamentos implements InterfaceGenericDAO{
         } else {
             tipoPagamento = "Regular";
         }
-        return "ID: " + id
+        return "ID: " + this.id
                 + " | nome: " + pessoa.getNome()
                 + " | telefone: " + pessoa.getTelefone()
                 + " | Data de pagamento: " + Util.formatarDataLocal(data)
-                + " | Descrição: " + descricao
-                + "\nValor Pago: " + valor
+                + " | Descrição: " + this.descricao
+                + "\nValor Pago: " + this.valor
                 + " | Valor a Pagar: " + fornecedor.getValorAPagar()
                 + " | Valor Total: " + fornecedor.getValorOriginalAPagar()
-                + " | Total de parcelas: " + parcela
-                + " | Parcela atual: " + fornecedor.getParcelas()
+                + " | Parcela atual: " + this.parcela
+                + " | Total de parcelas: " + fornecedor.getParcelas()
                 + "\nEstado do pagamento: " + fornecedor.getEstado()
                 + " | Tipo de Pagamento: " + tipoPagamento
                 + "\nNome fornecedor: " + fornecedor.getPessoa().getNome()
