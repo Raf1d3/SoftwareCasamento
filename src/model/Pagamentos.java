@@ -98,11 +98,11 @@ public class Pagamentos {
         this.id = id;
     }
 
-    public LocalDate getData() {
-        return data;
+    public String getData() {
+        return Util.formatarDataLocal(data);
     }
-
-    public void setData(LocalDate data) {
+    
+    public void setDataEvento(LocalDate data) {
         this.data = data;
     }
 
@@ -168,9 +168,5 @@ public class Pagamentos {
 
     public void setAgendado(boolean agendado) {
         this.agendado = agendado;
-    }
-
-    public long getFornecedorId() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }
