@@ -56,10 +56,11 @@ public class MuralDeRecados implements InterfaceGenericDAO {
     public String toString() {
 
         return "ID: " + id 
-                + " | Pessoa: " + pessoa 
-                + " | Comentário: " + comentario
-                + " | Data de Criação: " + Util.formatarData(dataCriacao) 
-                + " | Última Modificação: " + Util.formatarData(dataModificacao);
+                + " | Nome: " + pessoa.getNome()
+                + " | Telefone: " + pessoa.getTelefone()
+                + " | Comentário: " + this.comentario
+                + " | Data de Criação: " + Util.formatarData(this.dataCriacao) 
+                + " | Última Modificação: " + Util.formatarData(this.dataModificacao) + "\n";
     }
 
     @Override

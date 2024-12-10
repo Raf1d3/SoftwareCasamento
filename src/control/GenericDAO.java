@@ -58,22 +58,35 @@ public class GenericDAO<T> {
     }
 
     private T instanciarObj(Object... parametros) {
-        Class[] Tipoparametros = new Class[parametros.length];
-        for (int i = 0; i < parametros.length; i++) {
-            Tipoparametros[i] = parametros[i].getClass();
-        }
-        //System.out.println(Arrays.toString(Tipoparametros));
-        //System.out.println(Arrays.toString(parametros));
         try {
+            Constructor<?>[] constructors = classe.getConstructors();
 
-            Constructor<T> constructor = classe.getConstructor(Tipoparametros);
+            for (Constructor<?> constructor : constructors) {
+                Class<?>[] parameterTypes = constructor.getParameterTypes();
 
-            return constructor.newInstance(parametros);
+                if (parameterTypes.length == parametros.length) {
+                    boolean compativel = true;
 
-        } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
+                    for (int i = 0; i < parametros.length; i++) {
+                        Object parametro = parametros[i];
+
+                        if (parametro != null && !parameterTypes[i].isAssignableFrom(parametro.getClass())) {
+                            compativel = false;
+                            break;
+                        }
+                    }
+
+                    if (compativel) {
+                        return (T) constructor.newInstance(parametros);
+
+                    }
+                }
+            }
+
+            throw new RuntimeException("Nenhum construtor compatível encontrado.");
+        } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
             throw new RuntimeException("Erro ao instanciar objeto com parâmetros", e);
         }
-
     }
 
     private String GeradorAtributosECampos(int option) {
@@ -297,6 +310,7 @@ public class GenericDAO<T> {
 
                         } else if (TipoAtributo.getPackageName().equals(classe.getPackageName())) {
                             Long idRelacionado = rs.getLong(nomeColuna);
+
                             if (idRelacionado != 0) {
                                 try {
 
@@ -306,6 +320,8 @@ public class GenericDAO<T> {
                                 } catch (Exception e) {
                                     throw new RuntimeException("Erro ao buscar objeto relacionado: " + TipoAtributo.getName(), e);
                                 }
+                            } else {
+                                // valor = null;
                             }
 
                         } else {
@@ -362,9 +378,9 @@ public class GenericDAO<T> {
         String CamposEcolunas = GeradorAtributosECampos(3);
 
         String sql = "update " + nomeTabela + " set " + CamposEcolunas + " where id = ?";
-        
+
         List<String> ListaAtributos = geraAtributosLista();
-        
+
         int indiceDoParametro = 1;
         try (Connection conexao = new ConexaoBanco().getConexao(); PreparedStatement stmt = conexao.prepareStatement(sql)) {
 
@@ -373,7 +389,7 @@ public class GenericDAO<T> {
                 if (ListaAtributos.get(indiceDoParametro - 1).equals("dataCriacao")) {
                     continue;
                 }
-                
+
                 if (valores == null) {
                     stmt.setNull(indiceDoParametro, java.sql.Types.NULL);
                 } else if (valores instanceof String) {

@@ -882,8 +882,7 @@ public class GUI {
         String tipo = mostrarMensagemInput("Tipo:", "Tipo", 3, "Cozinha");
         BigDecimal valor = validarStringToBigDecimal(mostrarMensagemInput("Valor", "Valor", 3, "79.90"));
 
-        Presentes ps = new Presentes(nome, tipo, valor);
-        ps.setPessoa(p);
+        Presentes ps = new Presentes(nome, tipo, valor, p);
         return ps;
     }
 

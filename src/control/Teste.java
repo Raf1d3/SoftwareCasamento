@@ -4,6 +4,8 @@
  */
 package control;
 
+import java.lang.reflect.Field;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import model.ConvidadoFamilia;
@@ -38,8 +40,14 @@ public class Teste{
         ConvidadoFamiliaDAO ConvidadoFamiliaDao = new ConvidadoFamiliaDAO(ConvidadoFamilia.class);
         GenericDAO<ConvidadoIndividual> ConvidadoIndividualDao = new GenericDAO(ConvidadoIndividual.class);
         
-        boolean alterar = PagamentosDao.alterar(1, PagamentosDao.buscar(1));
-        System.out.println(alterar);
+        //PessoasDao.adiciona(new Pessoas("Algusto", Util.getDataAtual(), "40028922"));
+        //UsuarioDao.adiciona(new Usuario(PessoasDao.buscar(1), "Administrador", "admin", "123"));
+        
+        //PresentesDao.adiciona(new Presentes("Jbl boom box 5", "Eletronico", BigDecimal.valueOf(1000.5), null));
+        System.out.println(PresentesDao.buscar(2));
+        
+        
+        
         
         /*
         List<Fornecedor> lista = FornecedorDao.listar();

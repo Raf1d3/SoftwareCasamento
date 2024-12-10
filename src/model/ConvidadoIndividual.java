@@ -59,12 +59,15 @@ public class ConvidadoIndividual implements InterfaceGenericDAO {
     @Override
     public String toString() {
 
-        return "ID: " + id + " | Pessoa: " + pessoa
+        return "ID: " + id 
+                + " | nome: " + pessoa.getNome()
+                + " | Telefone: " + pessoa.getTelefone()
+                + " | Nascimento: " + Util.formatarDataLocal(pessoa.getNascimento())
                 + " | Família: " + familia
                 + " | Parentesco: " + parentesco
                 + "\nConfirmação: " + confirmacao
                 + " | Data de Criação: " + Util.formatarData(dataCriacao)
-                + " | Última Modificação: " + Util.formatarData(dataModificacao);
+                + " | Última Modificação: " + Util.formatarData(dataModificacao) + "\n";
     }
 
     @Override

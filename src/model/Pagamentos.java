@@ -95,12 +95,12 @@ public class Pagamentos implements InterfaceGenericDAO{
                 + " | Total de parcelas: " + fornecedor.getParcelas()
                 + "\nEstado do pagamento: " + fornecedor.getEstado()
                 + " | Tipo de Pagamento: " + tipoPagamento
-                + "\nNome fornecedor: " + fornecedor.getPessoa().getNome()
-                + " | Nome serviço : " + fornecedor.getNomeServico()
+                + " | Nome fornecedor: " + fornecedor.getPessoa().getNome()
+                + "\nNome serviço : " + fornecedor.getNomeServico()
                 + " | Telefone: " + fornecedor.getTelefone()
                 + " | Cnpj: " + fornecedor.getCnpj()
-                + "\nData de Criação: " + Util.formatarData(dataCriacao)
-                + " | Última Modificação: " + Util.formatarData(dataModificacao) + "\n";
+                + "\nData de Criação: " + Util.formatarData(this.dataCriacao)
+                + " | Última Modificação: " + Util.formatarData(this.dataModificacao) + "\n";
     }
 
     @Override

@@ -15,7 +15,7 @@ import java.util.List;
  *
  * @author CAUPT - ALUNOS
  */
-public class Presentes implements InterfaceGenericDAO{
+public class Presentes implements InterfaceGenericDAO {
 
     long id;
     String nome;
@@ -31,7 +31,11 @@ public class Presentes implements InterfaceGenericDAO{
         valores.add(this.nome);
         valores.add(this.tipo);
         valores.add(this.valor);
-        valores.add(this.pessoa.getId());
+        if (this.pessoa != null) {
+            valores.add(this.pessoa.getId());
+        } else {
+            valores.add(null);
+        }
         valores.add(this.dataCriacao);
         valores.add(this.dataModificacao);
         return valores;
@@ -42,14 +46,16 @@ public class Presentes implements InterfaceGenericDAO{
         this.nome = nome;
         this.tipo = tipo;
         this.valor = valor;
+        this.pessoa = pessoa;
         this.dataCriacao = dataCriacao;
         this.dataModificacao = dataModificacao;
     }
-        
-    public Presentes(String nome, String tipo, BigDecimal valor) {
+
+    public Presentes(String nome, String tipo, BigDecimal valor, Pessoas pessoa) {
         this.nome = nome;
         this.tipo = tipo;
         this.valor = valor;
+        this.pessoa = pessoa;
         this.dataCriacao = LocalDateTime.now();
         this.dataModificacao = LocalDateTime.now();
     }
@@ -57,13 +63,13 @@ public class Presentes implements InterfaceGenericDAO{
     @Override
     public String toString() {
 
-        return "ID: " + id 
-                + " | Nome: " + nome 
-                + " | Tipo: " + tipo
-                + " | Valor: " + valor 
-                + " | Pessoa: " + pessoa
-                + " | Data de Criação: " + Util.formatarData(dataCriacao) 
-                + " | Última Modificação: " + Util.formatarData(dataModificacao);
+        return "ID: " + id
+                + " | Nome: " + this.nome
+                + " | Tipo: " + this.tipo
+                + " | Valor: " + this.valor
+                + " | Pessoa: " + this.pessoa
+                + " | Data de Criação: " + Util.formatarData(this.dataCriacao)
+                + " | Última Modificação: " + Util.formatarData(this.dataModificacao) + "\n";
     }
 
     @Override
@@ -124,14 +130,14 @@ public class Presentes implements InterfaceGenericDAO{
         this.pessoa = pessoa;
     }
 
-   public LocalDateTime getDataCriacao() {
+    public LocalDateTime getDataCriacao() {
         return dataCriacao;
     }
-   
+
     public LocalDateTime getDataModificacao() {
         return dataModificacao;
     }
-    
+
     public void setDataModificacao(LocalDateTime dataModificacao) {
         this.dataModificacao = dataModificacao;
     }

@@ -70,7 +70,7 @@ public class Usuario implements InterfaceGenericDAO{
         }
             retorno += " | Tipo: " + tipo
             + "\nData de Criação: " + Util.formatarData(dataCriacao)
-            + " | Última Modificação: " + Util.formatarData(dataModificacao);
+            + " | Última Modificação: " + Util.formatarData(dataModificacao) + "\n";
         return retorno;
     }
 

@@ -39,7 +39,7 @@ public class Util {
         String toStringLista = "";
         if (!lista.isEmpty()) {
             for (int i = 0; i < lista.size(); i++) {
-                toStringLista += lista.get(i).toString() + "\n";
+                toStringLista += lista.get(i).toString();
             }
         }
         return toStringLista;

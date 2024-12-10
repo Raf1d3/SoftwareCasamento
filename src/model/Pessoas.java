@@ -61,7 +61,7 @@ public class Pessoas implements InterfaceGenericDAO {
                 + " | Nascimento: " + Util.formatarDataLocal(nascimento)
                 + " | Telefone: " + telefone
                 + "\nData de Criação: " + Util.formatarData(dataCriacao)
-                + " | Última Modificação: " + Util.formatarData(dataModificacao);
+                + " | Última Modificação: " + Util.formatarData(dataModificacao) + "\n";
     }
     
     
