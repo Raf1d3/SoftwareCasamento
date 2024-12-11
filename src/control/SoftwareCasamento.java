@@ -46,9 +46,9 @@ public class SoftwareCasamento {
         System.out.println("Iniciando Logs do programa...");
 
         ConexaoBanco.setParametrosDeConexao("root", "admin", "BDSofwareDeCasamento");
-        
+
         GeradorPdf.setCaminho("arquivosPdfs/");
-        
+
         System.out.println(Util.ListToString(ConvidadoFamiliaDao.listar()));
         MenuLoginLoop(Gui.MenuLoginOpcoes(EventoDao.listar()));
 
@@ -742,7 +742,7 @@ public class SoftwareCasamento {
 
     private boolean menuConfirmacaoFamiliaLoop(int opcaoUsuario, ConvidadoFamilia cf) {
         List<Long> idsConvidadosFamilia = new ArrayList();
-        
+
         while (opcaoUsuario != 9) {
             switch (opcaoUsuario) {
                 case 0:
@@ -752,7 +752,7 @@ public class SoftwareCasamento {
                         if (cf.getNomeDaFamilia().equals(ci.getFamilia())) {
                             idsConvidadosFamilia.add(ci.getId());
                             StringConvidadosFamilia += ConvidadoIndividualDao.buscar(ci.getId());
-                            
+
                         }
                     }
 
@@ -786,7 +786,7 @@ public class SoftwareCasamento {
 
                                 boolean familiaVai = false;
                                 for (ConvidadoIndividual convidados : ConvidadoIndividualDao.listar()) {
-                                    if (cf.getNomeDaFamilia().equals(convidados.getFamilia()) 
+                                    if (cf.getNomeDaFamilia().equals(convidados.getFamilia())
                                             && convidados.getConfirmacao().equals("Confirmado")) {
                                         familiaVai = true;
                                     }
@@ -1132,7 +1132,7 @@ public class SoftwareCasamento {
                 case 1:
 
                     List<Long> idsPessoasSemConvite = new ArrayList();
-                    
+
                     String StringPessoasSemConvite = "";
                     int j = 0;
                     for (Pessoas pessoa : PessoasDao.listar()) {
@@ -1904,11 +1904,11 @@ public class SoftwareCasamento {
 
                         if (Gui.RelatorioRecados(conteudoMr) == 1) {
                             String resposta = GeradorPdf.GerarPdf((List) listar, "MuralDeRecados");
-                             if(!resposta.isBlank()){
-                                 Gui.mostrarMensagemAviso("Pdf gerado com sucesso \nem: " + resposta, "Aviso", 2);
-                             }else{
-                                 Gui.mostrarMensagemAviso("Erro ao gerar pdf", "Aviso", 2);
-                             }
+                            if (!resposta.isBlank()) {
+                                Gui.mostrarMensagemAviso("Pdf gerado com sucesso \nem: " + resposta, "Aviso", 2);
+                            } else {
+                                Gui.mostrarMensagemAviso("Erro ao gerar pdf", "Aviso", 2);
+                            }
                         }
 
                     } else {
@@ -1916,14 +1916,19 @@ public class SoftwareCasamento {
                     }
                     break;
 
-
                 case 1:
                     List<ConvidadoIndividual> listaConvidadoIndividual = ConvidadoIndividualDao.listar();
                     if (!listaConvidadoIndividual.isEmpty()) {
                         boolean verificacao = false;
                         int option;
-                        while (verificacao != true) {
-                            String resp = Gui.mostrarMensagemInput("Qual convidado você gostaria de Gerar o convite? digite o ID: \n" + Util.ListToString(listaConvidadoIndividual), "Escolha um Convidado", 3, "1");
+                        while (!verificacao) {
+                            String resp = Gui.mostrarMensagemInput(
+                                    "Qual convidado você gostaria de gerar o convite? Digite o ID: \n"
+                                    + Util.ListToString(listaConvidadoIndividual),
+                                    "Escolha um Convidado",
+                                    3,
+                                    "1"
+                            );
 
                             if (resp == null) {
                                 return true;
@@ -1931,20 +1936,29 @@ public class SoftwareCasamento {
                                 option = Gui.validarStringToInt(resp);
                             }
 
-                            for (ConvidadoIndividual ci : listaConvidadoIndividual) {
-                                if (ci.getId() == option && option != -1) {
-                                    verificacao = true;
-                                }
-                            }
-
-                            if (verificacao == true) {
+                            ConvidadoIndividual convidado = ConvidadoIndividualDao.buscar(option);
+                            if (convidado != null) {
+                                verificacao = true;
 
                                 if (Gui.mostrarConviteIndividual(ConvidadoIndividualDao.buscar(option)) == 1) {
-                                    System.out.println("Função gerar pdf Convidado Individual");
-                                }
 
+                                    List<String> conteudo = new ArrayList<>();
+
+                                    conteudo.add("-------------------------------------------");
+                                    conteudo.add("Convite para: " + convidado.getPessoa().getNome());
+                                    conteudo.add("Telefone: " + convidado.getPessoa().getTelefone());
+                                    conteudo.add("Nascimento: " + Util.formatarDataLocal(convidado.getPessoa().getNascimento()));
+                                    conteudo.add("Família: " + convidado.getFamilia());
+                                    conteudo.add("Parentesco: " + convidado.getParentesco());
+                                    conteudo.add("Confirmação de presença: " + convidado.getConfirmacao());
+                                    conteudo.add("Data de Criação: " + Util.formatarData(convidado.getDataCriacao()));
+                                    conteudo.add("Última Modificação: " + Util.formatarData(convidado.getDataModificacao()));
+
+                                    GeradorPdf.gerarPdf("Convite Convidado Individual", conteudo, "ConviteIndividual" + convidado.getPessoa().getNome() + ".pdf");
+                                    System.out.println("Convite PDF gerado para o convidado " + convidado.getPessoa().getNome());
+                                }
                             } else {
-                                Gui.mostrarMensagemAviso("ID invalido", "Aviso", 1);
+                                Gui.mostrarMensagemAviso("ID inválido", "Aviso", 1);
                             }
                         }
                     } else {
@@ -1971,10 +1985,16 @@ public class SoftwareCasamento {
                             }
                         }
 
-                        if (verificacao == true) {
-                            if (Gui.mostrarConviteFamilia(ConvidadoFamiliaDao.buscar(option)) == 1) {
-                                System.out.println("Função gerar pdf Convidado Familia");
-                            }
+                        if (verificacao == true && Gui.mostrarConviteFamilia(ConvidadoFamiliaDao.buscar(option)) == 1) {
+                            List<String> conteudoFamilia = new ArrayList<>();
+                            ConvidadoFamilia familia = ConvidadoFamiliaDao.buscar(option);
+
+                            conteudoFamilia.add("Família: " + familia.getNomeDaFamilia());
+                            conteudoFamilia.add("Descrição: " + familia.toString());
+
+                            GeradorPdf.gerarPdf("Convite Família", conteudoFamilia, "ConviteFamilia" + familia.getNomeDaFamilia());
+
+                            System.out.println("Função gerar pdf Convidado Familia");
                         } else {
                             Gui.mostrarMensagemAviso("ID invalido", "Aviso", 1);
                         }

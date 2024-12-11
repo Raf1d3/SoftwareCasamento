@@ -62,7 +62,7 @@ public class ConvidadoFamilia implements InterfaceGenericDAO{
                 + " | Acesso: " + acesso
                 + " | Confirmacão: " + confirmacao 
                 + " | Data de Criação: " + Util.formatarData(dataCriacao)
-                + " | Última Modificação: " + Util.formatarData(dataModificacao);
+                + " | Última Modificação: " + Util.formatarData(dataModificacao) + "\n\n";
     }
 
     public long getId() {

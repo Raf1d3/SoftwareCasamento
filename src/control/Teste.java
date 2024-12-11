@@ -41,8 +41,8 @@ public class Teste{
         ConvidadoFamiliaDAO ConvidadoFamiliaDao = new ConvidadoFamiliaDAO(ConvidadoFamilia.class);
         GenericDAO<ConvidadoIndividual> ConvidadoIndividualDao = new GenericDAO(ConvidadoIndividual.class);
         
-        //PessoasDao.adiciona(new Pessoas("Algusto", Util.getDataAtual(), "40028922"));
-        //UsuarioDao.adiciona(new Usuario(PessoasDao.buscar(1), "Administrador", "admin", "123"));
+        PessoasDao.adiciona(new Pessoas("Algusto", Util.getDataAtual(), "40028922"));
+        UsuarioDao.adiciona(new Usuario(PessoasDao.buscar(1), "Administrador", "admin", "123"));
         
         //PresentesDao.adiciona(new Presentes("Jbl boom box 5", "Eletronico", BigDecimal.valueOf(1000.5), null));
         //System.out.println(PresentesDao.buscar(2));

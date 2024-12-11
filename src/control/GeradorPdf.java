@@ -19,7 +19,7 @@ import model.InterfaceGenericDAO;
  * @author pse
  */
 public class GeradorPdf {
-    
+
     private static String caminho;
 
     public static void setCaminho(String caminho) {
@@ -33,8 +33,8 @@ public class GeradorPdf {
         Document documento = new Document();
         try {
             PdfWriter.getInstance(documento, new FileOutputStream(GeradorPdf.caminho + nomeArquivo + ".pdf"));
-            documento.open(); 
-            
+            documento.open();
+
             for (InterfaceGenericDAO item : lista) {
                 List<Object> atributos = item.getValoresAtributos();
 
@@ -49,7 +49,36 @@ public class GeradorPdf {
             System.err.println("Erro ao gerar o PDF: " + e.getMessage());
             return "";
         } finally {
-            documento.close(); 
+            documento.close();
+        }
+        System.out.println("PDF gerado com sucesso em: " + GeradorPdf.caminho + nomeArquivo + ".pdf");
+        return GeradorPdf.caminho + nomeArquivo + ".pdf";
+    }
+
+    public static String gerarPdf(String titulo, List<String> conteudo, String nomeArquivo) {
+        if (caminho == null || caminho.isEmpty()) {
+            throw new IllegalArgumentException("O caminho para salvar o PDF não foi definido!");
+        }
+        
+        Document documento = new Document();
+        try {
+            PdfWriter.getInstance(documento, new FileOutputStream(GeradorPdf.caminho + nomeArquivo + ".pdf"));
+            
+            documento.open();
+            documento.add(new Paragraph(titulo));
+            documento.add(new Paragraph("\n"));
+
+            for (String linha : conteudo) {
+                documento.add(new Paragraph(linha));
+            }
+
+            documento.close();
+        } catch (DocumentException | IOException e) {
+            e.printStackTrace();
+            System.err.println("Erro ao gerar o PDF: " + e.getMessage());
+            return "";
+        } finally {
+            documento.close();
         }
         System.out.println("PDF gerado com sucesso em: " + GeradorPdf.caminho + nomeArquivo + ".pdf");
         return GeradorPdf.caminho + nomeArquivo + ".pdf";
