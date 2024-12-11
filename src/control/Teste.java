@@ -7,6 +7,7 @@ package control;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import model.ConvidadoFamilia;
 import model.ConvidadoIndividual;
@@ -44,23 +45,23 @@ public class Teste{
         //UsuarioDao.adiciona(new Usuario(PessoasDao.buscar(1), "Administrador", "admin", "123"));
         
         //PresentesDao.adiciona(new Presentes("Jbl boom box 5", "Eletronico", BigDecimal.valueOf(1000.5), null));
-        System.out.println(PresentesDao.buscar(2));
+        //System.out.println(PresentesDao.buscar(2));
         
         
         
         
-        /*
-        List<Fornecedor> lista = FornecedorDao.listar();
-        for (Fornecedor fornecedor : lista) {
-        System.out.println(fornecedor.toString());
+        
+        List<Long> lista = new ArrayList();
+
+        lista.add((long) 1);
+        lista.add((long) 2);
+        lista.add((long) 3);
+        lista.add((long) 4);
+        lista.add((long) 5);
+        
+        for (Long a : lista) {
+            System.out.println(a);
         }
-         */
-        
-       
-        
-        
-        
-        
         
     }
     

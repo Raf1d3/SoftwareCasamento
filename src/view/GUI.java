@@ -542,26 +542,27 @@ public class GUI {
     }
 
     //Tela do Relatorio de recados
-    public void RelatorioRecados(String vetmural[]) {
+    public int RelatorioRecados(List<String> vetmural) {
         StringBuilder menu = new StringBuilder();
 
         menu.append("<html><body><br>");
         menu.append("<div width='1010px' align='center'>");
         menu.append("<p style='font-size:18px; font-weight:bold;'>GERENCIADOR DE CASAMENTOS</p>");
         menu.append("<p style='font-size:14px;'>Relatorio De Recados</p><br>");
-        for (Object recado : vetmural) {
-            if (recado != "") {
+        for (String recado : vetmural) {
+            if (!recado.isBlank()) {
                 menu.append("<p style='font-size:12px; font-weight:bold;'>" + recado + "</p>");
             }
         }
         menu.append("<br></div></body></html>");
 
-        mostrarMensagemAviso(menu.toString(), "Relatorio de Recados", -1);
+        Object[] options = {"Fechar", "Gerar Pdf"};
 
+        return mostrarMensagemBots(menu.toString(), "Relatorio de Recados", -1, options);
     }
 
     //Tela do Convite individual
-    public void mostrarConviteIndividual(ConvidadoIndividual ci) {
+    public int mostrarConviteIndividual(ConvidadoIndividual ci) {
         StringBuilder menu = new StringBuilder();
 
         menu.append("<html><body><br>");
@@ -591,12 +592,13 @@ public class GUI {
         menu.append("<p style='font-size:8px;'>Convite gerado pelo sistema de gerenciamento de casamentos: Entre Tapas e beijos.<br>");
         menu.append("<br></div></body></html>");
 
-        mostrarMensagemAviso(menu.toString(), "Convite Individual", -1);
+        Object[] options = {"Fechar", "Gerar Pdf"};
 
+        return mostrarMensagemBots(menu.toString(), "Convite Individual", -1, options);
     }
 
     //Tela do Convite Familiar
-    public void mostrarConviteFamilia(ConvidadoFamilia cf) {
+    public int mostrarConviteFamilia(ConvidadoFamilia cf) {
         StringBuilder menu = new StringBuilder();
 
         menu.append("<html><body><br>");
@@ -620,65 +622,71 @@ public class GUI {
         menu.append("<p style='font-size:8px;'>Convite gerado pelo sistema de gerenciamento de casamentos: Entre Tapas e beijos.<br>");
         menu.append("<br></div></body></html>");
 
-        mostrarMensagemAviso(menu.toString(), "Convite Familiar", -1);
+        Object[] options = {"Fechar", "Gerar Pdf"};
+        return mostrarMensagemBots(menu.toString(), "Convite Familiar", -1, options);
     }
 
     //Tela do Relatorio de convidados
-    public void RelatorioConvidados(String vetmural[]) {
+    public int RelatorioConvidados(List<String> vetmural) {
         StringBuilder menu = new StringBuilder();
-
         menu.append("<html><body><br>");
         menu.append("<div width='1010px' align='center'>");
         menu.append("<p style='font-size:18px; font-weight:bold;'>GERENCIADOR DE CASAMENTOS</p>");
         menu.append("<p style='font-size:14px;'>Relatorio De Convidados</p><br>");
-        for (Object recado : vetmural) {
-            if (recado != "") {
-                menu.append("<p style='font-size:12px; font-weight:bold;'>" + recado + "</p>");
+        for (String recado : vetmural) {
+            if (!recado.isBlank()) {
+                menu.append("<p style='font-size:12px; font-weight:bold;'>").append(recado).append("</p>");
             }
         }
         menu.append("<br></div></body></html>");
 
-        mostrarMensagemAviso(menu.toString(), "Relatorio de Convidados", -1);
+        Object[] options = {"Fechar", "Gerar Pdf"};
+
+        return mostrarMensagemBots(menu.toString(), "Relatorio de Convidados", -1, options);
 
     }
 
     //Tela do Relatorio de convidados
-    public void RelatorioPagamento(String vetmural[], double ValorTotal) {
+    public int RelatorioPagamento(List<String> vetmural, double ValorTotal) {
         StringBuilder menu = new StringBuilder();
 
         menu.append("<html><body><br>");
         menu.append("<div width='1010px' align='center'>");
         menu.append("<p style='font-size:18px; font-weight:bold;'>GERENCIADOR DE CASAMENTOS</p>");
         menu.append("<p style='font-size:14px;'>Relatorio De Pagamento</p><br>");
-        for (Object recado : vetmural) {
-            if (recado != "") {
-                menu.append("<p style='font-size:12px; font-weight:bold;'>" + recado + "</p>");
+        for (String recado : vetmural) {
+            if (!recado.isBlank()) {
+                menu.append("<p style='font-size:12px; font-weight:bold;'>").append(recado).append("</p>");
             }
         }
-        menu.append("<p style='font-size:12px; font-weight:bold;'>Valor Total: " + ValorTotal + "</p>");
+        menu.append("<p style='font-size:12px; font-weight:bold;'>Valor Total: ").append(ValorTotal).append("</p>");
         menu.append("<br></div></body></html>");
 
-        mostrarMensagemAviso(menu.toString(), "Relatorio de Pagamento", -1);
+        Object[] options = {"Fechar", "Gerar Pdf"};
+
+        return mostrarMensagemBots(menu.toString(), "Relatorio de Pagamento", -1, options);
 
     }
 
     //Tela do Relatorio de convidados Confirmados
-    public void RelatorioConvidadosConfirmados(String[] vetmural, double totalPTS) {
+    public int RelatorioConvidadosConfirmados(List<String> vetmural, double totalPTS) {
         StringBuilder menu = new StringBuilder();
 
         menu.append("<html><body><br>");
         menu.append("<div width='1010px' align='center'>");
         menu.append("<p style='font-size:18px; font-weight:bold;'>GERENCIADOR DE CASAMENTOS</p>");
         menu.append("<p style='font-size:14px;'>Relatorio De Convidados Confirmados</p><br>");
-        for (Object recado : vetmural) {
-            if (recado != "") {
-                menu.append("<p style='font-size:12px; font-weight:bold;'>" + recado + "</p>");
+        for (String recado : vetmural) {
+            if (!recado.isBlank()) {
+                menu.append("<p style='font-size:12px; font-weight:bold;'>").append(recado).append("</p>");
             }
         }
-        menu.append("<p style='font-size:12px; font-weight:bold;'>Total de pontos: " + totalPTS + "</p>");
+        menu.append("<p style='font-size:12px; font-weight:bold;'>Total de pontos: ").append(totalPTS).append("</p>");
         menu.append("<br></div></body></html>");
 
-        mostrarMensagemAviso(menu.toString(), "Relatorio de Convidados Confirmados", -1);
+        Object[] options = {"Fechar", "Gerar Pdf"};
+
+        return mostrarMensagemBots(menu.toString(), "Relatorio de Convidados Confirmados", -1, options);
 
     }
 
@@ -777,7 +785,7 @@ public class GUI {
         if (familia != null) {
             familia = familia.toLowerCase();
         }
-        
+
         ConvidadoIndividual ci = new ConvidadoIndividual(p, familia, parentesco);
         return ci;
     }
@@ -804,11 +812,10 @@ public class GUI {
         String nome = mostrarMensagemInput("Nome do Cartório:", "Nome", 3, "Cartório Municipal");
         String endereco = mostrarMensagemInput("Endereço:", "Endereço", 3, "Av. Central, 456");
         String telefone = mostrarMensagemInput("Telefone:", "Telefone Cartorio", 3, "33714482");
-       
 
         LocalDate data = null;
         while (data == null) {
-             String input_data = mostrarMensagemInput("Digite a data do evento no cartorio:", "Data", 3, "15/10/2024");
+            String input_data = mostrarMensagemInput("Digite a data do evento no cartorio:", "Data", 3, "15/10/2024");
             if (input_data != null) {
                 data = validarData(input_data);
                 if (data == null) {
@@ -835,9 +842,9 @@ public class GUI {
     }
 
     public MuralDeRecados CriarRecado(Pessoas p) {
-        
+
         String comentario = mostrarMensagemInput("Comentario:", "Comentario", 3, "Bom dia");
-        
+
         MuralDeRecados mr = new MuralDeRecados(p, comentario);
 
         return mr;
@@ -942,6 +949,5 @@ public class GUI {
     public int mostrarMensagemBots(String mensagem, String titulo, int icone, Object[] options) {
         return JOptionPane.showOptionDialog(null, mensagem, titulo, JOptionPane.DEFAULT_OPTION, icone, null, options, options[0]);
     }
-
 
 }

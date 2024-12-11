@@ -6,6 +6,7 @@ package control;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import model.Cartorio;
 import model.Cerimonial;
@@ -45,7 +46,9 @@ public class SoftwareCasamento {
         System.out.println("Iniciando Logs do programa...");
 
         ConexaoBanco.setParametrosDeConexao("root", "admin", "BDSofwareDeCasamento");
-
+        
+        GeradorPdf.setCaminho("arquivosPdfs/");
+        
         System.out.println(Util.ListToString(ConvidadoFamiliaDao.listar()));
         MenuLoginLoop(Gui.MenuLoginOpcoes(EventoDao.listar()));
 
@@ -240,7 +243,7 @@ public class SoftwareCasamento {
                 case 0:
                     List<Presentes> listaPresentes = PresentesDao.listar();
                     if (!listaPresentes.isEmpty()) {
-                        int idresposta = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID de um dos presentes abaixo que voce irá presentear\n" + Util.ListToString(listaPresentes), "Alterar Presente", 1, ""));
+                        int idresposta = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID de um dos presentes abaixo que voce irá presentear\n" + Util.ListToString(listaPresentes), "Alterar Presente", 1, "1"));
                         if (PresentesDao.buscar(idresposta) != null) {
                             PresentesDao.buscar(idresposta).setPessoa(p);
                             Gui.mostrarMensagemAviso("Presente Confirmado.", "Aviso", 1);
@@ -262,7 +265,7 @@ public class SoftwareCasamento {
                     break;
                 case 2:
                     listaPresentes = PresentesDao.listar();
-                    int idresposta = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID de um dos presentes abaixo que voce irá cancelar\n" + Util.ListToString(listaPresentes), "Alterar Presente", 1, ""));
+                    int idresposta = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID de um dos presentes abaixo que voce irá cancelar\n" + Util.ListToString(listaPresentes), "Alterar Presente", 1, "1"));
                     if (PresentesDao.buscar(idresposta) != null) {
                         if (PresentesDao.buscar(idresposta).getPessoa() != null
                                 && PresentesDao.buscar(idresposta).getPessoa().equals(p)) {
@@ -311,7 +314,7 @@ public class SoftwareCasamento {
                     }
                     break;
                 case 2:
-                    int idAltera = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID de um Recado a ser alterado", "Alterar Recado", 1, "0"));
+                    int idAltera = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID de um Recado a ser alterado", "Alterar Recado", 1, "1"));
                     if (MuralDeRecadosDao.buscar(idAltera).getPessoa().equals(p)) {
                         if (MuralDeRecadosDao.alterar(idAltera, Gui.CriarRecado(p)) != false) {
                             Gui.mostrarMensagemAviso("Recado Alterado", "Aviso", 1);
@@ -323,7 +326,7 @@ public class SoftwareCasamento {
                     }
                     break;
                 case 3:
-                    int idDelete = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID do Recado a ser deletado", "Deletar Recado", 1, "0"));
+                    int idDelete = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID do Recado a ser deletado", "Deletar Recado", 1, "1"));
                     if (MuralDeRecadosDao.buscar(idDelete) != null
                             && MuralDeRecadosDao.buscar(idDelete).getPessoa().equals(p)) {
 
@@ -337,7 +340,7 @@ public class SoftwareCasamento {
                     }
                     break;
                 case 4:
-                    int idBuscar = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID do Recado a ser buscado", "Buscar Recado", 1, "0"));
+                    int idBuscar = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID do Recado a ser buscado", "Buscar Recado", 1, "1"));
                     if (MuralDeRecadosDao.buscar(idBuscar) != null) {
                         Gui.mostrarMensagemAviso("Recado : \n" + MuralDeRecadosDao.buscar(idBuscar).toString(), "Aviso", 1);
                     } else {
@@ -382,7 +385,7 @@ public class SoftwareCasamento {
                     break;
                 case 2:
 
-                    int idAltera = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID da pessoa a ser alterada", "Alterar Pessoa", 1, "0"));
+                    int idAltera = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID da pessoa a ser alterada", "Alterar Pessoa", 1, "1"));
                     if (PessoasDao.alterar(idAltera, Gui.CriarPessoa()) != false) {
                         Gui.mostrarMensagemAviso("Pessoa Alterada", "Aviso", 3);
                     } else {
@@ -390,7 +393,7 @@ public class SoftwareCasamento {
                     }
                     break;
                 case 3:
-                    int idDelete = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID do pessoa a ser deletado", "Deletar Pessoa", 1, "0"));
+                    int idDelete = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID do pessoa a ser deletado", "Deletar Pessoa", 1, "1"));
                     if (PessoasDao.deletar(idDelete) != null) {
                         Gui.mostrarMensagemAviso("Pessoa Deletada", "Aviso", 3);
                     } else {
@@ -398,7 +401,7 @@ public class SoftwareCasamento {
                     }
                     break;
                 case 4:
-                    int idBuscar = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID do pessoa a ser buscado", "Buscar Pessoa", 1, "0"));
+                    int idBuscar = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID do pessoa a ser buscado", "Buscar Pessoa", 1, "1"));
                     if (PessoasDao.buscar(idBuscar) != null) {
                         Gui.mostrarMensagemAviso("Pessoas : \n" + PessoasDao.buscar(idBuscar).toString(), "Aviso", 3);
 
@@ -447,7 +450,7 @@ public class SoftwareCasamento {
                         Gui.mostrarMensagemAviso("Nenhuma pessoa disponivel encontrada insira informações da pessoa referente a esse usuario", "Aviso", 1);
                         Pessoas p = Gui.CriarPessoa();
                         Long idPessoaADD = PessoasDao.adiciona(p);
-                                
+
                         if (idPessoaADD != -1) {
                             Gui.mostrarMensagemAviso("Pessoa Criada", "Aviso", 1);
 
@@ -476,7 +479,7 @@ public class SoftwareCasamento {
                     }
                     break;
                 case 2:
-                    int idAltera = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID do usuario a ser alterado", "Alterar Usuario", 1, "0"));
+                    int idAltera = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID do usuario a ser alterado", "Alterar Usuario", 1, "1"));
                     Usuario usuario = UsuarioDao.buscar(idAltera);
                     if (usuario != null && UsuarioDao.alterar(idAltera, Gui.CriarUsuario(usuario.getPessoa()))) {
                         Gui.mostrarMensagemAviso("Usuario Alterada", "Aviso", 1);
@@ -486,7 +489,7 @@ public class SoftwareCasamento {
                     break;
 
                 case 3:
-                    int idDelete = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID do usuario a ser deletado", "Deletar Usuario", 1, "0"));
+                    int idDelete = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID do usuario a ser deletado", "Deletar Usuario", 1, "1"));
                     if (UsuarioDao.deletar(idDelete) != null) {
                         Gui.mostrarMensagemAviso("Usuario Deletada", "Aviso", 1);
                     } else {
@@ -495,7 +498,7 @@ public class SoftwareCasamento {
 
                     break;
                 case 4:
-                    int idBuscar = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID do usuario a ser buscado", "Buscar Usuario", 1, "0"));
+                    int idBuscar = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID do usuario a ser buscado", "Buscar Usuario", 1, "1"));
                     if (UsuarioDao.buscar(idBuscar) != null) {
                         Gui.mostrarMensagemAviso("Usuario : \n" + UsuarioDao.buscar(idBuscar).toString(), "Aviso", 1);
                     } else {
@@ -535,15 +538,11 @@ public class SoftwareCasamento {
                     }
                     break;
                 case 1:
-                    int tamVet = 1000;
-                    long[] idsPessoaSemUsuario = new long[tamVet];
-                    for (int a = 0; a < idsPessoaSemUsuario.length; a++) {
-                        idsPessoaSemUsuario[a] = -1;
-                    }
+
+                    List<Long> idsPessoaSemUsuario = new ArrayList();
 
                     String StringPessoasSemUsuario = "";
 
-                    int j = 0;
                     for (Pessoas pessoa : PessoasDao.listar()) {
                         boolean PessoatemUsuario = false;
                         for (Usuario usuario : UsuarioDao.listar()) {
@@ -552,17 +551,16 @@ public class SoftwareCasamento {
                             }
                         }
 
-                        if (!PessoatemUsuario && j <= tamVet) {
-                            idsPessoaSemUsuario[j] = pessoa.getId();
-                            StringPessoasSemUsuario += PessoasDao.buscar(pessoa.getId()).toString() ;
-                            j++;
+                        if (!PessoatemUsuario) {
+                            idsPessoaSemUsuario.add(pessoa.getId());
+                            StringPessoasSemUsuario += PessoasDao.buscar(pessoa.getId()).toString();
                         }
                     }
 
                     boolean verificacao = false;
                     int option;
                     while (verificacao != true) {
-                        String resp = Gui.mostrarMensagemInput("Qual Pessoa vai ser atrelado ao usuario? digite o ID: \n" + StringPessoasSemUsuario, "Opções", 1, "0");
+                        String resp = Gui.mostrarMensagemInput("Qual Pessoa vai ser atrelado ao usuario? digite o ID: \n" + StringPessoasSemUsuario, "Opções", 1, "1");
                         if (resp == null) {
                             return true;
                         } else {
@@ -570,7 +568,7 @@ public class SoftwareCasamento {
                         }
 
                         for (long pessoa : idsPessoaSemUsuario) {
-                            if (pessoa == option && option != -1) {
+                            if (pessoa == option && option != 0) {
                                 verificacao = true;
                             }
                         }
@@ -638,7 +636,7 @@ public class SoftwareCasamento {
                     }
                     break;
                 case 2:
-                    int idAltera = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID do fornecedor a ser alterado", "Alterar Fornecedor", 1, "0"));
+                    int idAltera = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID do fornecedor a ser alterado", "Alterar Fornecedor", 1, "1"));
                     Fornecedor fornecedor = FornecedorDao.buscar(idAltera);
                     if (fornecedor != null && FornecedorDao.alterar(idAltera, Gui.CriarFornecedor(fornecedor.getPessoa()))) {
                         Gui.mostrarMensagemAviso("Fornecedor Alterado", "Aviso", 1);
@@ -648,7 +646,7 @@ public class SoftwareCasamento {
                     break;
 
                 case 3:
-                    int idDelete = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID do Fornecedor a ser deletado", "Deletar Fornecedor", 1, "0"));
+                    int idDelete = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID do Fornecedor a ser deletado", "Deletar Fornecedor", 1, "1"));
                     if (FornecedorDao.deletar(idDelete) != null) {
                         Gui.mostrarMensagemAviso("Fornecedor Deletado", "Aviso", 1);
                     } else {
@@ -656,7 +654,7 @@ public class SoftwareCasamento {
                     }
                     break;
                 case 4:
-                    int idBuscar = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID do Fornecedor a ser buscado", "Buscar Forncededor", 1, "0"));
+                    int idBuscar = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID do Fornecedor a ser buscado", "Buscar Forncededor", 1, "1"));
                     if (FornecedorDao.buscar(idBuscar) != null) {
                         Gui.mostrarMensagemAviso("Fornecedor : \n" + FornecedorDao.buscar(idBuscar).toString(), "Aviso", 1);
                     } else {
@@ -701,7 +699,7 @@ public class SoftwareCasamento {
                     boolean verificacao = false;
                     int option;
                     while (verificacao != true) {
-                        String resp = Gui.mostrarMensagemInput("Qual Pessoa vai ser atrelado a esse fornecedor? digite o ID: \n" + Util.ListToString(PessoasDao.listar()), "escolha a pessoa", 3, "0");
+                        String resp = Gui.mostrarMensagemInput("Qual Pessoa vai ser atrelado a esse fornecedor? digite o ID: \n" + Util.ListToString(PessoasDao.listar()), "escolha a pessoa", 3, "1");
 
                         if (resp == null) {
                             return true;
@@ -743,30 +741,26 @@ public class SoftwareCasamento {
     }
 
     private boolean menuConfirmacaoFamiliaLoop(int opcaoUsuario, ConvidadoFamilia cf) {
-        int tamVet = 1000;
-        int j = 0;
-        long[] idsConvidadosFamilia = new long[tamVet];
-        for (int a = 0; a < idsConvidadosFamilia.length; a++) {
-            idsConvidadosFamilia[a] = -1;
-        }
+        List<Long> idsConvidadosFamilia = new ArrayList();
+        
         while (opcaoUsuario != 9) {
             switch (opcaoUsuario) {
                 case 0:
                     String StringConvidadosFamilia = "";
 
                     for (ConvidadoIndividual ci : ConvidadoIndividualDao.listar()) {
-                        if (cf.getNomeDaFamilia().equals(ci.getFamilia()) && j <= tamVet) {
-                            idsConvidadosFamilia[j] = ci.getId();
+                        if (cf.getNomeDaFamilia().equals(ci.getFamilia())) {
+                            idsConvidadosFamilia.add(ci.getId());
                             StringConvidadosFamilia += ConvidadoIndividualDao.buscar(ci.getId());
-                            j++;
+                            
                         }
                     }
 
-                    if (idsConvidadosFamilia[0] != -1) {
+                    if (!idsConvidadosFamilia.isEmpty()) {
                         int option;
                         boolean verificacao = false;
                         while (verificacao != true) {
-                            String resp = Gui.mostrarMensagemInput("Qual convidado você gostaria de modificar a confirmação de presença? digite o ID: \n" + StringConvidadosFamilia, "escolha a pessoa", 3, "0");
+                            String resp = Gui.mostrarMensagemInput("Qual convidado você gostaria de modificar a confirmação de presença? digite o ID: \n" + StringConvidadosFamilia, "escolha a pessoa", 3, "1");
                             if (resp == null) {
                                 break;
                             } else {
@@ -774,7 +768,7 @@ public class SoftwareCasamento {
                             }
 
                             for (Long convidados : idsConvidadosFamilia) {
-                                if (convidados == option && option != -1) {
+                                if (convidados == option && option != 0) {
                                     verificacao = true;
                                 }
                             }
@@ -789,10 +783,11 @@ public class SoftwareCasamento {
                                     Gui.mostrarMensagemAviso("Presença Cancelada", "Aviso", 1);
                                 }
                                 ConvidadoIndividualDao.alterar(convidado.getId(), convidado);
-                                
+
                                 boolean familiaVai = false;
                                 for (ConvidadoIndividual convidados : ConvidadoIndividualDao.listar()) {
-                                    if (convidados.getConfirmacao().equals("Confirmado")) {
+                                    if (cf.getNomeDaFamilia().equals(convidados.getFamilia()) 
+                                            && convidados.getConfirmacao().equals("Confirmado")) {
                                         familiaVai = true;
                                     }
                                 }
@@ -801,7 +796,7 @@ public class SoftwareCasamento {
                                 } else {
                                     cf.setConfirmacao("Confirmado");
                                 }
-                                    ConvidadoFamiliaDao.alterar(cf.getId(), cf);
+                                ConvidadoFamiliaDao.alterar(cf.getId(), cf);
 
                             } else {
                                 Gui.mostrarMensagemAviso("ID invalido", "Aviso", 1);
@@ -872,7 +867,7 @@ public class SoftwareCasamento {
 
                     break;
                 case 2:
-                    int idAltera = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID da família a ser alterada", "Alterar família", 1, "0"));
+                    int idAltera = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID da família a ser alterada", "Alterar família", 1, "1"));
                     if (ConvidadoFamiliaDao.alterar(idAltera, Gui.CriarConvidadoFamilia()) != false) {
                         Gui.mostrarMensagemAviso("Família Alterada", "Aviso", 1);
                     } else {
@@ -880,7 +875,7 @@ public class SoftwareCasamento {
                     }
                     break;
                 case 3:
-                    int idDelete = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID da família a ser deletada", "Deletar família", 1, "0"));
+                    int idDelete = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID da família a ser deletada", "Deletar família", 1, "1"));
                     if (ConvidadoFamiliaDao.deletar(idDelete) != null) {
                         Gui.mostrarMensagemAviso("família Deletada", "Aviso", 1);
                     } else {
@@ -888,7 +883,7 @@ public class SoftwareCasamento {
                     }
                     break;
                 case 4:
-                    int idBuscar = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID da família a ser buscada", "Buscar família", 1, "0"));
+                    int idBuscar = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID da família a ser buscada", "Buscar família", 1, "1"));
                     if (ConvidadoFamiliaDao.buscar(idBuscar) != null) {
                         Gui.mostrarMensagemAviso("família : \n" + ConvidadoFamiliaDao.buscar(idBuscar).toString(), "Aviso", 1);
                     } else {
@@ -914,7 +909,7 @@ public class SoftwareCasamento {
                     boolean verificacao = false;
                     int option;
                     while (verificacao != true) {
-                        String resp = Gui.mostrarMensagemInput("Qual convidado você gostaria de modificar a confirmação de presença? digite o ID: \n" + familias, "escolha o convidado", 3, "0");
+                        String resp = Gui.mostrarMensagemInput("Qual convidado você gostaria de modificar a confirmação de presença? digite o ID: \n" + familias, "escolha o convidado", 3, "1");
 
                         if (resp == null) {
                             break;
@@ -935,7 +930,7 @@ public class SoftwareCasamento {
                                 Gui.mostrarMensagemAviso("Presença Confirmada", "Aviso", 1);
                             } else {
                                 ConvidadoFamilia.setConfirmacao("Não Confirmado");
-                                Gui.mostrarMensagemAviso("Presença Cancelada", "Aviso", 1); 
+                                Gui.mostrarMensagemAviso("Presença Cancelada", "Aviso", 1);
                             }
                             ConvidadoFamiliaDao.alterar(option, ConvidadoFamilia);
                         } else {
@@ -986,7 +981,7 @@ public class SoftwareCasamento {
                         Gui.mostrarMensagemAviso("Nenhuma pessoa disponivel encontrada insira informações da pessoa referente a esse Convidado", "Aviso", 1);
                         Pessoas p = Gui.CriarPessoa();
                         Long idPessoaADD = PessoasDao.adiciona(p);
-                        
+
                         if (idPessoaADD != -1) {
                             Gui.mostrarMensagemAviso("Pessoa Criada", "Aviso", 1);
 
@@ -1015,7 +1010,7 @@ public class SoftwareCasamento {
                     }
                     break;
                 case 2:
-                    int idAltera = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID de um Convidado a ser alterado", "Alterar Convidado", 1, "0"));
+                    int idAltera = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID de um Convidado a ser alterado", "Alterar Convidado", 1, "1"));
                     ConvidadoIndividual ConvidadoI = ConvidadoIndividualDao.buscar(idAltera);
                     if (ConvidadoI != null && ConvidadoIndividualDao.alterar(idAltera, Gui.CriarConvidadoIndividual(ConvidadoI.getPessoa())) != false) {
                         Gui.mostrarMensagemAviso("Convidado Alterado", "Aviso", 1);
@@ -1025,7 +1020,7 @@ public class SoftwareCasamento {
                     break;
 
                 case 3:
-                    int idDelete = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID do Convidado a ser deletado", "Deletar Convidado", 1, "0"));
+                    int idDelete = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID do Convidado a ser deletado", "Deletar Convidado", 1, "1"));
                     if (ConvidadoIndividualDao.deletar(idDelete) != null) {
                         Gui.mostrarMensagemAviso("Convidado Deletado", "Aviso", 1);
                     } else {
@@ -1033,7 +1028,7 @@ public class SoftwareCasamento {
                     }
                     break;
                 case 4:
-                    int idBuscar = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID do Convidado a ser buscado", "Buscar Convidado", 1, "0"));
+                    int idBuscar = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID do Convidado a ser buscado", "Buscar Convidado", 1, "1"));
                     if (ConvidadoIndividualDao.buscar(idBuscar) != null) {
                         Gui.mostrarMensagemAviso("Convidado : \n" + ConvidadoIndividualDao.buscar(idBuscar).toString(), "Aviso", 1);
                     } else {
@@ -1067,7 +1062,7 @@ public class SoftwareCasamento {
                         boolean verificacao = false;
                         int option;
                         while (verificacao != true) {
-                            String resp = Gui.mostrarMensagemInput("Qual convidado você gostaria de modificar a confirmação de presença? digite o ID: \n" + convidados, "escolha o convidado", 3, "0");
+                            String resp = Gui.mostrarMensagemInput("Qual convidado você gostaria de modificar a confirmação de presença? digite o ID: \n" + convidados, "escolha o convidado", 3, "1");
 
                             if (resp == null) {
                                 break;
@@ -1119,7 +1114,7 @@ public class SoftwareCasamento {
                 case 0:
                     Pessoas p = Gui.CriarPessoa();
                     Long idPessoaADD = PessoasDao.adiciona(p);
-                    
+
                     if (idPessoaADD != -1) {
                         Gui.mostrarMensagemAviso("Pessoa Criada", "Aviso", 1);
 
@@ -1136,12 +1131,8 @@ public class SoftwareCasamento {
 
                 case 1:
 
-                    int tamVet = 1000;
-                    long[] idsPessoasSemConvite = new long[tamVet];
-                    for (int a = 0; a < idsPessoasSemConvite.length; a++) {
-                        idsPessoasSemConvite[a] = -1;
-                    }
-
+                    List<Long> idsPessoasSemConvite = new ArrayList();
+                    
                     String StringPessoasSemConvite = "";
                     int j = 0;
                     for (Pessoas pessoa : PessoasDao.listar()) {
@@ -1153,8 +1144,8 @@ public class SoftwareCasamento {
                                 PessoaEhconvidado = true;
                             }
                         }
-                        if (!PessoaEhconvidado && j <= tamVet) {
-                            idsPessoasSemConvite[j] = pessoa.getId();
+                        if (!PessoaEhconvidado) {
+                            idsPessoasSemConvite.add(pessoa.getId());
                             StringPessoasSemConvite += PessoasDao.buscar(pessoa.getId()).toString();
                             j++;
                         }
@@ -1163,7 +1154,7 @@ public class SoftwareCasamento {
                     boolean verificacao = false;
                     int option;
                     while (verificacao != true) {
-                        String resp = Gui.mostrarMensagemInput("Qual Pessoa vai ser atrelado ao Convidado? digite o ID: \n" + StringPessoasSemConvite, "escolha a pessoa", 3, "0");
+                        String resp = Gui.mostrarMensagemInput("Qual Pessoa vai ser atrelado ao Convidado? digite o ID: \n" + StringPessoasSemConvite, "escolha a pessoa", 3, "1");
 
                         if (resp == null) {
                             return true;
@@ -1172,7 +1163,7 @@ public class SoftwareCasamento {
                         }
 
                         for (Long pessoa : idsPessoasSemConvite) {
-                            if (pessoa == option && option != -1) {
+                            if (pessoa == option && option != 0) {
                                 verificacao = true;
                             }
                         }
@@ -1224,8 +1215,8 @@ public class SoftwareCasamento {
                             int optionNoivo;
                             int optionNoiva;
                             while (verificacao != true) {
-                                String respNoivo = Gui.mostrarMensagemInput("Qual Pessoa vai ser atrelado ao Noivo? digite o ID: \n" + Util.ListToString(PessoasDao.listar()), "escolha a pessoa", 3, "0");
-                                String respNoiva = Gui.mostrarMensagemInput("Qual Pessoa vai ser atrelado a Noiva? digite o ID: \n" + Util.ListToString(PessoasDao.listar()), "escolha a pessoa", 3, "0");
+                                String respNoivo = Gui.mostrarMensagemInput("Qual Pessoa vai ser atrelado ao Noivo? digite o ID: \n" + Util.ListToString(PessoasDao.listar()), "escolha a pessoa", 3, "1");
+                                String respNoiva = Gui.mostrarMensagemInput("Qual Pessoa vai ser atrelado a Noiva? digite o ID: \n" + Util.ListToString(PessoasDao.listar()), "escolha a pessoa", 3, "2");
 
                                 if (respNoivo == null || respNoiva == null) {
                                     return true;
@@ -1362,7 +1353,7 @@ public class SoftwareCasamento {
                     }
                     break;
                 case 2:
-                    int idAltera = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID de um Evento a ser alterado", "Alterar Evento", 1, "0"));
+                    int idAltera = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID de um Evento a ser alterado", "Alterar Evento", 1, "1"));
                     Evento Evento = EventoDao.buscar(idAltera);
                     if (Evento != null && EventoDao.alterar(idAltera, Gui.CriarEvento(Evento.getNoivo(), Evento.getNoiva(),
                             Evento.getCerimonial(), Evento.getIgreja(), Evento.getCartorio())) != false) {
@@ -1373,7 +1364,7 @@ public class SoftwareCasamento {
                     break;
 
                 case 3:
-                    int idDelete = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID do Evento a ser deletado", "Deletar Evento", 1, "0"));
+                    int idDelete = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID do Evento a ser deletado", "Deletar Evento", 1, "1"));
                     if (EventoDao.deletar(idDelete) != null) {
                         Gui.mostrarMensagemAviso("Evento Deletado", "Aviso", 1);
                     } else {
@@ -1381,7 +1372,7 @@ public class SoftwareCasamento {
                     }
                     break;
                 case 4:
-                    int idBuscar = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID do Evento a ser buscado", "Buscar Evento", 1, "0"));
+                    int idBuscar = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID do Evento a ser buscado", "Buscar Evento", 1, "1"));
                     if (EventoDao.buscar(idBuscar) != null) {
                         Gui.mostrarMensagemAviso("Evento : \n" + EventoDao.buscar(idBuscar).toString(), "Aviso", 1);
                     } else {
@@ -1439,7 +1430,7 @@ public class SoftwareCasamento {
                     }
                     break;
                 case 2:
-                    int idAltera = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID de um Recado a ser alterado", "Alterar Recado", 1, "0"));
+                    int idAltera = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID de um Recado a ser alterado", "Alterar Recado", 1, "1"));
                     MuralDeRecados MuralDR = MuralDeRecadosDao.buscar(idAltera);
                     if (MuralDR != null && MuralDeRecadosDao.alterar(idAltera, Gui.CriarRecado(MuralDR.getPessoa())) != false) {
                         Gui.mostrarMensagemAviso("Recado Alterado", "Aviso", 1);
@@ -1449,7 +1440,7 @@ public class SoftwareCasamento {
                     break;
 
                 case 3:
-                    int idDelete = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID do Recado a ser deletado", "Deletar Recado", 1, "0"));
+                    int idDelete = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID do Recado a ser deletado", "Deletar Recado", 1, "1"));
                     if (MuralDeRecadosDao.deletar(idDelete) != null) {
                         Gui.mostrarMensagemAviso("Recado Deletado", "Aviso", 1);
                     } else {
@@ -1457,7 +1448,7 @@ public class SoftwareCasamento {
                     }
                     break;
                 case 4:
-                    int idBuscar = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID do Recado a ser buscado", "Buscar Recado", 1, "0"));
+                    int idBuscar = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID do Recado a ser buscado", "Buscar Recado", 1, "1"));
                     if (MuralDeRecadosDao.buscar(idBuscar) != null) {
                         Gui.mostrarMensagemAviso("Recado : \n" + MuralDeRecadosDao.buscar(idBuscar).toString(), "Aviso", 1);
                     } else {
@@ -1499,7 +1490,7 @@ public class SoftwareCasamento {
 
                     break;
                 case 1:
-                    String resp = Gui.mostrarMensagemInput("Qual pessoa vai ser o autor do recado?  digite o ID: \n" + Util.ListToString(PessoasDao.listar()), "escolha a pessoa", 3, "0");
+                    String resp = Gui.mostrarMensagemInput("Qual pessoa vai ser o autor do recado?  digite o ID: \n" + Util.ListToString(PessoasDao.listar()), "escolha a pessoa", 3, "1");
                     int option;
                     if (resp == null) {
                         return true;
@@ -1576,7 +1567,7 @@ public class SoftwareCasamento {
                     }
                     break;
                 case 2:
-                    int idAltera = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID de um Pagamento a ser alterado", "Alterar Pagamento", 1, "0"));
+                    int idAltera = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID de um Pagamento a ser alterado", "Alterar Pagamento", 1, "1"));
                     Pagamentos Pagamentos = PagamentosDao.buscar(idAltera);
                     if (Pagamentos != null && PagamentosDao.alterar(idAltera, Gui.CriarPagamento(Pagamentos.getFornecedor(), Pagamentos.getPessoa())) != false) {
                         Gui.mostrarMensagemAviso("Pagamento Alterado", "Aviso", 1);
@@ -1586,7 +1577,7 @@ public class SoftwareCasamento {
                     break;
 
                 case 3:
-                    int idDelete = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID do Pagamento a ser deletado", "Deletar Pagamento", 1, "0"));
+                    int idDelete = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID do Pagamento a ser deletado", "Deletar Pagamento", 1, "1"));
                     if (PagamentosDao.deletar(idDelete) != null) {
                         Gui.mostrarMensagemAviso("Pagamento Deletado", "Aviso", 1);
                     } else {
@@ -1594,7 +1585,7 @@ public class SoftwareCasamento {
                     }
                     break;
                 case 4:
-                    int idBuscar = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID do Pagamento a ser buscado", "Buscar Pagamento", 1, "0"));
+                    int idBuscar = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID do Pagamento a ser buscado", "Buscar Pagamento", 1, "1"));
                     if (PagamentosDao.buscar(idBuscar) != null) {
                         Gui.mostrarMensagemAviso("Pagamento : \n" + PagamentosDao.buscar(idBuscar).toString(), "Aviso", 1);
                     } else {
@@ -1620,11 +1611,7 @@ public class SoftwareCasamento {
         while (opcaoUsuario != 9) {
             switch (opcaoUsuario) {
                 case 0:
-                    int tamVet = 1000;
-                    long[] idsFornecedoresSemPagamento = new long[tamVet];
-                    for (int i = 0; i < tamVet; i++) {
-                        idsFornecedoresSemPagamento[i] = -1;
-                    }
+                    List<Long> idsFornecedoresSemPagamento = new ArrayList();
 
                     String stringFornecedoresComValorAPagar = "";
                     int j = 0;
@@ -1632,7 +1619,7 @@ public class SoftwareCasamento {
                     for (Fornecedor f : FornecedorDao.listar()) {
                         if (f.getEstado().equals("A pagar")) {
                             stringFornecedoresComValorAPagar += FornecedorDao.buscar(f.getId());
-                            idsFornecedoresSemPagamento[j] = f.getId();
+                            idsFornecedoresSemPagamento.add(f.getId());
                             j++;
                         }
                     }
@@ -1641,7 +1628,7 @@ public class SoftwareCasamento {
                         boolean verificacao = false;
                         int optionFornecedor;
                         while (verificacao != true) {
-                            String resp = Gui.mostrarMensagemInput("Qual Fornecedor Sera pago? Digite o ID:\n" + stringFornecedoresComValorAPagar, "Opções", 1, "0");
+                            String resp = Gui.mostrarMensagemInput("Qual Fornecedor Sera pago? Digite o ID:\n" + stringFornecedoresComValorAPagar, "Opções", 1, "1");
 
                             if (resp == null) {
                                 return true;
@@ -1650,7 +1637,7 @@ public class SoftwareCasamento {
                             }
 
                             for (Long fornecedores : idsFornecedoresSemPagamento) {
-                                if (fornecedores == optionFornecedor && optionFornecedor != -1) {
+                                if (fornecedores == optionFornecedor && optionFornecedor != 0) {
                                     verificacao = true;
                                 }
                             }
@@ -1662,7 +1649,7 @@ public class SoftwareCasamento {
                                 int optionPessoa = 0;
                                 if (!PessoasDao.listar().isEmpty()) {
                                     while (verificacao1 != true) {
-                                        resp = Gui.mostrarMensagemInput("Qual pessoa será atrelada ao pagamento ? Digite o ID:\n" + Util.ListToString(PessoasDao.listar()), "Opções", 1, "0");
+                                        resp = Gui.mostrarMensagemInput("Qual pessoa será atrelada ao pagamento ? Digite o ID:\n" + Util.ListToString(PessoasDao.listar()), "Opções", 1, "1");
 
                                         if (resp == null) {
                                             return true;
@@ -1787,7 +1774,7 @@ public class SoftwareCasamento {
                     }
 
                     if (resposta == 0) {
-                        int idresposta = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID da pessoa que esta presenteando:\n" + Util.ListToString(PessoasDao.listar()), "Pessoa Presente", 1, "0"));
+                        int idresposta = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID da pessoa que esta presenteando:\n" + Util.ListToString(PessoasDao.listar()), "Pessoa Presente", 1, "1"));
                         Pessoas PessoaBusca = PessoasDao.buscar(idresposta);
                         if (PessoaBusca != null) {
                             if (PresentesDao.adiciona(Gui.CriarPresente(PessoaBusca)) != -1) {
@@ -1815,7 +1802,7 @@ public class SoftwareCasamento {
                     }
                     break;
                 case 2:
-                    int idAltera = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID de um Presente a ser alterado", "Alterar Presente", 1, "0"));
+                    int idAltera = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID de um Presente a ser alterado", "Alterar Presente", 1, "1"));
                     int idresposta = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID da pessoa que esta presenteando: (deixe vazio caso não queira alterar)\n" + PessoasDao.listar().toString(), "Alterar Presente", 1, ""));
                     Pessoas pessoa = PessoasDao.buscar(idresposta);
                     Presentes presente = PresentesDao.buscar(idAltera);
@@ -1837,7 +1824,7 @@ public class SoftwareCasamento {
                     break;
 
                 case 3:
-                    int idDelete = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID do Presente a ser deletado", "Deletar Presente", 1, "0"));
+                    int idDelete = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID do Presente a ser deletado", "Deletar Presente", 1, "1"));
                     if (PresentesDao.deletar(idDelete) != null) {
                         Gui.mostrarMensagemAviso("Presente Deletado", "Aviso", 1);
                     } else {
@@ -1846,7 +1833,7 @@ public class SoftwareCasamento {
 
                     break;
                 case 4:
-                    int idBuscar = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID do Presente a ser buscado", "Recado Presente", 1, "0"));
+                    int idBuscar = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID do Presente a ser buscado", "Recado Presente", 1, "1"));
                     if (PresentesDao.buscar(idBuscar) != null) {
                         Gui.mostrarMensagemAviso("Presente : \n" + PresentesDao.buscar(idBuscar).toString(), "Aviso", 1);
                     } else {
@@ -1856,9 +1843,9 @@ public class SoftwareCasamento {
                     break;
                 case 5:
                     if (!PessoasDao.listar().isEmpty()) {
-                        idresposta = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID da pessoa que esta presenteando: \n" + Util.ListToString(PessoasDao.listar()), "Escolha a pessoa", 1, "0"));
-                        int idPresente = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID de um Presente a ser atrelado a pessoa \n" + Util.ListToString(PresentesDao.listar()), "Presentear", 1, "0"));
-                        
+                        idresposta = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID da pessoa que esta presenteando: \n" + Util.ListToString(PessoasDao.listar()), "Escolha a pessoa", 1, "1"));
+                        int idPresente = Gui.validarStringToInt(Gui.mostrarMensagemInput("Digite o ID de um Presente a ser atrelado a pessoa \n" + Util.ListToString(PresentesDao.listar()), "Presentear", 1, "1"));
+
                         Presentes p = PresentesDao.buscar(idPresente);
                         Pessoas pessoa2 = PessoasDao.buscar(idresposta);
                         if (p != null && pessoa2 != null) {
@@ -1892,39 +1879,43 @@ public class SoftwareCasamento {
         while (opcaoUsuario != 9) {
             switch (opcaoUsuario) {
                 case 0:
-                    if (!MuralDeRecadosDao.listar().isEmpty()) {
-                        int j = 0;
-                        int tamVet = 1000;
-                        String[] conteudoMr = new String[tamVet];
+                    List<MuralDeRecados> listar = MuralDeRecadosDao.listar();
+                    if (!listar.isEmpty()) {
 
-                        for (int i = 0; i < conteudoMr.length; i++) {
-                            conteudoMr[i] = "";
+                        String ConjuntoDados = "";
+                        List<String> conteudoMr = new ArrayList();
+
+                        for (MuralDeRecados mr : listar) {
+
+                            ConjuntoDados += "ID: ";
+                            ConjuntoDados += mr.getId();
+                            ConjuntoDados += " | Nome: ";
+                            ConjuntoDados += mr.getPessoa().getNome();
+                            ConjuntoDados += " | Comentário: ";
+                            ConjuntoDados += mr.getComentario();
+                            ConjuntoDados += " | Data de Criação: ";
+                            ConjuntoDados += Util.formatarData(mr.getDataCriacao());
+                            ConjuntoDados += " | Última Modificação: ";
+                            ConjuntoDados += Util.formatarData(mr.getDataModificacao());
+
+                            conteudoMr.add(ConjuntoDados);
+                            ConjuntoDados = "";
                         }
 
-                        for (MuralDeRecados mr : MuralDeRecadosDao.listar()) {
-                            if (j <= tamVet) {
-                                conteudoMr[j] += "ID: ";
-                                conteudoMr[j] += mr.getId();
-                                conteudoMr[j] += " | Nome: ";
-                                conteudoMr[j] += mr.getPessoa().getNome();
-                                conteudoMr[j] += " | Comentário: ";
-                                conteudoMr[j] += mr.getComentario();
-                                conteudoMr[j] += " | Data de Criação: ";
-                                conteudoMr[j] += Util.formatarData(mr.getDataCriacao());
-                                conteudoMr[j] += " | Última Modificação: ";
-                                conteudoMr[j] += Util.formatarData(mr.getDataModificacao());
-
-                                j++;
-                            } else {
-                                Gui.mostrarMensagemAviso("Quantidade maxima de relatorios atingida, se nescessario contrate uma expansão.", "Aviso", 2);
-                            }
+                        if (Gui.RelatorioRecados(conteudoMr) == 1) {
+                            String resposta = GeradorPdf.GerarPdf((List) listar, "MuralDeRecados");
+                             if(!resposta.isBlank()){
+                                 Gui.mostrarMensagemAviso("Pdf gerado com sucesso \nem: " + resposta, "Aviso", 2);
+                             }else{
+                                 Gui.mostrarMensagemAviso("Erro ao gerar pdf", "Aviso", 2);
+                             }
                         }
 
-                        Gui.RelatorioRecados(conteudoMr);
                     } else {
                         Gui.mostrarMensagemAviso("Nenhum recado cadastrado", "Aviso", 2);
                     }
                     break;
+
 
                 case 1:
                     List<ConvidadoIndividual> listaConvidadoIndividual = ConvidadoIndividualDao.listar();
@@ -1932,7 +1923,7 @@ public class SoftwareCasamento {
                         boolean verificacao = false;
                         int option;
                         while (verificacao != true) {
-                            String resp = Gui.mostrarMensagemInput("Qual convidado você gostaria de Gerar o convite? digite o ID: \n" + Util.ListToString(listaConvidadoIndividual), "Escolha um Convidado", 3, "0");
+                            String resp = Gui.mostrarMensagemInput("Qual convidado você gostaria de Gerar o convite? digite o ID: \n" + Util.ListToString(listaConvidadoIndividual), "Escolha um Convidado", 3, "1");
 
                             if (resp == null) {
                                 return true;
@@ -1947,7 +1938,11 @@ public class SoftwareCasamento {
                             }
 
                             if (verificacao == true) {
-                                Gui.mostrarConviteIndividual(ConvidadoIndividualDao.buscar(option));
+
+                                if (Gui.mostrarConviteIndividual(ConvidadoIndividualDao.buscar(option)) == 1) {
+                                    System.out.println("Função gerar pdf Convidado Individual");
+                                }
+
                             } else {
                                 Gui.mostrarMensagemAviso("ID invalido", "Aviso", 1);
                             }
@@ -1962,7 +1957,7 @@ public class SoftwareCasamento {
                     boolean verificacao = false;
                     int option;
                     while (verificacao != true) {
-                        String resp = Gui.mostrarMensagemInput("Qual família você gostaria de Gerar o convite? digite o ID: \n" + Util.ListToString(listaConvidadoFamilia), "Escolha uma Familia", 3, "0");
+                        String resp = Gui.mostrarMensagemInput("Qual família você gostaria de Gerar o convite? digite o ID: \n" + Util.ListToString(listaConvidadoFamilia), "Escolha uma Familia", 3, "1");
 
                         if (resp == null) {
                             return true;
@@ -1977,7 +1972,9 @@ public class SoftwareCasamento {
                         }
 
                         if (verificacao == true) {
-                            Gui.mostrarConviteFamilia(ConvidadoFamiliaDao.buscar(option));
+                            if (Gui.mostrarConviteFamilia(ConvidadoFamiliaDao.buscar(option)) == 1) {
+                                System.out.println("Função gerar pdf Convidado Familia");
+                            }
                         } else {
                             Gui.mostrarMensagemAviso("ID invalido", "Aviso", 1);
                         }
@@ -1987,34 +1984,32 @@ public class SoftwareCasamento {
                 case 3:
                     List<Pagamentos> listaPagamentos = PagamentosDao.listar();
                     if (!listaPagamentos.isEmpty()) {
-                        int j = 0;
-                        int tamVet = 1000;
-                        String[] conteudoP = new String[tamVet];
 
-                        for (int i = 0; i < conteudoP.length; i++) {
-                            conteudoP[i] = "";
-                        }
+                        String ConjuntoDados = "";
+                        List<String> conteudoP = new ArrayList();
+
                         double valorTotal = 0;
                         for (Pagamentos p : listaPagamentos) {
-                            if (j <= tamVet) {
-                                conteudoP[j] += "ID: ";
-                                conteudoP[j] += p.getId();
-                                conteudoP[j] += " | Nome: ";
-                                conteudoP[j] += p.getPessoa().getNome();
-                                conteudoP[j] += " | Descrição: ";
-                                conteudoP[j] += p.getDescricao();
-                                conteudoP[j] += " | Valor: ";
-                                conteudoP[j] += p.getValor();
-                                conteudoP[j] += " | Parcelas: ";
-                                conteudoP[j] += p.getParcela();
-                                j++;
-                                valorTotal += p.getValor();
-                            } else {
-                                Gui.mostrarMensagemAviso("Quantidade maxima de relatorios atingida, se nescessario contrate uma expansão.", "Aviso", 2);
-                            }
+
+                            ConjuntoDados += "ID: ";
+                            ConjuntoDados += p.getId();
+                            ConjuntoDados += " | Nome: ";
+                            ConjuntoDados += p.getPessoa().getNome();
+                            ConjuntoDados += " | Descrição: ";
+                            ConjuntoDados += p.getDescricao();
+                            ConjuntoDados += " | Valor: ";
+                            ConjuntoDados += p.getValor();
+                            ConjuntoDados += " | Parcelas: ";
+                            ConjuntoDados += p.getParcela();
+
+                            conteudoP.add(ConjuntoDados);
+                            ConjuntoDados = "";
+                            valorTotal += p.getValor();
                         }
 
-                        Gui.RelatorioPagamento(conteudoP, valorTotal);
+                        if (Gui.RelatorioPagamento(conteudoP, valorTotal) == 1) {
+                            System.out.println("Função gerar pdf Pagamento");
+                        }
                     } else {
                         Gui.mostrarMensagemAviso("Nenhum pagamento cadastrado", "Aviso", 2);
                     }
@@ -2023,40 +2018,36 @@ public class SoftwareCasamento {
                 case 4:
                     listaConvidadoIndividual = ConvidadoIndividualDao.listar();
                     if (!listaConvidadoIndividual.isEmpty()) {
-                        int j = 0;
-                        int tamVet = 1000;
-                        String[] conteudoC = new String[tamVet];
 
-                        for (int i = 0; i < conteudoC.length; i++) {
-                            conteudoC[i] = "";
-                        }
+                        String ConjuntoDados = "";
+                        List<String> conteudoC = new ArrayList();
 
                         for (ConvidadoIndividual ci : listaConvidadoIndividual) {
-                            if (j <= tamVet) {
-                                conteudoC[j] += "ID: ";
-                                conteudoC[j] += ci.getId();
-                                conteudoC[j] += " | Nome: ";
-                                conteudoC[j] += ci.getPessoa().getNome();
-                                conteudoC[j] += " | Data de Nascimento: ";
-                                conteudoC[j] += Util.formatarDataLocal(ci.getPessoa().getNascimento());
-                                conteudoC[j] += " | Confirmação: ";
-                                conteudoC[j] += ci.getConfirmacao();
-                                conteudoC[j] += " | Família: ";
-                                conteudoC[j] += ci.getFamilia();
-                                conteudoC[j] += " | Parentesco: ";
-                                conteudoC[j] += ci.getParentesco();
-                                conteudoC[j] += "<br>Data de Criação: ";
-                                conteudoC[j] += Util.formatarData(ci.getDataCriacao());
-                                conteudoC[j] += " | Última Modificação: ";
-                                conteudoC[j] += Util.formatarData(ci.getDataModificacao());
 
-                                j++;
-                            } else {
-                                Gui.mostrarMensagemAviso("Quantidade maxima de relatorios atingida, se nescessario contrate uma expansão.", "Aviso", 2);
-                            }
+                            ConjuntoDados += "ID: ";
+                            ConjuntoDados += ci.getId();
+                            ConjuntoDados += " | Nome: ";
+                            ConjuntoDados += ci.getPessoa().getNome();
+                            ConjuntoDados += " | Data de Nascimento: ";
+                            ConjuntoDados += Util.formatarDataLocal(ci.getPessoa().getNascimento());
+                            ConjuntoDados += " | Confirmação: ";
+                            ConjuntoDados += ci.getConfirmacao();
+                            ConjuntoDados += " | Família: ";
+                            ConjuntoDados += ci.getFamilia();
+                            ConjuntoDados += " | Parentesco: ";
+                            ConjuntoDados += ci.getParentesco();
+                            ConjuntoDados += "<br>Data de Criação: ";
+                            ConjuntoDados += Util.formatarData(ci.getDataCriacao());
+                            ConjuntoDados += " | Última Modificação: ";
+                            ConjuntoDados += Util.formatarData(ci.getDataModificacao());
+
+                            conteudoC.add(ConjuntoDados);
+                            ConjuntoDados = "";
                         }
 
-                        Gui.RelatorioConvidados(conteudoC);
+                        if (Gui.RelatorioConvidados(conteudoC) == 1) {
+                            System.out.println("Função gerar pdf Convidado Individual");
+                        }
                     } else {
                         Gui.mostrarMensagemAviso("Nenhum convidado cadastrado", "Aviso", 2);
                     }
@@ -2071,14 +2062,10 @@ public class SoftwareCasamento {
                     }
                     if (temConfirmado) {
 
-                        int j = 0;
-                        int tamVet = 1000;
-                        String[] conteudoC = new String[tamVet];
-                        double totalDePontos = 0;
+                        String ConjuntoDados = "";
+                        List<String> conteudoC = new ArrayList();
 
-                        for (int i = 0; i < conteudoC.length; i++) {
-                            conteudoC[i] = "";
-                        }
+                        double totalDePontos = 0;
 
                         for (ConvidadoIndividual ci : ConvidadoIndividualDao.listar()) {
                             int idade = Util.calcularIdade(ci.getPessoa().getNascimento());
@@ -2097,36 +2084,35 @@ public class SoftwareCasamento {
                                     ponto = 1;
                                 }
 
-                                if (j <= tamVet) {
-                                    conteudoC[j] += "ID: ";
-                                    conteudoC[j] += ci.getId();
-                                    conteudoC[j] += " | Nome: ";
-                                    conteudoC[j] += ci.getPessoa().getNome();
-                                    conteudoC[j] += " | Data de Nascimento: ";
-                                    conteudoC[j] += Util.formatarDataLocal(ci.getPessoa().getNascimento());
-                                    conteudoC[j] += " | Confirmação: ";
-                                    conteudoC[j] += ci.getConfirmacao();
-                                    conteudoC[j] += " | Família: ";
-                                    conteudoC[j] += ci.getFamilia();
-                                    conteudoC[j] += " | Parentesco: ";
-                                    conteudoC[j] += ci.getParentesco();
-                                    conteudoC[j] += " | Ponto eq: ";
-                                    conteudoC[j] += ponto;
-                                    conteudoC[j] += "<br>Data de Criação: ";
-                                    conteudoC[j] += Util.formatarData(ci.getDataCriacao());
-                                    conteudoC[j] += " | Última Modificação: ";
-                                    conteudoC[j] += Util.formatarData(ci.getDataModificacao());
+                                ConjuntoDados += "ID: ";
+                                ConjuntoDados += ci.getId();
+                                ConjuntoDados += " | Nome: ";
+                                ConjuntoDados += ci.getPessoa().getNome();
+                                ConjuntoDados += " | Data de Nascimento: ";
+                                ConjuntoDados += Util.formatarDataLocal(ci.getPessoa().getNascimento());
+                                ConjuntoDados += " | Confirmação: ";
+                                ConjuntoDados += ci.getConfirmacao();
+                                ConjuntoDados += " | Família: ";
+                                ConjuntoDados += ci.getFamilia();
+                                ConjuntoDados += " | Parentesco: ";
+                                ConjuntoDados += ci.getParentesco();
+                                ConjuntoDados += " | Ponto eq: ";
+                                ConjuntoDados += ponto;
+                                ConjuntoDados += "<br>Data de Criação: ";
+                                ConjuntoDados += Util.formatarData(ci.getDataCriacao());
+                                ConjuntoDados += " | Última Modificação: ";
+                                ConjuntoDados += Util.formatarData(ci.getDataModificacao());
 
-                                    j++;
-
-                                } else {
-                                    Gui.mostrarMensagemAviso("Quantidade maxima de relatorios atingida, se nescessario contrate uma expansão.", "Aviso", 2);
-                                }
                                 totalDePontos += ponto;
+
+                                conteudoC.add(ConjuntoDados);
+                                ConjuntoDados = "";
                             }
                         }
 
-                        Gui.RelatorioConvidadosConfirmados(conteudoC, totalDePontos);
+                        if (Gui.RelatorioConvidadosConfirmados(conteudoC, totalDePontos) == 1) {
+                            System.out.println("Função gerar pdf Convidado Individual com pontos");
+                        }
 
                     } else {
                         Gui.mostrarMensagemAviso("Nenhum convidado confirmado cadastrado", "Aviso", 2);
