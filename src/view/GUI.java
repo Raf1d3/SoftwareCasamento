@@ -546,12 +546,12 @@ public class GUI {
         StringBuilder menu = new StringBuilder();
 
         menu.append("<html><body><br>");
-        menu.append("<div width='1010px' align='center'>");
+        menu.append("<div width='600px' align='center'>");
         menu.append("<p style='font-size:18px; font-weight:bold;'>GERENCIADOR DE CASAMENTOS</p>");
         menu.append("<p style='font-size:14px;'>Relatorio De Recados</p><br>");
         for (String recado : vetmural) {
             if (!recado.isBlank()) {
-                menu.append("<p style='font-size:12px; font-weight:bold;'>" + recado + "</p>");
+                menu.append("<p style='font-size:12px; font-weight:bold;'>" + recado + "</p><br>");
             }
         }
         menu.append("<br></div></body></html>");
@@ -606,7 +606,7 @@ public class GUI {
         menu.append("<p style='font-size:15px; align='center''>Prezada Família ");
         menu.append(cf.getNomeDaFamilia());
         menu.append(",</p><br>");
-        menu.append("<p style='font-size:14px;'>É com grande alegria que convidamos vocês para celebrar um momento especial conosco. Este convite concede acesso exclusivo ao nosso evento e sistema, e pedimos que o guardem com carinho</p><br>");
+        menu.append("<p style='font-size:14px;'>É com grande alegria que convidamos vocês para celebrar um momento especial conosco. Este convite concede acesso exclusivo ao nosso evento e sistema, e pedimos que o guardem com carinho.</p><br>");
         menu.append("<p style='font-size:12px;'>• Nome da Família: ");
         menu.append(cf.getNomeDaFamilia());
         menu.append("</p><br>");
@@ -630,7 +630,7 @@ public class GUI {
     public int RelatorioConvidados(List<String> vetmural) {
         StringBuilder menu = new StringBuilder();
         menu.append("<html><body><br>");
-        menu.append("<div width='1010px' align='center'>");
+        menu.append("<div width='700px' align='center'>");
         menu.append("<p style='font-size:18px; font-weight:bold;'>GERENCIADOR DE CASAMENTOS</p>");
         menu.append("<p style='font-size:14px;'>Relatorio De Convidados</p><br>");
         for (String recado : vetmural) {

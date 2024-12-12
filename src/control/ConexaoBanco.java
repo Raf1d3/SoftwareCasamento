@@ -39,7 +39,7 @@ public class ConexaoBanco {
             String conexao = "jdbc:mysql://localhost/" + this.nomeBanco;
 
             String con = conexao;
-            System.out.println("Conectado ao banco");
+            //System.out.println("Conectado ao banco");
             return DriverManager.getConnection(con, properties);
 
         } catch (SQLException e) {

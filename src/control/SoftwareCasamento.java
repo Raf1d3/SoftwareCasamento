@@ -1886,7 +1886,7 @@ public class SoftwareCasamento {
                         List<String> conteudoMr = new ArrayList();
 
                         for (MuralDeRecados mr : listar) {
-
+                            
                             ConjuntoDados += "ID: ";
                             ConjuntoDados += mr.getId();
                             ConjuntoDados += " | Nome: ";
@@ -1903,9 +1903,9 @@ public class SoftwareCasamento {
                         }
 
                         if (Gui.RelatorioRecados(conteudoMr) == 1) {
-                            String resposta = GeradorPdf.GerarPdf((List) listar, "MuralDeRecados");
+                            String resposta = GeradorPdf.gerarPdf("Relatorio de Mural de recados", conteudoMr, "RelatorioMuralDeRecados");
                             if (!resposta.isBlank()) {
-                                Gui.mostrarMensagemAviso("Pdf gerado com sucesso \nem: " + resposta, "Aviso", 2);
+                                Gui.mostrarMensagemAviso("Pdf gerado com sucesso \nem: " + resposta, "Aviso", 1);
                             } else {
                                 Gui.mostrarMensagemAviso("Erro ao gerar pdf", "Aviso", 2);
                             }
@@ -1940,22 +1940,24 @@ public class SoftwareCasamento {
                             if (convidado != null) {
                                 verificacao = true;
 
-                                if (Gui.mostrarConviteIndividual(ConvidadoIndividualDao.buscar(option)) == 1) {
+                                if (Gui.mostrarConviteIndividual(convidado) == 1) {
 
                                     List<String> conteudo = new ArrayList<>();
 
-                                    conteudo.add("-------------------------------------------");
-                                    conteudo.add("Convite para: " + convidado.getPessoa().getNome());
-                                    conteudo.add("Telefone: " + convidado.getPessoa().getTelefone());
-                                    conteudo.add("Nascimento: " + Util.formatarDataLocal(convidado.getPessoa().getNascimento()));
-                                    conteudo.add("Família: " + convidado.getFamilia());
-                                    conteudo.add("Parentesco: " + convidado.getParentesco());
-                                    conteudo.add("Confirmação de presença: " + convidado.getConfirmacao());
-                                    conteudo.add("Data de Criação: " + Util.formatarData(convidado.getDataCriacao()));
-                                    conteudo.add("Última Modificação: " + Util.formatarData(convidado.getDataModificacao()));
+                                    conteudo.add(convidado.getPessoa().getNome());
+                                    conteudo.add("• Telefone: " + convidado.getPessoa().getTelefone());
+                                    conteudo.add("• Data de Nascimento: " + Util.formatarDataLocal(convidado.getPessoa().getNascimento()));
+                                    conteudo.add("• Família: " + convidado.getFamilia());
+                                    conteudo.add("• Parentesco: " + convidado.getParentesco());
+                                    conteudo.add("• ID do Convidado: " + convidado.getId());
 
-                                    GeradorPdf.gerarPdf("Convite Convidado Individual", conteudo, "ConviteIndividual" + convidado.getPessoa().getNome() + ".pdf");
-                                    System.out.println("Convite PDF gerado para o convidado " + convidado.getPessoa().getNome());
+                                    String resposta = GeradorPdf.gerarPdfIndividual(conteudo, 0, "ConviteIndividual" + convidado.getPessoa().getNome());
+                                    if (!resposta.isBlank()) {
+                                        Gui.mostrarMensagemAviso("Pdf gerado com sucesso \nem: " + resposta, "Aviso", 1);
+                                    } else {
+                                        Gui.mostrarMensagemAviso("Erro ao gerar pdf", "Aviso", 2);
+                                    }
+
                                 }
                             } else {
                                 Gui.mostrarMensagemAviso("ID inválido", "Aviso", 1);
@@ -1984,15 +1986,22 @@ public class SoftwareCasamento {
                                 verificacao = true;
                             }
                         }
-
-                        if (verificacao == true && Gui.mostrarConviteFamilia(ConvidadoFamiliaDao.buscar(option)) == 1) {
+                        ConvidadoFamilia cf = ConvidadoFamiliaDao.buscar(option);
+                        if (verificacao == true && Gui.mostrarConviteFamilia(cf) == 1) {
                             List<String> conteudoFamilia = new ArrayList<>();
-                            ConvidadoFamilia familia = ConvidadoFamiliaDao.buscar(option);
+                            ConvidadoFamilia familia = cf;
 
-                            conteudoFamilia.add("Família: " + familia.getNomeDaFamilia());
-                            conteudoFamilia.add("Descrição: " + familia.toString());
+                            conteudoFamilia.add(familia.getNomeDaFamilia());
+                            conteudoFamilia.add("• Senha do Sistema: " + familia.getAcesso());
+                            conteudoFamilia.add("• ID da Familia: " + familia.getId());
 
-                            GeradorPdf.gerarPdf("Convite Família", conteudoFamilia, "ConviteFamilia" + familia.getNomeDaFamilia());
+                            String resposta = GeradorPdf.gerarPdfIndividual(conteudoFamilia, 1, "ConviteFamilia" + familia.getNomeDaFamilia());
+
+                            if (!resposta.isBlank()) {
+                                Gui.mostrarMensagemAviso("Pdf gerado com sucesso \nem: " + resposta, "Aviso", 1);
+                            } else {
+                                Gui.mostrarMensagemAviso("Erro ao gerar pdf", "Aviso", 2);
+                            }
 
                             System.out.println("Função gerar pdf Convidado Familia");
                         } else {
@@ -2008,7 +2017,7 @@ public class SoftwareCasamento {
                         String ConjuntoDados = "";
                         List<String> conteudoP = new ArrayList();
 
-                        double valorTotal = 0;
+                        Double valorTotal = (double) 0;
                         for (Pagamentos p : listaPagamentos) {
 
                             ConjuntoDados += "ID: ";
@@ -2028,7 +2037,15 @@ public class SoftwareCasamento {
                         }
 
                         if (Gui.RelatorioPagamento(conteudoP, valorTotal) == 1) {
-                            System.out.println("Função gerar pdf Pagamento");
+
+                            conteudoP.add("Valor Total De pontos: " + valorTotal.toString());
+                            String resposta = GeradorPdf.gerarPdf("Relatorio pagamentos", conteudoP, "RelatorioPagamentos");
+                            if (!resposta.isBlank()) {
+                                Gui.mostrarMensagemAviso("Pdf gerado com sucesso \nem: " + resposta, "Aviso", 1);
+                            } else {
+                                Gui.mostrarMensagemAviso("Erro ao gerar pdf", "Aviso", 2);
+                            }
+
                         }
                     } else {
                         Gui.mostrarMensagemAviso("Nenhum pagamento cadastrado", "Aviso", 2);
@@ -2056,7 +2073,7 @@ public class SoftwareCasamento {
                             ConjuntoDados += ci.getFamilia();
                             ConjuntoDados += " | Parentesco: ";
                             ConjuntoDados += ci.getParentesco();
-                            ConjuntoDados += "<br>Data de Criação: ";
+                            ConjuntoDados += " | Data de Criação: ";
                             ConjuntoDados += Util.formatarData(ci.getDataCriacao());
                             ConjuntoDados += " | Última Modificação: ";
                             ConjuntoDados += Util.formatarData(ci.getDataModificacao());
@@ -2066,7 +2083,12 @@ public class SoftwareCasamento {
                         }
 
                         if (Gui.RelatorioConvidados(conteudoC) == 1) {
-                            System.out.println("Função gerar pdf Convidado Individual");
+                            String resposta = GeradorPdf.gerarPdf("Relatorio de Convidados", conteudoC, "ConvidadosRelatorio");
+                            if (!resposta.isBlank()) {
+                                Gui.mostrarMensagemAviso("Pdf gerado com sucesso \nem: " + resposta, "Aviso", 1);
+                            } else {
+                                Gui.mostrarMensagemAviso("Erro ao gerar pdf", "Aviso", 2);
+                            }
                         }
                     } else {
                         Gui.mostrarMensagemAviso("Nenhum convidado cadastrado", "Aviso", 2);
@@ -2085,7 +2107,7 @@ public class SoftwareCasamento {
                         String ConjuntoDados = "";
                         List<String> conteudoC = new ArrayList();
 
-                        double totalDePontos = 0;
+                        Double totalDePontos = (double) 0;
 
                         for (ConvidadoIndividual ci : ConvidadoIndividualDao.listar()) {
                             int idade = Util.calcularIdade(ci.getPessoa().getNascimento());
@@ -2118,7 +2140,7 @@ public class SoftwareCasamento {
                                 ConjuntoDados += ci.getParentesco();
                                 ConjuntoDados += " | Ponto eq: ";
                                 ConjuntoDados += ponto;
-                                ConjuntoDados += "<br>Data de Criação: ";
+                                ConjuntoDados += " | Data de Criação: ";
                                 ConjuntoDados += Util.formatarData(ci.getDataCriacao());
                                 ConjuntoDados += " | Última Modificação: ";
                                 ConjuntoDados += Util.formatarData(ci.getDataModificacao());
@@ -2131,7 +2153,13 @@ public class SoftwareCasamento {
                         }
 
                         if (Gui.RelatorioConvidadosConfirmados(conteudoC, totalDePontos) == 1) {
-                            System.out.println("Função gerar pdf Convidado Individual com pontos");
+                            conteudoC.add("Valor Total De pontos: " + totalDePontos.toString());
+                            String resposta = GeradorPdf.gerarPdf("Relatorio da pontuação dos convidados", conteudoC, "RelatorioPontuacaoConvidados");
+                            if (!resposta.isBlank()) {
+                                Gui.mostrarMensagemAviso("Pdf gerado com sucesso \nem: " + resposta, "Aviso", 1);
+                            } else {
+                                Gui.mostrarMensagemAviso("Erro ao gerar pdf", "Aviso", 2);
+                            }
                         }
 
                     } else {
